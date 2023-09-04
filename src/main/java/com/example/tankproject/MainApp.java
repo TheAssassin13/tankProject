@@ -11,7 +11,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("game.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1500, 800);
+        Scene scene = new Scene(fxmlLoader.load(), Constants.WINDOWWIDTH, Constants.WINDOWHEIGHT);
         stage.setTitle("Tank Project");
         stage.setScene(scene);
         stage.show();
