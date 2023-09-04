@@ -15,13 +15,15 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         GraphicsContext gc = grid.getGraphicsContext2D();
-
+        grid.setHeight(Constants.WINDOWHEIGHT);
+        grid.setWidth(Constants.WINDOWWIDTH);
         gc.setFill(Color.RED);
         gc.fillRect(50,50,100,250);
         gc.setFill(Color.BLUE);
 
         gc.fillOval(100,0,300,300);
 
-
     }
+
+
 }
