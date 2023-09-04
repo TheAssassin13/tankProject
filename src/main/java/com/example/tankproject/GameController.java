@@ -12,7 +12,6 @@ public class GameController implements Initializable {
     @FXML
     public Canvas grid;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         GraphicsContext gc = grid.getGraphicsContext2D();
