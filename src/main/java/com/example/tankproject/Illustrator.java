@@ -10,7 +10,13 @@ public class Illustrator {
         gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH, 10);
         gc.setFill(Color.BLUE);
         gc.fillOval(100,0,300,300);
+    }
 
+    public static void drawBackground(GraphicsContext gc) {
+        gc.setFill(Color.LIGHTBLUE);
+        gc.fillRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
+        gc.setFill(Color.ORANGE);
+        gc.fillOval(100, 50, 300, 300);
     }
 
     public static void drawTerrain(GraphicsContext gc) {
@@ -20,7 +26,7 @@ public class Illustrator {
         for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
-                    gc.fillRect(j, i,10,10);
+                    gc.fillRect(j, i,1,1000);
                 }
             }
         }

@@ -19,7 +19,7 @@ public class Land {
         //Montañas
         int height1 = (int) (seaLevel * Math.random());
         if (height1 - margen * 2 > 0) height1 -= margen*2;
-        int width1 = (int) (width/4 * Math.random());
+        int width1 = (int) (width/4 * Math.random()) + margen;
         resolutionMatrix[height1][width1] = 1;
         int height3 = (int) (seaLevel * Math.random());
         if (height3 - margen * 2 > 0) height3 -= margen*2;
@@ -66,10 +66,10 @@ public class Land {
                 i++;
             }
         }
-
+/*
         resolutionMatrix[height1][width1] = 0;
         resolutionMatrix[height2][width2] = 0;
         resolutionMatrix[height3][width3] = 0;
-        resolutionMatrix[height4][width4] = 0;
+        resolutionMatrix[height4][width4] = 0;*/
     }
 }
