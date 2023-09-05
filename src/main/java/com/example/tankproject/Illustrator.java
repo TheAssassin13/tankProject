@@ -19,10 +19,8 @@ public class Illustrator {
         gc.fillOval(100, 50, 300, 300);
     }
 
-    public static void drawTerrain(GraphicsContext gc) {
+    public static void drawTerrain(GraphicsContext gc, Land terrain) {
         gc.setFill(Color.BLACK);
-        Land terrain = new Land(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
-        terrain.terrainGeneration(Constants.SEA_LEVEL);
         for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {

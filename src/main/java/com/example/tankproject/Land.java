@@ -13,33 +13,46 @@ public class Land {
         resolutionMatrix = new int[height][width];
     }
 
-    public void terrainGeneration(int seaLevel) {
-        int margen = 50;
+    public void terrainGeneration(int seaLevel, boolean random) {
+        int margin = 50;
+        //Reference points without random
+        int height1 = seaLevel - margin*2;
+        int height2 = seaLevel + margin*2;
+        int height3 = height1 + margin;
+        int height4 = height2 - margin;
+        int width1 = width/4 - margin;
+        int width2 = width/2 - margin;
+        int width3 = 3*width/4 - margin;
+        int width4 = width - margin;
 
-        //Montañas
-        int height1 = (int) (seaLevel * Math.random());
-        if (height1 - margen * 2 > 0) height1 -= margen*2;
-        int width1 = (int) (width/4 * Math.random()) + margen;
+        if (random) {
+            //Reference points for mountains
+            height1 = (int) (seaLevel * Math.random());
+            if (height1 - margin * 2 > 0) height1 -= margin * 2;
+            width1 = (int) (width / 4 * Math.random()) + margin;
+            height3 = (int) (seaLevel * Math.random());
+            if (height3 - margin * 2 > 0) height3 -= margin * 2;
+            width3 = (int) (width / 4 * Math.random()) + width / 2;
+
+            //Reference points for craters
+            height2 = (int) (seaLevel * Math.random()) + seaLevel;
+            if (height2 + margin * 2 < height) height2 += margin * 2;
+            width2 = (int) (width / 4 * Math.random()) + width / 4;
+            height4 = (int) (seaLevel * Math.random()) + seaLevel;
+            if (height4 + margin * 2 < height) height4 += margin * 2;
+            width4 = (int) (width / 4 * Math.random()) + 3 * width / 4 - margin;
+        }
         resolutionMatrix[height1][width1] = 1;
-        int height3 = (int) (seaLevel * Math.random());
-        if (height3 - margen * 2 > 0) height3 -= margen*2;
-        int width3 = (int) (width/4 * Math.random()) + width/2;
         resolutionMatrix[height3][width3] = 1;
-
-        //Cañones
-        int height2 = (int) (seaLevel * Math.random()) + seaLevel;
-        if (height2 + margen * 2 < height) height2 += margen*2;
-        int width2 = (int) (width/4 * Math.random()) + width/4;
         resolutionMatrix[height2][width2] = 1;
-        int height4 = (int) (seaLevel * Math.random()) + seaLevel;
-        if (height4 + margen * 2 < height) height4 += margen*2;
-        int width4 = (int) (width/4 * Math.random()) + 3*width/4 - margen;
         resolutionMatrix[height4][width4] = 1;
 
         int i = 0;
         while (i < width) {
             int maxHeight = seaLevel;
             resolutionMatrix[seaLevel][i] = 1;
+
+            //Random probability y-axis increments or decrements
             if (seaLevel > 1 && i < width1) {
                 maxHeight = height1;
                 seaLevel -= Math.round(Math.random());
@@ -52,11 +65,12 @@ public class Land {
             } else if (seaLevel < height - 1 && i < width4) {
                 maxHeight = height4;
                 seaLevel += Math.round(Math.random());
-            } else {
+            } else if (seaLevel < height - 1 && seaLevel > 1){
                 seaLevel += Math.round(Math.random()) * -(Math.round(Math.random()));
             }
 
-            if (Math.abs(maxHeight - seaLevel) > margen) {
+            //Random probability x-axis increments
+            if (Math.abs(maxHeight - seaLevel) > margin) {
                 int rand1 = (int) Math.round(Math.random());
                 int rand2 = (int) Math.round(Math.random());
                 if (rand1 == 0 || rand2 == 0) {
@@ -66,10 +80,11 @@ public class Land {
                 i++;
             }
         }
-/*
+
+        //Delete reference points
         resolutionMatrix[height1][width1] = 0;
         resolutionMatrix[height2][width2] = 0;
         resolutionMatrix[height3][width3] = 0;
-        resolutionMatrix[height4][width4] = 0;*/
+        resolutionMatrix[height4][width4] = 0;
     }
 }

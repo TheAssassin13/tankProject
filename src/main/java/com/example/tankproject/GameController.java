@@ -22,8 +22,8 @@ public class GameController implements Initializable {
         GraphicsContext gc = grid.getGraphicsContext2D();
         Illustrator.drawBackground(gc);
         Land terrain = new Land(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
-        terrain.terrainGeneration(Constants.SEA_LEVEL);
-        Illustrator.drawTerrain(gc);
+        terrain.terrainGeneration(Constants.SEA_LEVEL, false);
+        Illustrator.drawTerrain(gc, terrain);
         //Illustrator.drawTest(gc);
         Illustrator.drawTank(gc,new Tank(new Point(50,60)));
     }
