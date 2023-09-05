@@ -17,9 +17,9 @@ public class GameController implements Initializable {
         GraphicsContext gc = grid.getGraphicsContext2D();
         grid.setHeight(Constants.WINDOWHEIGHT);
         grid.setWidth(Constants.WINDOWWIDTH);
-        gc.setFill(Color.RED);
-        gc.fillRect(0,Constants.SEALEVEL,Constants.WINDOWWIDTH, 10);
-        gc.setFill(Color.BLUE);
+        gc.setFill(Color.LIGHTBLUE);
+        gc.fillRect(0,0,Constants.WINDOWWIDTH, Constants.WINDOWHEIGHT);
+        gc.setFill(Color.ORANGE);
 
         gc.fillOval(100,0,300,300);
 
@@ -31,7 +31,7 @@ public class GameController implements Initializable {
         for (int i = 0; i < Constants.WINDOWHEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWWIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
-                    gc.fillRect(j, i,10,10);
+                    gc.fillRect(j, i,1,1000);
                 }
             }
         }
