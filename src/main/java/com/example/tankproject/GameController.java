@@ -18,12 +18,22 @@ public class GameController implements Initializable {
         grid.setHeight(Constants.WINDOWHEIGHT);
         grid.setWidth(Constants.WINDOWWIDTH);
         gc.setFill(Color.RED);
-        gc.fillRect(50,50,100,250);
+        gc.fillRect(0,Constants.SEALEVEL,Constants.WINDOWWIDTH, 10);
         gc.setFill(Color.BLUE);
 
         gc.fillOval(100,0,300,300);
 
+
+        //Dibujo terreno
+        gc.setFill(Color.BLACK);
+        Land terrain = new Land(Constants.WINDOWHEIGHT, Constants.WINDOWWIDTH);
+        terrain.terrainGeneration(Constants.SEALEVEL);
+        for (int i = 0; i < Constants.WINDOWHEIGHT; i++) {
+            for (int j = 0; j < Constants.WINDOWWIDTH; j++) {
+                if (terrain.resolutionMatrix[i][j] == 1) {
+                    gc.fillRect(j, i,10,10);
+                }
+            }
+        }
     }
-
-
 }

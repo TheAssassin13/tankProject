@@ -3,21 +3,33 @@ package com.example.tankproject;
 import java.util.ArrayList;
 
 public class Land {
-    public ArrayList<ArrayList<Integer>> resolutionMatrix;
+    public int[][] resolutionMatrix;
     int height;
     int width;
 
     public Land(int height, int width) {
         this.height = height;
         this.width = width;
-        resolutionMatrix = new ArrayList<>(height);
-        for (int i = 0; i < height; i++) {
-            resolutionMatrix.add(new ArrayList<>(width));
-        }
+        resolutionMatrix = new int[height][width];
     }
 
     public void terrainGeneration(int seaLevel) {
-        int rand = (int) (seaLevel * Math.random());
-        System.out.println(rand);
+        int margen = 50;
+
+        //Montañas
+        int y = (int) (seaLevel * Math.random());
+        int x = (int) (width/4 * Math.random());
+        resolutionMatrix[y][x] = 1;
+        y = (int) (seaLevel * Math.random());
+        x = (int) (width/4 * Math.random()) + width/2;
+        resolutionMatrix[y][x] = 1;
+
+        //Cañones
+        y = (int) (seaLevel * Math.random()) + seaLevel;
+        x = (int) (width/4 * Math.random()) + width/4;
+        resolutionMatrix[y][x] = 1;
+        y = (int) (seaLevel * Math.random()) + seaLevel;
+        x = (int) (width/4 * Math.random()) + 3*width/4 - margen;
+        resolutionMatrix[y][x] = 1;
     }
 }
