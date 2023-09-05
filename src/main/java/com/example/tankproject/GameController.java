@@ -4,36 +4,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
     @FXML
+    public VBox vbox;
     public Canvas grid;
+
+    public Player turn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        grid.setHeight(Constants.WINDOWS_HEIGHT-150);
+        grid.setWidth(Constants.WINDOWS_WIDTH);
         GraphicsContext gc = grid.getGraphicsContext2D();
-        grid.setHeight(Constants.WINDOWHEIGHT);
-        grid.setWidth(Constants.WINDOWWIDTH);
-        gc.setFill(Color.LIGHTBLUE);
-        gc.fillRect(0,0,Constants.WINDOWWIDTH, Constants.WINDOWHEIGHT);
-        gc.setFill(Color.ORANGE);
+        //Illustrator.drawTest(gc);
+        Illustrator.drawTank(gc,new Tank(new Point(50,60)));
 
-        gc.fillOval(100,0,300,300);
-
-
-        //Dibujo terreno
-        gc.setFill(Color.BLACK);
-        Land terrain = new Land(Constants.WINDOWHEIGHT, Constants.WINDOWWIDTH);
-        terrain.terrainGeneration(Constants.SEALEVEL);
-        for (int i = 0; i < Constants.WINDOWHEIGHT; i++) {
-            for (int j = 0; j < Constants.WINDOWWIDTH; j++) {
-                if (terrain.resolutionMatrix[i][j] == 1) {
-                    gc.fillRect(j, i,1,1000);
-                }
-            }
-        }
     }
+
 }
