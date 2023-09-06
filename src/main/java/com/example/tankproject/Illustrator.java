@@ -24,7 +24,7 @@ public class Illustrator {
         for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
-                    gc.fillRect(j, i,1,1000);
+                    gc.fillRect(j, i,1,2);
                 }
             }
         }

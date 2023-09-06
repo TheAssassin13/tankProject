@@ -50,7 +50,9 @@ public class Land {
         int i = 0;
         while (i < width) {
             int maxHeight = seaLevel;
-            resolutionMatrix[seaLevel][i] = 1;
+            for (int j = seaLevel; j < height; j++) {
+                resolutionMatrix[j][i] = 1;
+            }
 
             //Random probability y-axis increments or decrements
             if (seaLevel > 1 && i < width1) {
@@ -73,8 +75,8 @@ public class Land {
             if (Math.abs(maxHeight - seaLevel) > margin) {
                 int rand1 = (int) Math.round(Math.random());
                 int rand2 = (int) Math.round(Math.random());
-                if (rand1 == 0 || rand2 == 0) {
-                    i += Math.round(Math.random());
+                if (rand1 == 1 || rand2 == 1) {
+                    i += (int) Math.round(Math.random());
                 }
             } else {
                 i++;
