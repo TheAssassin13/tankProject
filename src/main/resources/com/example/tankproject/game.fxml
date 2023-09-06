@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="vbox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
+<VBox fx:id="vbox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
    <children>
       <Canvas fx:id="grid" height="200.0" width="600.0" />
-       <GridPane alignment="BOTTOM_CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="150.0" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+       <GridPane fx:id="buttonsPanel" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="150.0" styleClass="buttonPanel" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
            <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -22,15 +22,21 @@
            <children>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                    <children>
-                       <TextField promptText="Angle" />
-                       <TextField promptText="Power" />
+                       <TextField focusTraversable="false" promptText="Angle">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></TextField>
+                       <TextField focusTraversable="false" promptText="Power">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></TextField>
                    </children>
                </HBox>
-               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Shoot" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="shootButton" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
                </font></Button>
-               <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Player: ">
+               <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="">
                <font>
                   <Font size="18.0" />
                </font>

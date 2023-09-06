@@ -31,7 +31,7 @@ public class Illustrator {
     }
 
     public static void drawTank(GraphicsContext gc, Tank tank) {
-        gc.setFill(Color.GREEN);
+        gc.setFill(tank.color);
         gc.fillOval(tank.position.getX(),tank.position.getY(),Constants.TANK_SIZE,Constants.TANK_SIZE);
     }
 

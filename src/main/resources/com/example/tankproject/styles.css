@@ -1,0 +1,26 @@
+.root {
+    -fx-red-color: #B81C14;
+    -fx-grey-color: #3e3e3e;
+    -fx-white-color: #eeeeee;
+    -fx-green-color: #3cff50;
+    -fx-blue-color: #00e1ff;
+    -fx-yellow-color: #ffef50;
+}
+
+.shootButton {
+    -fx-background-color: -fx-red-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+}
+
+.shootButton:hover {
+    -fx-background-color: derive(-fx-red-color,25%);
+
+}
+
+.buttonPanel {
+    -fx-background-color: -fx-white-color;
+    -fx-border-width: 2px;
+    -fx-border-color: -fx-grey-color;
+}

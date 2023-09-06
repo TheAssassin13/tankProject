@@ -1,9 +1,14 @@
 package com.example.tankproject;
 
-public class Player {
-    Tank tank;
+import javafx.scene.paint.Color;
 
-    public Player(Tank tank) {
+public class Player {
+    String name;
+    Color color;
+    Tank tank;
+    public Player(String name, Color color, Tank tank) {
+        this.name = name;
+        this.color = color;
         this.tank = tank;
     }
 }
