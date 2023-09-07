@@ -7,7 +7,6 @@ public class Constants {
     public static int WINDOWS_WIDTH = 1000;
     public static int TANK_SIZE = 15;
     public static int SHOT_SIZE = 10;
-
     public static int BUTTONS_PANEL_HEIGHT = 150;
 
 

@@ -23,13 +23,12 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Player pTest = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
-        turn = pTest;
+        turn = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
         GraphicsContext gc = grid.getGraphicsContext2D();
-        currentPlayerText.setText("Current Player: " + turn.name);
+        currentPlayerText.setText("Current player: " + turn.name);
         buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         Land terrain = new Land(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
-        terrain.terrainGeneration(Constants.SEA_LEVEL,false);
+        terrain.terrainGeneration(Constants.SEA_LEVEL,true);
         grid.setHeight(Constants.WINDOWS_HEIGHT-Constants.BUTTONS_PANEL_HEIGHT);
         grid.setWidth(Constants.WINDOWS_WIDTH);
         Illustrator.drawBackground(gc);
@@ -64,4 +63,5 @@ public class GameController implements Initializable {
         }
         Illustrator.drawTank(gc,new Tank(Color.BLUE,new Point(posXSecondTank, posYSecondTank)));
     }
+
 }

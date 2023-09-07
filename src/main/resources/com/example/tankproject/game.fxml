@@ -16,33 +16,43 @@
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
            </columnConstraints>
            <rowConstraints>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+               <RowConstraints maxHeight="50.0" minHeight="10.0" vgrow="SOMETIMES" />
            </rowConstraints>
            <children>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                    <children>
-                       <TextField focusTraversable="false" promptText="Angle">
+                  <Label text="Angle" />
+                       <TextField focusTraversable="false" prefHeight="35.0" prefWidth="50.0" promptText="45°">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>
-                       <TextField focusTraversable="false" promptText="Power">
+                  <Label layoutX="31.0" layoutY="33.0" text="Power" />
+                       <TextField focusTraversable="false" prefHeight="35.0" prefWidth="50.0" promptText="25">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>
                    </children>
                </HBox>
-               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="shootButton" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="200.0" minWidth="100.0" mnemonicParsing="false" prefWidth="150.0" styleClass="shootButton" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
-                  <Font size="14.0" />
-               </font></Button>
-               <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="">
-               <font>
-                  <Font size="18.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="15.0" />
-               </GridPane.margin></Text>
+                  <Insets />
+               </GridPane.margin></Button>
+            <StackPane maxWidth="200.0" minWidth="100.0" prefHeight="150.0" prefWidth="50.0" styleClass="currentPlayerPanel">
+               <children>
+                     <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+               </GridPane.margin>
+            </StackPane>
            </children>
        </GridPane>
    </children>
