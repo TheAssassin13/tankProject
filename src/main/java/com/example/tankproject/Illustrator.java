@@ -33,6 +33,7 @@ public class Illustrator {
     public static void drawTank(GraphicsContext gc, Tank tank) {
         gc.setFill(tank.color);
         gc.fillOval(tank.position.getX(),tank.position.getY(),Constants.TANK_SIZE,Constants.TANK_SIZE);
+        gc.fillRect(tank.position.getX() + Constants.TANK_SIZE/2 - 2, tank.position.getY() - 8, 5, 10);
     }
 
     public static void drawShot(GraphicsContext gc, Shot shot) {

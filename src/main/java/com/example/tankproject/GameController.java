@@ -34,18 +34,34 @@ public class GameController implements Initializable {
         grid.setWidth(Constants.WINDOWS_WIDTH);
         Illustrator.drawBackground(gc);
         Illustrator.drawTerrain(gc,terrain);
-        tanksPlacement(gc);
+        tanksPlacement(gc, terrain);
 
     }
 
 
-    public void tanksPlacement(GraphicsContext gc) {
+    public void tanksPlacement(GraphicsContext gc, Land terrain) {
         int gap = Constants.WINDOWS_WIDTH / 2;
-        int posXFirstTank = (int) (Math.random() * (gap/2 - 25) + 25);
-        int posxSecondTank = posXFirstTank + gap;
+        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE); //Formula changed
+        int posXSecondTank = posXFirstTank + gap;
+        int posYSecondTank = Constants.WINDOWS_HEIGHT - Constants.TANK_SIZE;
         turn.tank.position.setX(posXFirstTank);
-        turn.tank.position.setY(Constants.SEA_LEVEL);
+
+        //Position tank 1 on terrain
+        for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
+            if (terrain.resolutionMatrix[i][posXFirstTank + Constants.TANK_SIZE/2] == 1) {
+                turn.tank.position.setY(i - Constants.TANK_SIZE);
+                break;
+            }
+        }
         Illustrator.drawTank(gc,turn.tank);
-        Illustrator.drawTank(gc,new Tank(Color.BLUE,new Point(posxSecondTank,Constants.SEA_LEVEL)));
+
+        //Position tank 2 on terrain
+        for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
+            if (terrain.resolutionMatrix[i][posXSecondTank + Constants.TANK_SIZE/2] == 1) {
+                posYSecondTank = i - Constants.TANK_SIZE;
+                break;
+            }
+        }
+        Illustrator.drawTank(gc,new Tank(Color.BLUE,new Point(posXSecondTank, posYSecondTank)));
     }
 }
