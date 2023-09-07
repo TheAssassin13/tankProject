@@ -41,8 +41,9 @@ public class GameController implements Initializable {
 
     public void tanksPlacement(GraphicsContext gc, Land terrain) {
         int gap = Constants.WINDOWS_WIDTH / 2;
-        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE); //Formula changed
-        int posXSecondTank = posXFirstTank + gap;
+        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE);
+        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.random());
+        if (posXSecondTank > Constants.WINDOWS_WIDTH) posXSecondTank = Constants.WINDOWS_WIDTH - Constants.TANK_SIZE * 2;
         int posYSecondTank = Constants.WINDOWS_HEIGHT - Constants.TANK_SIZE;
         turn.tank.position.setX(posXFirstTank);
 
