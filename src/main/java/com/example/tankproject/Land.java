@@ -1,16 +1,15 @@
 package com.example.tankproject;
 
-import java.util.ArrayList;
 
 public class Land {
     public int[][] resolutionMatrix;
-    int height;
-    int width;
+    public int height;
+    public int width;
 
     public Land(int height, int width) {
         this.height = height;
         this.width = width;
-        resolutionMatrix = new int[height][width];
+        this.resolutionMatrix = new int[height][width];
     }
 
     public void terrainGeneration(int seaLevel, boolean random) {

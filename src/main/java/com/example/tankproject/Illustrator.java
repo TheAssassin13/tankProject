@@ -5,18 +5,14 @@ import javafx.scene.paint.Color;
 
 public class Illustrator {
 
-    public static void drawTest(GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH, 10);
-        gc.setFill(Color.BLUE);
-        gc.fillOval(100,0,300,300);
-    }
 
     public static void drawBackground(GraphicsContext gc) {
         gc.setFill(Color.LIGHTBLUE);
         gc.fillRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         gc.setFill(Color.ORANGE);
         gc.fillOval(100, 50, 300, 300);
+        gc.setFill(Color.web("#332E30"));
+        gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
     }
 
     public static void drawTerrain(GraphicsContext gc, Land terrain) {
@@ -37,6 +33,7 @@ public class Illustrator {
     }
 
     public static void drawShot(GraphicsContext gc, Shot shot) {
-
+        gc.setFill(Constants.SHOT_COLOR);
+        gc.fillOval(shot.position.getX(),shot.position.getY(),Constants.SHOT_SIZE,Constants.SHOT_SIZE);
     }
 }

@@ -23,18 +23,18 @@
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                    <children>
                   <Label text="Angle" />
-                       <TextField focusTraversable="false" prefHeight="35.0" prefWidth="50.0" promptText="45°">
+                       <TextField fx:id="angleTextField" focusTraversable="false"  prefHeight="35.0" prefWidth="50.0" promptText="45°">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>
                   <Label layoutX="31.0" layoutY="33.0" text="Power" />
-                       <TextField focusTraversable="false" prefHeight="35.0" prefWidth="50.0" promptText="25">
+                       <TextField fx:id="powerTextField" focusTraversable="false"  prefHeight="35.0" prefWidth="50.0" promptText="25">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>
                    </children>
                </HBox>
-               <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="200.0" minWidth="100.0" mnemonicParsing="false" prefWidth="150.0" styleClass="shootButton" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="200.0" minWidth="100.0" mnemonicParsing="false" onAction="#onShootButtonClick" prefWidth="150.0" styleClass="shootButton" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -43,7 +43,7 @@
                </GridPane.margin></Button>
             <StackPane maxWidth="200.0" minWidth="100.0" prefHeight="150.0" prefWidth="50.0" styleClass="currentPlayerPanel">
                <children>
-                     <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" text="">
+                     <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0" >
                      <font>
                         <Font size="18.0" />
                      </font>

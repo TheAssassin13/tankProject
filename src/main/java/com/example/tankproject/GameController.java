@@ -1,9 +1,12 @@
 package com.example.tankproject;
 
+import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,21 +23,47 @@ public class GameController implements Initializable {
     public Player turn;
     public Text currentPlayerText;
     public GridPane buttonsPanel;
+    public TextField angleTextField;
+    public TextField powerTextField;
 
+    //Game interface, tanks and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        turn = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
         GraphicsContext gc = grid.getGraphicsContext2D();
-        currentPlayerText.setText("Current player: " + turn.name);
-        buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        //Test player
+        turn = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
+
         Land terrain = new Land(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
         terrain.terrainGeneration(Constants.SEA_LEVEL,true);
+        buttonsPanelInitialize();
+        drawingMethods(gc,terrain);
+
+
+        /*
+        //TEST
+        Shot s = new Shot(new Point(300,250),20,45);
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                s.shotPosition();
+                Illustrator.drawShot(gc,s);
+                //gc.clearRect(0,0,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+
+            }
+        }.start();
+        */
+    }
+
+    public void buttonsPanelInitialize() {
+        currentPlayerText.setText("Current player: " + turn.name);
+        buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         grid.setHeight(Constants.WINDOWS_HEIGHT-Constants.BUTTONS_PANEL_HEIGHT);
         grid.setWidth(Constants.WINDOWS_WIDTH);
+    }
+    public void drawingMethods(GraphicsContext gc, Land terrain) {
         Illustrator.drawBackground(gc);
         Illustrator.drawTerrain(gc,terrain);
         tanksPlacement(gc, terrain);
-
     }
 
 
@@ -64,5 +93,14 @@ public class GameController implements Initializable {
         }
         Illustrator.drawTank(gc,new Tank(Color.BLUE,new Point(posXSecondTank, posYSecondTank)));
     }
+
+    public void onShootButtonClick(ActionEvent actionEvent) {
+        //Make the shoot action
+        angleTextField.clear();
+        powerTextField.clear();
+
+
+    }
+
 
 }
