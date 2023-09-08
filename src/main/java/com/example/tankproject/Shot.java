@@ -22,13 +22,13 @@ public class Shot {
         this.balavelocidadY += Constants.GRAVITY;
 
         // Verifica si la bala ha alcanzado la altura del canvas
-        if (this.position.getY() >= Constants.WINDOWS_HEIGHT) {
+        /*if (this.position.getY() >= Constants.WINDOWS_HEIGHT) {
             // Restablece la posición de la bala
             this.position.setX(50);
             this.position.setY(300);
             this.balavelocidadY = -initialVelocity * Math.sin(angle);
         }
-
+*/
     }
 
 
