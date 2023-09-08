@@ -34,6 +34,6 @@ public class Illustrator {
 
     public static void drawShot(GraphicsContext gc, Shot shot) {
         gc.setFill(Constants.SHOT_COLOR);
-        gc.fillOval(shot.position.getX(),shot.position.getY(),Constants.SHOT_SIZE,Constants.SHOT_SIZE);
+        gc.fillOval(shot.position.getX() - Constants.SHOT_SIZE / 2,shot.position.getY() - Constants.SHOT_SIZE / 2,Constants.SHOT_SIZE,Constants.SHOT_SIZE);
     }
 }
