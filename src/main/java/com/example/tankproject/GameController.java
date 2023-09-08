@@ -41,7 +41,7 @@ public class GameController implements Initializable {
         this.players.add(new Player("Player2",Color.BLUE,new Tank(Color.BLUE, new Point(0,0))));
         this.turn = players.get(0);
 
-        this.terrain = new Terrain(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
+        this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL,false);
         buttonsPanelInitialize();
         tanksPlacement();
@@ -106,17 +106,31 @@ public class GameController implements Initializable {
                 Illustrator.drawShot(gc,s);
                 if (s.position.getX() > Constants.WINDOWS_WIDTH || s.position.getY() > Constants.CANVAS_HEIGHT) {
                     stop();
-                    System.out.println("salio");
+                    changeTurn();
                 }
-
+                if (s.TerrainColission(terrain)) {
+                    stop();
+                    changeTurn();
+                }
             }
         }.start();
 
         angleTextField.clear();
         powerTextField.clear();
 
-
     }
 
+    public void changeTurn() {
+        for (int i = 0; i < this.players.size(); i++) {
+            if (this.turn == this.players.get(i)) {
+                if (i+1 < this.players.size()) {
+                    this.turn = this.players.get(i+1);
+                } else {
+                    this.turn = this.players.get(0);
+                }
+                break;
+            }
+        }
+    }
 
 }

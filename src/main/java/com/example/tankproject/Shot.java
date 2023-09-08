@@ -29,9 +29,12 @@ public class Shot {
     }
 
     public boolean TerrainColission(Terrain terrain) {
-        /*if () {
-
-        }*/
-        return true;
+        if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() > Constants.WINDOWS_WIDTH) {
+            return false;
+        }
+        if (terrain.resolutionMatrix[this.position.getY()][this.position.getX()] == 1) {
+            return true;
+        }
+        return false;
     }
 }

@@ -17,7 +17,7 @@ public class Illustrator {
 
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
+        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
                     gc.fillRect(j, i,1,2);
