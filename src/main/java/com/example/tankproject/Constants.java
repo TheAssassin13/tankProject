@@ -11,7 +11,7 @@ public class Constants {
     public static int TANKS_QUANTITY = 2;
     public static double GRAVITY = 9 * 0.1;
     public static int SHOT_SIZE = 10;
-    public static int TANK_SIZE = 15;
+    public static int TANK_SIZE = 30;
     public static int PIXEL_SIZE = 2;
     public static double SHOT_VELOCITY = 0.5;
     public static Color SKY_COLOR = Color.LIGHTBLUE;

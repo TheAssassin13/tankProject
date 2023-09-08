@@ -24,7 +24,7 @@ public class Shot {
     }
 
     public boolean tankCollision(Tank tank) {
-        return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) + Constants.SHOT_SIZE);
+        return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_SIZE);
     }
 
     public boolean terrainCollision(Terrain terrain) {

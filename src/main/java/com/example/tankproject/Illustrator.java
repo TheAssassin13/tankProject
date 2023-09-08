@@ -27,9 +27,18 @@ public class Illustrator {
     }
 
     public static void drawTank(GraphicsContext gc, Tank tank) {
+        int wheelSize = Constants.TANK_SIZE/3;
         gc.setFill(tank.color);
-        gc.fillOval(tank.position.getX(),tank.position.getY(),Constants.TANK_SIZE,Constants.TANK_SIZE);
-        gc.fillRect(tank.position.getX() + Constants.TANK_SIZE/2 - 2, tank.position.getY() - 8, 5, 10);
+        //Wheels
+        gc.fillOval(tank.position.getX() - wheelSize,tank.position.getY(),wheelSize,wheelSize);
+        gc.fillOval(tank.position.getX(),tank.position.getY(),wheelSize,wheelSize);
+        gc.fillOval(tank.position.getX() + wheelSize,tank.position.getY(),wheelSize,wheelSize);
+
+        gc.fillRect(tank.position.getX() - wheelSize, tank.position.getY() - wheelSize, Constants.TANK_SIZE, wheelSize);
+        gc.fillRect(tank.position.getX() - wheelSize/2, tank.position.getY() - wheelSize * 2, Constants.TANK_SIZE/2,wheelSize*2);
+
+        //Canon
+        gc.fillRect(tank.position.getX(), tank.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE,wheelSize/2);
     }
 
     public static void drawShot(GraphicsContext gc, Shot shot) {

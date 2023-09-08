@@ -30,6 +30,7 @@ public class GameController implements Initializable {
     public GridPane buttonsPanel;
     public TextField angleTextField;
     public TextField powerTextField;
+
     public Terrain terrain;
     public ArrayList<Player> players;
     public Text maxHeightTextField;
@@ -87,8 +88,8 @@ public class GameController implements Initializable {
 
         //Position tank 1 on terrain
         for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
-            if (terrain.resolutionMatrix[i][posXFirstTank + Constants.TANK_SIZE / 2] == 1) {
-                posYFirstTank = i - Constants.TANK_SIZE;
+            if (terrain.resolutionMatrix[i][posXFirstTank] == 1) {
+                posYFirstTank = i - Constants.TANK_SIZE/3;
                 break;
             }
         }
@@ -96,8 +97,8 @@ public class GameController implements Initializable {
 
         //Position tank 2 on terrain
         for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
-            if (terrain.resolutionMatrix[i][posXSecondTank + Constants.TANK_SIZE / 2] == 1) {
-                posYSecondTank = i - Constants.TANK_SIZE;
+            if (terrain.resolutionMatrix[i][posXSecondTank] == 1) {
+                posYSecondTank = i - Constants.TANK_SIZE/3;
                 break;
             }
         }
@@ -122,8 +123,8 @@ public class GameController implements Initializable {
             Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));
             maxDistance = (int) ((Math.pow(s.initialVelocity,2) * Math.sin(s.angle * 2)) / Constants.GRAVITY);
-            maxDistanceTextField.setText("Max height = " + maxDistance);
-            maxHeightTextField.setText("Max distance = " + maxHeight);
+            maxDistanceTextField.setText("Max height = " + maxHeight);
+            maxHeightTextField.setText("Max distance = " + maxDistance);
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
