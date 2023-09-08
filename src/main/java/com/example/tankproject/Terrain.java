@@ -1,12 +1,12 @@
 package com.example.tankproject;
 
 
-public class Land {
+public class Terrain {
     public int[][] resolutionMatrix;
     public int height;
     public int width;
 
-    public Land(int height, int width) {
+    public Terrain(int height, int width) {
         this.height = height;
         this.width = width;
         this.resolutionMatrix = new int[height][width];

@@ -15,7 +15,7 @@ public class Illustrator {
         gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
     }
 
-    public static void drawTerrain(GraphicsContext gc, Land terrain) {
+    public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         gc.setFill(Color.BLACK);
         for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {

@@ -27,7 +27,7 @@ public class GameController implements Initializable {
     public TextField angleTextField;
     public TextField powerTextField;
 
-    public Land terrain;
+    public Terrain terrain;
 
     //Game interface, tanks and terrain initialization
     @Override
@@ -36,7 +36,7 @@ public class GameController implements Initializable {
         //Test player
         this.turn = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
 
-        this.terrain = new Land(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
+        this.terrain = new Terrain(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL,false);
         buttonsPanelInitialize();
         tanksPlacement();
@@ -47,7 +47,7 @@ public class GameController implements Initializable {
     public void buttonsPanelInitialize() {
         currentPlayerText.setText("Current player: " + turn.name);
         buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        grid.setHeight(Constants.WINDOWS_HEIGHT-Constants.BUTTONS_PANEL_HEIGHT);
+        grid.setHeight(Constants.CANVAS_HEIGHT);
         grid.setWidth(Constants.WINDOWS_WIDTH);
     }
     public void drawingMethods() {
@@ -97,7 +97,7 @@ public class GameController implements Initializable {
                 s.shotPosition();
                 drawingMethods();
                 Illustrator.drawShot(gc,s);
-                if (s.position.getX() > Constants.WINDOWS_WIDTH || s.position.getY() > Constants.WINDOWS_HEIGHT) {
+                if (s.position.getX() > Constants.WINDOWS_WIDTH || s.position.getY() > Constants.CANVAS_HEIGHT) {
                     stop();
                     System.out.println("salio");
                 }

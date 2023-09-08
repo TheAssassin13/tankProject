@@ -1,6 +1,6 @@
 .root {
     -fx-red-color: #da3a2f;
-    -fx-grey-color: #3e3e3e;
+    -fx-grey-color: #bbbbbb;
     -fx-white-color: #eeeeee;
     -fx-green-color: #82e395;
     -fx-blue-color: #00e1ff;
@@ -21,7 +21,7 @@
 
 .buttonPanel {
     -fx-background-color: -fx-white-color;
-    -fx-border-width: 2px;
+    -fx-border-width: 3px 0 0 0;
     -fx-border-color: -fx-grey-color;
 }
 
