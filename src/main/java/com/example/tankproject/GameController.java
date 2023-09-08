@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
@@ -28,20 +29,23 @@ public class GameController implements Initializable {
     public TextField powerTextField;
 
     public Terrain terrain;
+    public ArrayList<Player> players;
 
     //Game interface, tanks and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.gc = grid.getGraphicsContext2D();
         //Test player
-        this.turn = new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0)));
+        this.players = new ArrayList<>();
+        this.players.add(new Player("Player1",Color.GREENYELLOW,new Tank(Color.GREENYELLOW, new Point(0,0))));
+        this.players.add(new Player("Player2",Color.BLUE,new Tank(Color.BLUE, new Point(0,0))));
+        this.turn = players.get(0);
 
         this.terrain = new Terrain(Constants.WINDOWS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL,false);
         buttonsPanelInitialize();
         tanksPlacement();
         drawingMethods();
-
     }
 
     public void buttonsPanelInitialize() {
@@ -53,8 +57,9 @@ public class GameController implements Initializable {
     public void drawingMethods() {
         Illustrator.drawBackground(this.gc);
         Illustrator.drawTerrain(this.gc,this.terrain);
-        Illustrator.drawTank(this.gc,this.turn.tank);
-
+        for (Player p: this.players) {
+            Illustrator.drawTank(this.gc, p.tank);
+        }
     }
 
 
@@ -62,27 +67,29 @@ public class GameController implements Initializable {
         int gap = Constants.WINDOWS_WIDTH / 2;
         int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE);
         int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.random());
-        if (posXSecondTank > Constants.WINDOWS_WIDTH) posXSecondTank = Constants.WINDOWS_WIDTH - Constants.TANK_SIZE * 2;
-        int posYSecondTank = Constants.WINDOWS_HEIGHT - Constants.TANK_SIZE;
-        turn.tank.position.setX(posXFirstTank);
+        if (posXSecondTank >= Constants.WINDOWS_WIDTH) posXSecondTank = Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2);
+        int posYSecondTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
+        int posYFirstTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
+        this.players.get(0).tank.position.setX(posXFirstTank);
+        this.players.get(1).tank.position.setX(posXSecondTank);
 
         //Position tank 1 on terrain
-        for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
+        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
             if (terrain.resolutionMatrix[i][posXFirstTank + Constants.TANK_SIZE/2] == 1) {
-                turn.tank.position.setY(i - Constants.TANK_SIZE);
+                posYFirstTank = i - Constants.TANK_SIZE;
                 break;
             }
         }
-//        Illustrator.drawTank(gc,turn.tank);
+        this.players.get(0).tank.position.setY(posYFirstTank);
 
         //Position tank 2 on terrain
-        for (int i = 0; i < Constants.WINDOWS_HEIGHT; i++) {
+        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
             if (terrain.resolutionMatrix[i][posXSecondTank + Constants.TANK_SIZE/2] == 1) {
                 posYSecondTank = i - Constants.TANK_SIZE;
                 break;
             }
         }
-  //      Illustrator.drawTank(gc,new Tank(Color.BLUE,new Point(posXSecondTank, posYSecondTank)));
+        this.players.get(1).tank.position.setY(posYSecondTank);
     }
 
     public void onShootButtonClick(ActionEvent actionEvent) {

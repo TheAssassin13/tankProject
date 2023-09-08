@@ -12,7 +12,7 @@ public class Illustrator {
         gc.setFill(Color.ORANGE);
         gc.fillOval(100, 50, 300, 300);
         gc.setFill(Color.web("#332E30"));
-        gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+        gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH, Constants.CANVAS_HEIGHT - Constants.SEA_LEVEL);
     }
 
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {

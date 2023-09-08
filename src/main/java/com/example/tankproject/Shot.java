@@ -28,4 +28,10 @@ public class Shot {
         return true;
     }
 
+    public boolean TerrainColission(Terrain terrain) {
+        /*if () {
+
+        }*/
+        return true;
+    }
 }
