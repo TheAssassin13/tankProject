@@ -8,7 +8,20 @@
 
 <VBox fx:id="vbox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
    <children>
-      <Canvas fx:id="grid" height="200.0" width="600.0" />
+      <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Canvas fx:id="grid" height="200.0" width="600.0" />
+            <VBox fillWidth="false" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Text fx:id="maxHeightTextField" strokeType="OUTSIDE" strokeWidth="0.0" text="Max height = " />
+                  <Text fx:id="maxDistanceTextField" strokeType="OUTSIDE" strokeWidth="0.0" text="Max distance = " />
+               </children>
+               <padding>
+                  <Insets left="15.0" top="15.0" />
+               </padding>
+            </VBox>
+         </children>
+      </StackPane>
        <GridPane fx:id="buttonsPanel" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="150.0" styleClass="buttonPanel" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
            <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,12 +36,12 @@
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                    <children>
                   <Label text="Angle" />
-                       <TextField fx:id="angleTextField" prefHeight="35.0" prefWidth="50.0" promptText="45°">
+                       <TextField fx:id="angleTextField" prefHeight="35.0" prefWidth="50.0" promptText="degree">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>
                   <Label layoutX="31.0" layoutY="33.0" text="Power" />
-                       <TextField fx:id="powerTextField" prefHeight="35.0" prefWidth="50.0" promptText="25">
+                       <TextField fx:id="powerTextField" prefHeight="35.0" prefWidth="50.0" promptText="m/s">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></TextField>

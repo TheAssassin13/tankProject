@@ -7,16 +7,16 @@ public class Illustrator {
 
 
     public static void drawBackground(GraphicsContext gc) {
-        gc.setFill(Color.LIGHTBLUE);
+        gc.setFill(Constants.SKY_COLOR);
         gc.fillRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        gc.setFill(Color.ORANGE);
+        gc.setFill(Constants.SUN_COLOR);
         gc.fillOval(100, 50, 300, 300);
-        gc.setFill(Color.web("#332E30"));
+        gc.setFill(Constants.SEA_LEVEL_COLOR);
         gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH, Constants.CANVAS_HEIGHT - Constants.SEA_LEVEL);
     }
 
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
-        gc.setFill(Color.BLACK);
+        gc.setFill(Constants.TERRAIN_COLOR);
         for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
             for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
                 if (terrain.resolutionMatrix[i][j] == 1) {

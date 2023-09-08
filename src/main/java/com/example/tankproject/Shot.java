@@ -3,9 +3,9 @@ package com.example.tankproject;
 
 public class Shot {
     public Point position;
-    private double velocityX, velocityY; // Velocidad de la bala
-    private double initialVelocity; // Velocidad inicial de la bala
-    private double angle; // Ángulo de lanzamiento
+    public double velocityX, velocityY; // Velocidad de la bala
+    public double initialVelocity; // Velocidad inicial de la bala
+    public double angle; // Ángulo de lanzamiento
 
     public Shot(Point position, double initialVelocity, double angle) {
         this.initialVelocity = initialVelocity;
@@ -17,8 +17,8 @@ public class Shot {
 
     public void shotPosition() {
         // Esto va actualizando la posición de la bala
-        this.position.setX((int) (this.position.getX() + velocityX));
-        this.position.setY((int) (this.position.getY() + velocityY));
+        this.position.setX((int) (this.position.getX() + velocityX * Constants.SHOT_VELOCITY));
+        this.position.setY((int) (this.position.getY() + velocityY * Constants.SHOT_VELOCITY));
         this.velocityY += Constants.GRAVITY;
 
     }
