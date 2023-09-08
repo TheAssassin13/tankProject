@@ -93,27 +93,27 @@ public class GameController implements Initializable {
     }
 
     public void onShootButtonClick(ActionEvent actionEvent) {
-        //TEST
-        GraphicsContext gc = this.gc;
-
-        Shot s = new Shot(new Point(turn.tank.position.getX(),turn.tank.position.getY()),Integer.parseInt(powerTextField.getText()),Integer.parseInt(angleTextField.getText()));
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                gc.clearRect(0,0,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
-                s.shotPosition();
-                drawingMethods();
-                Illustrator.drawShot(gc,s);
-                if (s.position.getX() > Constants.WINDOWS_WIDTH || s.position.getY() > Constants.CANVAS_HEIGHT) {
-                    stop();
-                    changeTurn();
+        if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
+            Shot s = new Shot(new Point(turn.tank.position.getX(),turn.tank.position.getY()),Double.parseDouble(powerTextField.getText()),Double.parseDouble(angleTextField.getText()));
+            new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    gc.clearRect(0,0,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+                    s.shotPosition();
+                    drawingMethods();
+                    Illustrator.drawShot(gc,s);
+                    if (s.position.getX() > Constants.WINDOWS_WIDTH || s.position.getY() > Constants.CANVAS_HEIGHT) {
+                        stop();
+                        changeTurn();
+                    }
+                    if (s.tankColission(players.get(1).tank)) System.out.println("Impacto");
+                    if (s.TerrainColission(terrain)) {
+                        stop();
+                        changeTurn();
+                    }
                 }
-                if (s.TerrainColission(terrain)) {
-                    stop();
-                    changeTurn();
-                }
-            }
-        }.start();
+            }.start();
+        }
 
         angleTextField.clear();
         powerTextField.clear();
