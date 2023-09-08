@@ -26,7 +26,7 @@
 }
 
 .currentPlayerPanel {
-    -fx-background-color: -fx-green-color;
+    -fx-background-color: GREENYELLOW;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
 }

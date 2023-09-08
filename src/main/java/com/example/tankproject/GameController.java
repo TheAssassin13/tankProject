@@ -8,12 +8,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
@@ -30,6 +32,7 @@ public class GameController implements Initializable {
 
     public Terrain terrain;
     public ArrayList<Player> players;
+    public StackPane currentPlayerPanel;
 
     //Game interface, tanks and terrain initialization
     @Override
@@ -62,12 +65,11 @@ public class GameController implements Initializable {
         }
     }
 
-
     public void tanksPlacement() {
         int gap = Constants.WINDOWS_WIDTH / 2;
-        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE);
-        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.random());
-        if (posXSecondTank >= Constants.WINDOWS_WIDTH) posXSecondTank = Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2);
+        int posXFirstTank = (int) (Math.round(Math.random()) * 2 * Constants.WINDOWS_WIDTH/5 + Constants.TANK_SIZE);
+        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.round(Math.random()));
+        if (posXSecondTank + Constants.TANK_SIZE/2 >= Constants.WINDOWS_WIDTH) posXSecondTank = Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2);
         int posYSecondTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
         int posYFirstTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
         this.players.get(0).tank.position.setX(posXFirstTank);
@@ -106,10 +108,13 @@ public class GameController implements Initializable {
                         stop();
                         changeTurn();
                     }
-                    if (s.tankColission(players.get(1).tank)) System.out.println("Impacto");
-                    if (s.TerrainColission(terrain)) {
+                    if (s.tankCollision(players.get(1).tank)) System.out.println("Impacto");
+                    if (s.terrainCollision(terrain)) {
                         stop();
                         changeTurn();
+                        gc.clearRect(0,0,Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+                        s.shotPosition();
+                        drawingMethods();
                     }
                 }
             }.start();
@@ -131,6 +136,9 @@ public class GameController implements Initializable {
                 break;
             }
         }
-    }
+        this.currentPlayerText.setText("Current player: " + this.turn.name);
+        String[] color = this.turn.color.toString().split("x");
+        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color: #" + color[1] + ";");
 
+    }
 }

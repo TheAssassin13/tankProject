@@ -51,6 +51,9 @@ public class Terrain {
             int maxHeight = seaLevel;
             for (int j = seaLevel; j < height; j++) {
                 resolutionMatrix[j][i] = 1;
+                if (j + 1 < height && resolutionMatrix[j+1][i] == 1) {
+                    break;
+                }
             }
 
             //Random probability y-axis increments or decrements
@@ -67,7 +70,7 @@ public class Terrain {
                 maxHeight = height4;
                 seaLevel += Math.round(Math.random());
             } else if (seaLevel < height - 1 && seaLevel > 1){
-                seaLevel += Math.round(Math.random()) * -(Math.round(Math.random()));
+                seaLevel += (Math.round(Math.random())) * -(Math.round(Math.random()));
             }
 
             //Random probability x-axis increments

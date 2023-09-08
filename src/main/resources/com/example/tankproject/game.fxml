@@ -41,7 +41,7 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></Button>
-            <StackPane maxWidth="200.0" minWidth="100.0" prefHeight="150.0" prefWidth="50.0" styleClass="currentPlayerPanel">
+            <StackPane fx:id="currentPlayerPanel" maxWidth="200.0" minWidth="100.0" prefHeight="150.0" prefWidth="50.0" styleClass="currentPlayerPanel">
                <children>
                      <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0">
                      <font>
