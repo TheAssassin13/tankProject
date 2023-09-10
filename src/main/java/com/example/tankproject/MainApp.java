@@ -23,6 +23,7 @@ public class MainApp extends Application {
         stage.show();
     }
 
+    // Convert a Color object to a Hexadecimal string
     public static String toHexString(Color color) {
         int red = (int) (color.getRed() * 255);
         int green = (int) (color.getGreen() * 255);
@@ -32,6 +33,5 @@ public class MainApp extends Application {
     }
     public static void main(String[] args) {
         launch();
-
     }
 }

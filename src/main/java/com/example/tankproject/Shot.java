@@ -15,14 +15,15 @@ public class Shot {
         this.velocityY = -initialVelocity * Math.sin(this.angle);
     }
 
+    // Updates the position of the shot
     public void shotPosition() {
-        // Esto va actualizando la posición de la bala
         this.position.setX((int) (this.position.getX() + velocityX * Constants.SHOT_VELOCITY));
         this.position.setY((int) (this.position.getY() + velocityY * Constants.SHOT_VELOCITY));
         this.velocityY += Constants.GRAVITY;
 
     }
 
+    // Checks if a tank gets hit by the shot
     public boolean tankCollision(Tank tank) {
         return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_SIZE);
     }
