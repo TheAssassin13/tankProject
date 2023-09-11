@@ -45,9 +45,10 @@ public class GameController implements Initializable {
         this.gc = grid.getGraphicsContext2D();
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
-        this.alivePlayers.add(new Player("Player1", Color.GREENYELLOW, new Tank(Color.GREENYELLOW, new Point(0, 0))));
-        this.alivePlayers.add(new Player("Player2", Color.BLUE, new Tank(Color.BLUE, new Point(0, 0))));
-        this.turn = alivePlayers.get(0);
+        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+            this.alivePlayers.add(new Player("Player" + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+        }
+        this.turn = alivePlayers.get((int) Math.round(Math.random()));
         this.maxDistanceTextField.setText("Max distance = 0");
         this.maxHeightTextField.setText("Max height = 0");
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
@@ -55,6 +56,7 @@ public class GameController implements Initializable {
         buttonsPanelInitialize();
         tanksPlacement();
         drawingMethods();
+        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
     }
 
     // Initialize the buttons panel of the interface
@@ -77,8 +79,8 @@ public class GameController implements Initializable {
 
     public void tanksPlacement() {
         int gap = Constants.WINDOWS_WIDTH / 2;
-        int posXFirstTank = (int) (Math.round(Math.random()) * 2 * Constants.WINDOWS_WIDTH / 5 + Constants.TANK_SIZE);
-        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.round(Math.random()));
+        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / 5 + Constants.TANK_SIZE);
+        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.random());
         if (posXSecondTank + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
             posXSecondTank = Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2);
         int posYSecondTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
@@ -177,7 +179,7 @@ public class GameController implements Initializable {
         }
         this.currentPlayerText.setText("Current player: " + this.turn.name);
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
-        maxHeightTextField.setText("Max height = " + 0);
-        maxDistanceTextField.setText("Max distance = " + 0);
+        //maxHeightTextField.setText("Max height = " + 0);
+        //maxDistanceTextField.setText("Max distance = " + 0);
     }
 }

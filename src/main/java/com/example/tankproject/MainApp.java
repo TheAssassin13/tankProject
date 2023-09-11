@@ -13,7 +13,7 @@ import java.util.Objects;
 public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Image icon = new Image(Objects.requireNonNull(getClass().getResource("/com/example/tankProject/icons/windows_icon.png")).toExternalForm());
+        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("game.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
