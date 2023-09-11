@@ -141,7 +141,7 @@ public class GameController implements Initializable {
                     drawingMethods();
                     Illustrator.drawShot(gc, s);
                     // Shot is out of the screen in the X-axis
-                    if (s.position.getX() >= Constants.WINDOWS_WIDTH) {
+                    if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX()<0) {
                         stop();
                         changeTurn();
                         drawingMethods();
