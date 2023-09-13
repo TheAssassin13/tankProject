@@ -107,7 +107,7 @@ public class GameController implements Initializable {
         this.alivePlayers.get(1).tank.position.setY(posYSecondTank);
     }
 
-    // Checks if a player's tank, that is no the current player, is hit and return the hit player
+    // Checks if a player's tank, that is not the current player, is hit and return the hit player
     public Player tanksCollision(Shot shot) {
         for (Player p : this.alivePlayers) {
             if (this.turn != p && shot.tankCollision(p.tank)) {
@@ -129,6 +129,8 @@ public class GameController implements Initializable {
         maxDistance = 0;
         // Checks if the input is not empty
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
+            turn.tank.angle = Double.parseDouble(angleTextField.getText());
+            turn.tank.power = Double.parseDouble(powerTextField.getText());
             Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));
             maxDistance = (int) Math.abs(((Math.pow(s.initialVelocity,2) * Math.sin(s.angle * 2)) / Constants.GRAVITY));
@@ -145,6 +147,8 @@ public class GameController implements Initializable {
                         stop();
                         changeTurn();
                         drawingMethods();
+                        angleTextField.setText(String.valueOf(turn.tank.angle));
+                        powerTextField.setText(String.valueOf(turn.tank.power));
                     }
                     // Checks if a tank is hit
                     if (tanksCollision(s) != null) {
@@ -156,14 +160,13 @@ public class GameController implements Initializable {
                         changeTurn();
                         s.shotPosition();
                         drawingMethods();
+                        angleTextField.setText(String.valueOf(turn.tank.angle));
+                        powerTextField.setText(String.valueOf(turn.tank.power));
                     }
 
                 }
             }.start();
         }
-        angleTextField.clear();
-        powerTextField.clear();
-
     }
 
     public void changeTurn() {
