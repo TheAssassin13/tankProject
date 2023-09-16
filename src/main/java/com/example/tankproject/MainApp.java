@@ -11,8 +11,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class MainApp extends Application {
+    private static Stage stage;
     @Override
     public void start(Stage stage) throws IOException {
+        MainApp.stage = stage;
+        initializeGame();
+    }
+
+    public void initializeGame() throws IOException {
         Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("game.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
@@ -22,7 +28,6 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     // Convert a Color object to a Hexadecimal string
     public static String toHexString(Color color) {
         int red = (int) (color.getRed() * 255);
@@ -30,6 +35,13 @@ public class MainApp extends Application {
         int blue = (int) (color.getBlue() * 255);
 
         return String.format("#%02x%02x%02x", red, green, blue);
+    }
+
+    // Close actual window and start a new one
+    public static void restartGame() throws IOException{
+        stage.close();
+        MainApp newApp = new MainApp();
+        newApp.start(new Stage());
     }
     public static void main(String[] args) {
         launch();

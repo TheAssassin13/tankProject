@@ -1,29 +1,33 @@
 package com.example.tankproject;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static com.example.tankproject.MainApp.restartGame;
 import static com.example.tankproject.MainApp.toHexString;
 
 public class GameController implements Initializable {
     @FXML
     public VBox vbox;
     public Canvas grid;
-
     public GraphicsContext gc;
     public Player turn;
     public Text currentPlayerText;
@@ -38,6 +42,8 @@ public class GameController implements Initializable {
     public Text maxDistanceTextField;
     public int maxDistance;
     public StackPane currentPlayerPanel;
+    public StackPane stackPane;
+    public Button shootButton;
 
     //Game interface, players and terrain initialization
     @Override
@@ -53,10 +59,11 @@ public class GameController implements Initializable {
         this.maxHeightTextField.setText("Max height = 0");
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, false);
+        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
+
         buttonsPanelInitialize();
         tanksPlacement();
         drawingMethods();
-        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
     }
 
     // Initialize the buttons panel of the interface
@@ -132,10 +139,12 @@ public class GameController implements Initializable {
             turn.tank.angle = Double.parseDouble(angleTextField.getText());
             turn.tank.power = Double.parseDouble(powerTextField.getText());
             Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+            // Calculate max height and distance of the shot and display it to the interface
             maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));
             maxDistance = (int) Math.abs(((Math.pow(s.initialVelocity,2) * Math.sin(s.angle * 2)) / Constants.GRAVITY));
             maxDistanceTextField.setText("Max distance = " + maxDistance);
             maxHeightTextField.setText("Max height = " + maxHeight);
+
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
@@ -143,7 +152,7 @@ public class GameController implements Initializable {
                     drawingMethods();
                     Illustrator.drawShot(gc, s);
                     // Shot is out of the screen in the X-axis
-                    if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX()<0) {
+                    if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX() < 0) {
                         stop();
                         changeTurn();
                         drawingMethods();
@@ -163,10 +172,16 @@ public class GameController implements Initializable {
                         angleTextField.setText(String.valueOf(turn.tank.angle));
                         powerTextField.setText(String.valueOf(turn.tank.power));
                     }
+                    // Checks if there is only one player left
+                    if (alivePlayers.size() == 1) {
+                        winScreen();
+                    }
 
                 }
             }.start();
         }
+        angleTextField.requestFocus();
+
     }
 
     public void changeTurn() {
@@ -182,7 +197,48 @@ public class GameController implements Initializable {
         }
         this.currentPlayerText.setText("Current player: " + this.turn.name);
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
-        //maxHeightTextField.setText("Max height = " + 0);
-        //maxDistanceTextField.setText("Max distance = " + 0);
+    }
+
+    // Create the game win screen
+    public void winScreen() {
+        if (stackPane.getChildren().size() != 1) return;
+        Color color = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
+        BackgroundFill bf = new BackgroundFill(color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
+        Background bg = new Background(bf);
+        VBox vb = new VBox();
+        HBox hb = new HBox();
+        Font font = Font.font("Arial",FontWeight.BOLD,24);
+        Text tx = new Text(this.alivePlayers.get(0).name + " won!");
+        Button replay = new Button("Replay");
+        Button exit = new Button("Exit");
+
+        // Disable buttons of the interface game
+        angleTextField.setDisable(true);
+        powerTextField.setDisable(true);
+        shootButton.setDisable(true);
+
+        // Replay button action
+        replay.setOnAction(event -> {
+            try {
+                restartGame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // Exit button action
+        exit.setOnAction(event -> Platform.exit());
+
+        tx.setFont(font);
+        hb.getChildren().add(replay);
+        hb.getChildren().add(exit);
+        hb.alignmentProperty().set(Pos.CENTER);
+        hb.setSpacing(15);
+        vb.getChildren().add(tx);
+        vb.getChildren().add(hb);
+        vb.alignmentProperty().set(Pos.CENTER);
+        vb.setSpacing(30);
+        vb.setBackground(bg);
+        stackPane.getChildren().add(vb);
     }
 }
