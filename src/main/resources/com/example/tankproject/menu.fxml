@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="vbox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
+   <children>
+      <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="Tank Project" textAlignment="CENTER">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="startButton" text="Start" />
+      <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="exitButton" text="Exit" />
+   </children>
+</VBox>

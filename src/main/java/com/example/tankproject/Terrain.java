@@ -15,7 +15,7 @@ public class Terrain {
     public void terrainGeneration(int seaLevel, boolean random) {
         int margin = 50;
         //Reference points without random
-        int height1 = seaLevel - margin*2;
+        int height1 = seaLevel - margin*3;
         int height2 = seaLevel + margin*2;
         int height3 = height1 + margin;
         int height4 = height2 - margin;
@@ -41,10 +41,6 @@ public class Terrain {
             if (height4 + margin * 2 < height) height4 += margin * 2;
             width4 = (int) (width / 4 * Math.random()) + 3 * width / 4 - margin;
         }
-        resolutionMatrix[height1][width1] = 1;
-        resolutionMatrix[height3][width3] = 1;
-        resolutionMatrix[height2][width2] = 1;
-        resolutionMatrix[height4][width4] = 1;
 
         int i = 0;
         while (i < width) {
@@ -60,17 +56,21 @@ public class Terrain {
             if (seaLevel > 1 && i < width1) {
                 maxHeight = height1;
                 seaLevel -= Math.round(Math.random());
+
             } else if (seaLevel < height - 1 && i < width2) {
                 maxHeight = height2;
                 seaLevel += Math.round(Math.random());
+
             } else if (seaLevel > 1 && i < width3) {
                 maxHeight = height3;
                 seaLevel -= Math.round(Math.random());
+
             } else if (seaLevel < height - 1 && i < width4) {
                 maxHeight = height4;
                 seaLevel += Math.round(Math.random());
+
             } else if (seaLevel < height - 1 && seaLevel > 1){
-                seaLevel += (Math.round(Math.random())) * -(Math.round(Math.random()));
+                seaLevel += Math.round(Math.random() * -Math.round(Math.random()));
             }
 
             //Random probability x-axis increments
@@ -84,11 +84,5 @@ public class Terrain {
                 i++;
             }
         }
-
-        //Delete reference points
-        resolutionMatrix[height1][width1] = 0;
-        resolutionMatrix[height2][width2] = 0;
-        resolutionMatrix[height3][width3] = 0;
-        resolutionMatrix[height4][width4] = 0;
     }
 }

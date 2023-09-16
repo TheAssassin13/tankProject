@@ -7,11 +7,38 @@
     -fx-yellow-color: #ffef50;
 }
 
+.titleMenu {
+    -fx-font-size: 48px;
+    -fx-padding: 0 0 300 0;
+}
+
+.button {
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.startButton {
+    -fx-background-color: -fx-green-color;
+}
+
+.startButton:hover {
+    -fx-background-color: derive(-fx-green-color,25%);
+
+}
+
+.exitButton {
+    -fx-background-color: -fx-red-color;
+    -fx-text-fill: -fx-white-color;
+}
+
+.exitButton:hover {
+    -fx-background-color: derive(-fx-red-color,25%);
+
+}
+
 .shootButton {
     -fx-background-color: -fx-red-color;
     -fx-text-fill: -fx-white-color;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
 }
 
 .shootButton:hover {

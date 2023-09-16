@@ -158,7 +158,6 @@ public class GameController implements Initializable {
                     if (s.terrainCollision(terrain)) {
                         stop();
                         changeTurn();
-                        s.shotPosition();
                         drawingMethods();
                         angleTextField.setText(String.valueOf(turn.tank.angle));
                         powerTextField.setText(String.valueOf(turn.tank.power));
