@@ -2,7 +2,6 @@ package com.example.tankproject;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 
 public class Constants {
     public static int WINDOWS_HEIGHT = 600;
@@ -15,11 +14,12 @@ public class Constants {
     public static int SHOT_SIZE = 10;
     public static int TANK_SIZE = 30;
     public static int PIXEL_SIZE = 1;
-    public static double SHOT_VELOCITY = 0.5;
+    public static double SHOT_VELOCITY = 0.35;
     public static Color SKY_COLOR = Color.LIGHTBLUE;
     public static Color SUN_COLOR = Color.ORANGE;
     public static Color SEA_LEVEL_COLOR = Color.web("#332E30");
     public static Color TERRAIN_COLOR = Color.BLACK;
     public static Color SHOT_COLOR = Color.BROWN;
     public static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE};
+    public static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
 }

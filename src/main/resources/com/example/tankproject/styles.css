@@ -53,7 +53,7 @@
 }
 
 .currentPlayerPanel {
-    -fx-background-color: GREENYELLOW;
+    -fx-background-color: -fx-white-color;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
 }
