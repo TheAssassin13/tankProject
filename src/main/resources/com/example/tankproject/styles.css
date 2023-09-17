@@ -2,7 +2,7 @@
     -fx-red-color: #da3a2f;
     -fx-grey-color: #bbbbbb;
     -fx-white-color: #eeeeee;
-    -fx-green-color: #82e395;
+    -fx-green-color: #1ad969;
     -fx-blue-color: #00e1ff;
     -fx-yellow-color: #ffef50;
 }
@@ -22,8 +22,7 @@
 }
 
 .startButton:hover {
-    -fx-background-color: derive(-fx-green-color,25%);
-
+    -fx-background-color: derive(-fx-green-color, 25%);
 }
 
 .exitButton {
@@ -33,26 +32,46 @@
 
 .exitButton:hover {
     -fx-background-color: derive(-fx-red-color,25%);
-
 }
 
-.shootButton {
+#shootButton {
     -fx-background-color: -fx-red-color;
     -fx-text-fill: -fx-white-color;
 }
 
-.shootButton:hover {
+#shootButton:hover {
+    -fx-background-color: derive(-fx-red-color,25%);
+}
+
+.winScreenButton {
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-pref-height: 75px;
+    -fx-pref-width: 75px;
+}
+
+#exitWinButton {
+    -fx-background-color: -fx-red-color;
+}
+
+#exitWinButton:hover {
     -fx-background-color: derive(-fx-red-color,25%);
 
 }
 
-.buttonPanel {
-    -fx-background-color: -fx-white-color;
-    -fx-border-width: 3px 0 0 0;
-    -fx-border-color: -fx-grey-color;
+#replayWinButton {
+    -fx-background-color: -fx-green-color;
 }
 
-.currentPlayerPanel {
+#replayWinButton:hover {
+    -fx-background-color: derive(-fx-green-color,25%);
+}
+
+#buttonsPanel {
+    -fx-background-color: -fx-white-color;
+}
+
+#currentPlayerPanel {
     -fx-background-color: -fx-white-color;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;

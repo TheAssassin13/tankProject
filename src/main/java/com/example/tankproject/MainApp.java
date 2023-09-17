@@ -15,7 +15,7 @@ public class MainApp extends Application {
     private static Stage stage;
     private static Scene scene;
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         MainApp.scene.setRoot(loadFXML(fxml));
     }
     private static Parent loadFXML(String fxml) throws IOException {
@@ -32,18 +32,14 @@ public class MainApp extends Application {
         Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
         scene = new Scene(loadFXML("menu"), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
+        stage.setMinWidth(Constants.WINDOWS_WIDTH);
+        stage.setMinHeight(Constants.WINDOWS_HEIGHT + 25);
+        stage.setMaxWidth(Constants.WINDOWS_WIDTH);
+        stage.setMaxHeight(Constants.WINDOWS_HEIGHT + 25);
         stage.getIcons().add(icon);
         stage.setTitle("Tank Project");
         stage.setScene(scene);
         stage.show();
-    }
-    // Convert a Color object to a Hexadecimal string
-    public static String toHexString(Color color) {
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
-
-        return String.format("#%02x%02x%02x", red, green, blue);
     }
 
     // Close actual window and start a new one
@@ -51,6 +47,16 @@ public class MainApp extends Application {
         stage.close();
         MainApp newApp = new MainApp();
         newApp.start(new Stage());
+        MainApp.setRoot("game");
+    }
+
+    // Convert a Color object to a Hexadecimal string
+    public static String toHexString(Color color) {
+        int red = (int) (color.getRed() * 255);
+        int green = (int) (color.getGreen() * 255);
+        int blue = (int) (color.getBlue() * 255);
+
+        return String.format("#%02x%02x%02x", red, green, blue);
     }
     public static void main(String[] args) {
         launch();

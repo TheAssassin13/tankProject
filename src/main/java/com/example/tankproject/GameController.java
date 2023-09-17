@@ -9,7 +9,10 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,6 +22,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.example.tankproject.MainApp.restartGame;
@@ -70,6 +74,8 @@ public class GameController implements Initializable {
     public void buttonsPanelInitialize() {
         currentPlayerText.setText("Current player: " + turn.name);
         buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
         grid.setHeight(Constants.CANVAS_HEIGHT);
         grid.setWidth(Constants.WINDOWS_WIDTH);
     }
@@ -202,14 +208,24 @@ public class GameController implements Initializable {
     public void winScreen() {
         if (stackPane.getChildren().size() != 1) return;
         Color color = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
-        BackgroundFill bf = new BackgroundFill(color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
-        Background bg = new Background(bf);
-        VBox vb = new VBox();
-        HBox hb = new HBox();
-        Font font = Font.font("Arial",FontWeight.BOLD,24);
-        Text tx = new Text(this.alivePlayers.get(0).name + " won!");
-        Button replay = new Button("Replay");
-        Button exit = new Button("Exit");
+        BackgroundFill backgroundFill = new BackgroundFill(color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        VBox vbox = new VBox();
+        VBox replayVbox = new VBox();
+        VBox exitVbox = new VBox();
+        HBox hbox = new HBox();
+        Font font = Font.font("Arial",FontWeight.BOLD,50);
+        Font labelFont = Font.font("Arial",20);
+        Text winnerText = new Text(this.alivePlayers.get(0).name + " won!");
+        Label replayLabel = new Label("Replay");
+        Label exitLabel = new Label("Exit");
+        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon.png")).toExternalForm());
+        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm());
+        ImageView replayIconView = new ImageView(replayIcon);
+        ImageView exitIconView = new ImageView(exitIcon);
+
+        Button replayButton = new Button("",replayIconView);
+        Button exitButton = new Button("",exitIconView);
 
         // Disable buttons of the interface game
         angleTextField.setDisable(true);
@@ -217,7 +233,7 @@ public class GameController implements Initializable {
         shootButton.setDisable(true);
 
         // Replay button action
-        replay.setOnAction(event -> {
+        replayButton.setOnAction(event -> {
             try {
                 restartGame();
             } catch (IOException e) {
@@ -226,18 +242,38 @@ public class GameController implements Initializable {
         });
 
         // Exit button action
-        exit.setOnAction(event -> Platform.exit());
+        exitButton.setOnAction(event -> Platform.exit());
 
-        tx.setFont(font);
-        hb.getChildren().add(replay);
-        hb.getChildren().add(exit);
-        hb.alignmentProperty().set(Pos.CENTER);
-        hb.setSpacing(15);
-        vb.getChildren().add(tx);
-        vb.getChildren().add(hb);
-        vb.alignmentProperty().set(Pos.CENTER);
-        vb.setSpacing(30);
-        vb.setBackground(bg);
-        stackPane.getChildren().add(vb);
+        replayLabel.setTextFill(Color.BLACK);
+        exitLabel.setTextFill(Color.BLACK);
+        replayIconView.setFitHeight(45);
+        replayIconView.setFitWidth(45);
+        exitIconView.setFitHeight(45);
+        exitIconView.setFitWidth(45);
+        replayLabel.setFont(labelFont);
+        exitLabel.setFont(labelFont);
+        replayButton.getStyleClass().add("winScreenButton");
+        exitButton.getStyleClass().add("winScreenButton");
+        replayButton.setId("replayWinButton");
+        exitButton.setId("exitWinButton");
+        winnerText.setFont(font);
+        replayVbox.getChildren().add(replayButton);
+        replayVbox.getChildren().add(replayLabel);
+        exitVbox.getChildren().add(exitButton);
+        exitVbox.getChildren().add(exitLabel);
+        replayVbox.alignmentProperty().set(Pos.CENTER);
+        exitVbox.alignmentProperty().set(Pos.CENTER);
+        replayVbox.setSpacing(5);
+        exitVbox.setSpacing(5);
+        hbox.getChildren().add(replayVbox);
+        hbox.getChildren().add(exitVbox);
+        hbox.alignmentProperty().set(Pos.CENTER);
+        hbox.setSpacing(80);
+        vbox.getChildren().add(winnerText);
+        vbox.getChildren().add(hbox);
+        vbox.alignmentProperty().set(Pos.CENTER);
+        vbox.setSpacing(30);
+        vbox.setBackground(background);
+        stackPane.getChildren().add(vbox);
     }
 }
