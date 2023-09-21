@@ -82,3 +82,10 @@
 .menu {
     -fx-background-color: linear-gradient(to bottom, -fx-orange-color, black);
 }
+
+#maxTextsPanel {
+    -fx-background-color: rgb(255,255,255,0.5);
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-color: -fx-white-color;
+}

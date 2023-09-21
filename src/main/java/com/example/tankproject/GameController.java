@@ -48,6 +48,7 @@ public class GameController implements Initializable {
     public StackPane currentPlayerPanel;
     public StackPane stackPane;
     public Button shootButton;
+    public ImageView backgroundImage;
 
     //Game interface, players and terrain initialization
     @Override
@@ -56,7 +57,7 @@ public class GameController implements Initializable {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
         for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
-            this.alivePlayers.add(new Player("Player" + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+            this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
         this.turn = alivePlayers.get((int) Math.round(Math.random()));
         this.maxDistanceTextField.setText("Max distance = 0");
@@ -64,6 +65,9 @@ public class GameController implements Initializable {
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, false);
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
+        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
+        this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
+        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
 
         buttonsPanelInitialize();
         tanksPlacement();
@@ -72,7 +76,7 @@ public class GameController implements Initializable {
 
     // Initialize the buttons panel of the interface
     public void buttonsPanelInitialize() {
-        currentPlayerText.setText("Current player: " + turn.name);
+        currentPlayerText.setText(turn.name + " is playing");
         buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
         buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
@@ -83,7 +87,6 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods() {
         gc.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        Illustrator.drawBackground(this.gc);
         Illustrator.drawTerrain(this.gc, this.terrain);
         for (Player p : this.alivePlayers) {
             Illustrator.drawTank(this.gc, p.tank);
@@ -137,7 +140,7 @@ public class GameController implements Initializable {
     }
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
-    public void onShootButtonClick(ActionEvent actionEvent) {
+    public void onShootButtonClick(ActionEvent ignoredActionEvent) {
         maxHeight = 0;
         maxDistance = 0;
         // Checks if the input is not empty
@@ -206,7 +209,7 @@ public class GameController implements Initializable {
                 break;
             }
         }
-        this.currentPlayerText.setText("Current player: " + this.turn.name);
+        this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
     }
 
