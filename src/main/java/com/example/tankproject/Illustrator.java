@@ -45,4 +45,11 @@ public class Illustrator {
         gc.setFill(Constants.SHOT_COLOR);
         gc.fillOval(shot.position.getX() - Constants.SHOT_SIZE / 2,shot.position.getY() - Constants.SHOT_SIZE / 2,Constants.SHOT_SIZE,Constants.SHOT_SIZE);
     }
+
+    public static void drawTrajectory(GraphicsContext gc, Shot shot) {
+        gc.setFill(Color.GRAY);
+        for (int i = 0; i < shot.trajectory.size(); i+=3) {
+            gc.fillOval(shot.trajectory.get(i).getX() - Constants.SHOT_SIZE / 2,shot.trajectory.get(i).getY() - Constants.SHOT_SIZE / 2, Constants.SHOT_SIZE, Constants.SHOT_SIZE);
+        }
+    }
 }

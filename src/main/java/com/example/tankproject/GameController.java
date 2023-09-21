@@ -156,6 +156,7 @@ public class GameController implements Initializable {
                 public void handle(long now) {
                     s.shotPosition();
                     drawingMethods();
+                    Illustrator.drawTrajectory(gc, s);
                     Illustrator.drawShot(gc, s);
                     // Shot is out of the screen in the X-axis
                     if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX() < 0) {
@@ -181,7 +182,9 @@ public class GameController implements Initializable {
                     if (alivePlayers.size() == 1) {
                         winScreen();
                     }
-
+                    if (now % 10 == 0) {
+                        s.addTrajectory();
+                    }
                 }
             }.start();
         }
