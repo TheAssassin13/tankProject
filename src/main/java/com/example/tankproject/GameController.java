@@ -163,8 +163,10 @@ public class GameController implements Initializable {
                         stop();
                         changeTurn();
                         drawingMethods();
-                        angleTextField.setText(String.valueOf(turn.tank.angle));
-                        powerTextField.setText(String.valueOf(turn.tank.power));
+                        if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
+                            angleTextField.setText(String.valueOf(turn.tank.angle));
+                            powerTextField.setText(String.valueOf(turn.tank.power));
+                        }
                     }
                     // Checks if a tank is hit
                     if (tanksCollision(s) != null) {
@@ -175,8 +177,10 @@ public class GameController implements Initializable {
                         stop();
                         changeTurn();
                         drawingMethods();
-                        angleTextField.setText(String.valueOf(turn.tank.angle));
-                        powerTextField.setText(String.valueOf(turn.tank.power));
+                        if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
+                            angleTextField.setText(String.valueOf(turn.tank.angle));
+                            powerTextField.setText(String.valueOf(turn.tank.power));
+                        }
                     }
                     // Checks if there is only one player left
                     if (alivePlayers.size() == 1) {
@@ -189,7 +193,6 @@ public class GameController implements Initializable {
             }.start();
         }
         angleTextField.requestFocus();
-
     }
 
     public void changeTurn() {
