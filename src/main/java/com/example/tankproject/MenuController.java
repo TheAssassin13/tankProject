@@ -5,7 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class MenuController implements Initializable {
     public Label titleMenu;
     public Button startButton;
     public Button exitButton;
+    public StackPane stackpane;
+    public GridPane gridpane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

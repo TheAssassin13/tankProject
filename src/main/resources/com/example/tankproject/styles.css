@@ -5,11 +5,13 @@
     -fx-green-color: #1ad969;
     -fx-blue-color: #00e1ff;
     -fx-yellow-color: #ffef50;
+    -fx-orange-color: #ff9e05;
 }
 
 .titleMenu {
     -fx-font-size: 48px;
-    -fx-padding: 0 0 300 0;
+    -fx-text-fill: -fx-white-color;
+    -fx-font-weight: bold;
 }
 
 .button {
@@ -75,4 +77,8 @@
     -fx-background-color: -fx-white-color;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
+}
+
+.menu {
+    -fx-background-color: linear-gradient(to bottom, -fx-orange-color, black);
 }
