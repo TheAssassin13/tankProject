@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -161,14 +162,19 @@ public class GameController implements Initializable {
                     drawingMethods();
                     Illustrator.drawTrajectory(gc, s);
                     Illustrator.drawShot(gc, s);
+                    shootButton.setDisable(true);
                     // Shot is out of the screen in the X-axis
                     if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX() < 0) {
                         stop();
                         changeTurn();
                         drawingMethods();
+                        shootButton.setDisable(false);
                         if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
                             angleTextField.setText(String.valueOf(turn.tank.angle));
                             powerTextField.setText(String.valueOf(turn.tank.power));
+                        } else {
+                            angleTextField.clear();
+                            powerTextField.clear();
                         }
                     }
                     // Checks if a tank is hit
@@ -180,15 +186,20 @@ public class GameController implements Initializable {
                         stop();
                         changeTurn();
                         drawingMethods();
+                        shootButton.setDisable(false);
                         if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
                             angleTextField.setText(String.valueOf(turn.tank.angle));
                             powerTextField.setText(String.valueOf(turn.tank.power));
+                        }  else {
+                            angleTextField.clear();
+                            powerTextField.clear();
                         }
                     }
                     // Checks if there is only one player left
                     if (alivePlayers.size() == 1) {
                         winScreen();
                     }
+                    //Trajectory is drawn
                     if (now % 10 == 0) {
                         s.addTrajectory();
                     }

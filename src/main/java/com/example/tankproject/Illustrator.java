@@ -17,11 +17,21 @@ public class Illustrator {
 
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         gc.setFill(Constants.TERRAIN_COLOR);
-        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
-            for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
+        for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
+            int i = 0;
+            while (i < Constants.CANVAS_HEIGHT) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
-                    gc.fillRect(j, i,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
+                    if (i > 0 && terrain.resolutionMatrix[i-1][j] == 0) {
+                        gc.setFill(Color.DARKORANGE);
+                        gc.fillRect(j, i,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
+                        gc.fillRect(j, i+1,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
+                        gc.setFill(Constants.TERRAIN_COLOR);
+                        i++;
+                    } else {
+                        gc.fillRect(j, i,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
+                    }
                 }
+                i++;
             }
         }
     }
