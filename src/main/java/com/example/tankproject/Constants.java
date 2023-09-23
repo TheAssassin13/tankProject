@@ -20,6 +20,6 @@ public class Constants {
     public static Color SEA_LEVEL_COLOR = Color.web("#332E30");
     public static Color TERRAIN_COLOR = Color.BLACK;
     public static Color SHOT_COLOR = Color.BROWN;
-    public static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE};
+    public static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};
     public static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
 }

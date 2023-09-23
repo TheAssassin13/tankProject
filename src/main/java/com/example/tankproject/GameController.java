@@ -95,33 +95,36 @@ public class GameController implements Initializable {
     }
 
     public void tanksPlacement() {
-        int gap = Constants.WINDOWS_WIDTH / 2;
-        int posXFirstTank = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / 5 + Constants.TANK_SIZE);
-        int posXSecondTank = (int) (posXFirstTank + gap + gap * Math.random());
-        if (posXSecondTank + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
-            posXSecondTank = Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2);
-        int posYSecondTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
-        int posYFirstTank = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
-        this.alivePlayers.get(0).tank.position.setX(posXFirstTank);
-        this.alivePlayers.get(1).tank.position.setX(posXSecondTank);
+        int gap = Constants.WINDOWS_WIDTH / Constants.TANKS_QUANTITY;
+        ArrayList<Point> tanksPosition = new ArrayList<>();
 
-        //Position tank 1 on terrain
-        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
-            if (terrain.resolutionMatrix[i][posXFirstTank] == 1) {
-                posYFirstTank = i - Constants.TANK_SIZE/3;
-                break;
+        //Position of the first tank
+        int x = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / (Constants.TANKS_QUANTITY * 2 + 1) + Constants.TANK_SIZE);
+        int y = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
+        tanksPosition.add(new Point(x, y));
+
+        for (int i = 1; i < Constants.TANKS_QUANTITY; i++) {
+            x = (int) (tanksPosition.get(i-1).getX() + gap + (gap/Constants.TANKS_QUANTITY-1) * Math.random());
+            tanksPosition.add(new Point(x, y));
+        }
+
+        //In case the last one gets out of bound
+        if (tanksPosition.get(Constants.TANKS_QUANTITY-1).getX() + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
+            tanksPosition.get(Constants.TANKS_QUANTITY-1).setX(Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2));
+
+        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+            this.alivePlayers.get(i).tank.position.setX(tanksPosition.get(i).getX());
+        }
+
+        //Position tanks on terrain
+        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+            for (int j = 0; j < Constants.CANVAS_HEIGHT; j++) {
+                if (terrain.resolutionMatrix[j][tanksPosition.get(i).getX()] == 1) {
+                    this.alivePlayers.get(i).tank.position.setY(j - Constants.TANK_SIZE/3);
+                    break;
+                }
             }
         }
-        this.alivePlayers.get(0).tank.position.setY(posYFirstTank);
-
-        //Position tank 2 on terrain
-        for (int i = 0; i < Constants.CANVAS_HEIGHT; i++) {
-            if (terrain.resolutionMatrix[i][posXSecondTank] == 1) {
-                posYSecondTank = i - Constants.TANK_SIZE/3;
-                break;
-            }
-        }
-        this.alivePlayers.get(1).tank.position.setY(posYSecondTank);
     }
 
     // Checks if a player's tank, that is not the current player, is hit and return the hit player
