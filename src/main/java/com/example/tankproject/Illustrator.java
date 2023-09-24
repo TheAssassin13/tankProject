@@ -2,6 +2,8 @@ package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
 
 public class Illustrator {
 
@@ -36,7 +38,7 @@ public class Illustrator {
         }
     }
 
-    public static void drawTank(GraphicsContext gc, Tank tank) {
+    public static void drawTank(GraphicsContext gc, Tank tank, double currentAngle) {
         int wheelSize = Constants.TANK_SIZE/3;
         gc.setFill(tank.color);
         //Wheels
@@ -47,8 +49,12 @@ public class Illustrator {
         gc.fillRect(tank.position.getX() - wheelSize, tank.position.getY() - wheelSize, Constants.TANK_SIZE, wheelSize);
         gc.fillRect(tank.position.getX() - wheelSize/2, tank.position.getY() - wheelSize * 2, Constants.TANK_SIZE/2,wheelSize*2);
 
-        //Canon
-        gc.fillRect(tank.position.getX(), tank.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE,wheelSize/2);
+        //Canon(with rotation added)
+        Rotate rotation = new Rotate(tank.angle*-1, tank.position.getX(), tank.position.getY() - wheelSize * 1.8);
+        gc.setTransform(rotation.getMxx(), rotation.getMyx(), rotation.getMxy(), rotation.getMyy(), rotation.getTx(), rotation.getTy());
+        gc.fillRect(tank.position.getX(), tank.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE, wheelSize / 2);
+        gc.setTransform(new Affine());
+
     }
 
     public static void drawShot(GraphicsContext gc, Shot shot) {

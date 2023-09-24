@@ -12,4 +12,11 @@ public class Tank {
         this.color = color;
         this.position = position;
     }
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
 }

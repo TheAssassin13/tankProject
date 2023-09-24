@@ -13,13 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -70,6 +68,19 @@ public class GameController implements Initializable {
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
 
+        //updates the direction of the barrel when the user types an angle
+        angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                try {
+                    double newAngle = Double.parseDouble(newValue);
+                    turn.tank.setAngle(newAngle);
+                    Illustrator.drawTank(gc, turn.tank, newAngle);
+                } catch (NumberFormatException e) {
+                    //invalid element
+                }
+                drawingMethods();
+            }
+        });
         buttonsPanelInitialize();
         tanksPlacement();
         drawingMethods();
@@ -90,7 +101,7 @@ public class GameController implements Initializable {
         gc.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         Illustrator.drawTerrain(this.gc, this.terrain);
         for (Player p : this.alivePlayers) {
-            Illustrator.drawTank(this.gc, p.tank);
+            Illustrator.drawTank(this.gc, p.tank, turn.tank.getAngle());
         }
     }
 
