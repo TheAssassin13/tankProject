@@ -15,9 +15,6 @@ public class Constants {
     public static int TANK_SIZE = 30;
     public static int PIXEL_SIZE = 1;
     public static double SHOT_VELOCITY = 0.35;
-    public static Color SKY_COLOR = Color.LIGHTBLUE;
-    public static Color SUN_COLOR = Color.ORANGE;
-    public static Color SEA_LEVEL_COLOR = Color.web("#332E30");
     public static Color TERRAIN_COLOR = Color.BLACK;
     public static Color SHOT_COLOR = Color.BROWN;
     public static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};

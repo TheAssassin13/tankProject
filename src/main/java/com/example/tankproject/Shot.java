@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class Shot {
     public Point position;
-    public double velocityX, velocityY; // Velocidad de la bala
-    public double initialVelocity; // Velocidad inicial de la bala
-    public double angle; // Ángulo de lanzamiento
+    public double velocityX, velocityY;
+    public double initialVelocity;
+    public double angle;
     public ArrayList<Point> trajectory;
 
     public Shot(Point position, double initialVelocity, double angle) {
         this.initialVelocity = initialVelocity;
-        this.angle = Math.toRadians(angle); // Convierte el ángulo a radianes
+        this.angle = Math.toRadians(angle);
         this.position = position;
         this.velocityX = initialVelocity * Math.cos(this.angle);
         this.velocityY = -initialVelocity * Math.sin(this.angle);
@@ -32,6 +32,7 @@ public class Shot {
         return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_SIZE);
     }
 
+    // Checks if terrain gets hit by the shot
     public boolean terrainCollision(Terrain terrain) {
         if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() >= Constants.WINDOWS_WIDTH) {
             return false;

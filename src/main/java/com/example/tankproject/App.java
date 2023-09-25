@@ -11,20 +11,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class MainApp extends Application {
+public class App extends Application {
     private static Stage stage;
     private static Scene scene;
 
     public static void setRoot(String fxml) throws IOException {
-        MainApp.scene.setRoot(loadFXML(fxml));
+        App.scene.setRoot(loadFXML(fxml));
     }
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
     @Override
     public void start(Stage stage) throws IOException {
-        MainApp.stage = stage;
+        App.stage = stage;
         initializeGame();
     }
 
@@ -45,9 +45,9 @@ public class MainApp extends Application {
     // Close actual window and start a new one
     public static void restartGame() throws IOException{
         stage.close();
-        MainApp newApp = new MainApp();
+        App newApp = new App();
         newApp.start(new Stage());
-        MainApp.setRoot("game");
+        App.setRoot("game");
     }
 
     // Convert a Color object to a Hexadecimal string

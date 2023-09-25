@@ -21,13 +21,19 @@
          <children>
             <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK PROJECT" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
-                  <Font size="48.0" />
+                  <Font name="Arial" size="48.0" />
                </font>
             </Label>
             <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" spacing="30.0" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="startButton" text="START" />
-                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="exitButton" text="EXIT" />
+                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="startButton" text="START">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font></Button>
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="50.0" prefWidth="200.0" styleClass="exitButton" text="EXIT">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font></Button>
                </children>
                <GridPane.margin>
                   <Insets left="50.0" />

@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.example.tankproject.MainApp.restartGame;
-import static com.example.tankproject.MainApp.toHexString;
+import static com.example.tankproject.App.restartGame;
+import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
     @FXML
@@ -74,7 +74,7 @@ public class GameController implements Initializable {
                 try {
                     double newAngle = Double.parseDouble(newValue);
                     turn.tank.setAngle(newAngle);
-                    Illustrator.drawTank(gc, turn.tank, newAngle);
+                    Illustrator.drawTank(gc, turn.tank);
                 } catch (NumberFormatException e) {
                     //invalid element
                 }
@@ -101,7 +101,7 @@ public class GameController implements Initializable {
         gc.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         Illustrator.drawTerrain(this.gc, this.terrain);
         for (Player p : this.alivePlayers) {
-            Illustrator.drawTank(this.gc, p.tank, turn.tank.getAngle());
+            Illustrator.drawTank(this.gc, p.tank);
         }
     }
 
@@ -162,6 +162,7 @@ public class GameController implements Initializable {
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
             turn.tank.angle = Double.parseDouble(angleTextField.getText());
             turn.tank.power = Double.parseDouble(powerTextField.getText());
+            // Create shot from user input
             Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             // Calculate max height and distance of the shot and display it to the interface
             maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));

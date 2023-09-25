@@ -27,7 +27,7 @@ public class MenuController implements Initializable {
     }
 
     public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
-        MainApp.setRoot("game");
+        App.setRoot("game");
     }
 
     public void onExitButtonClick(ActionEvent actionEvent) {

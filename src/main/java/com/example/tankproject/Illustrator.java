@@ -7,16 +7,6 @@ import javafx.scene.transform.Rotate;
 
 public class Illustrator {
 
-
-    public static void drawBackground(GraphicsContext gc) {
-        gc.setFill(Constants.SKY_COLOR);
-        gc.fillRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        gc.setFill(Constants.SUN_COLOR);
-        gc.fillOval(100, 50, 300, 300);
-        gc.setFill(Constants.SEA_LEVEL_COLOR);
-        gc.fillRect(0,Constants.SEA_LEVEL,Constants.WINDOWS_WIDTH, Constants.CANVAS_HEIGHT - Constants.SEA_LEVEL);
-    }
-
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         gc.setFill(Constants.TERRAIN_COLOR);
         for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
@@ -38,7 +28,7 @@ public class Illustrator {
         }
     }
 
-    public static void drawTank(GraphicsContext gc, Tank tank, double currentAngle) {
+    public static void drawTank(GraphicsContext gc, Tank tank) {
         int wheelSize = Constants.TANK_SIZE/3;
         gc.setFill(tank.color);
         //Wheels
