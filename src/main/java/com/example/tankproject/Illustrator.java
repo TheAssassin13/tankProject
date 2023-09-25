@@ -9,27 +9,16 @@ public class Illustrator {
 
     /* This method draws the terrain generated in the resolution matrix.
     This matrix includes every "pixel" of the screen.
+    To optimize in this method we use an array of the highest points,
+    but for the functioning code we use the resolution matrix.
     1 means terrain, 0 means air.
      */
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
-        gc.setFill(Constants.TERRAIN_COLOR);
-        for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
-            int i = 0;
-            while (i < Constants.CANVAS_HEIGHT) {
-                if (terrain.resolutionMatrix[i][j] == 1) {
-                    if (i > 0 && terrain.resolutionMatrix[i-1][j] == 0) {
-                        // Border is added
-                        gc.setFill(Color.DARKORANGE);
-                        gc.fillRect(j, i,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
-                        gc.fillRect(j, i+1,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
-                        gc.setFill(Constants.TERRAIN_COLOR);
-                        i++;
-                    } else {
-                        gc.fillRect(j, i,Constants.PIXEL_SIZE,Constants.PIXEL_SIZE);
-                    }
-                }
-                i++;
-            }
+        for (int i = 0; i < Constants.WINDOWS_WIDTH; i++) {
+            gc.setFill(Color.DARKORANGE);
+            gc.fillRect(i, terrain.maxHeightTerrain[i], 1, 2);
+            gc.setFill(Constants.TERRAIN_COLOR);
+            gc.fillRect(i, terrain.maxHeightTerrain[i] + 2, 1, Constants.CANVAS_HEIGHT - terrain.maxHeightTerrain[i]);
         }
     }
 

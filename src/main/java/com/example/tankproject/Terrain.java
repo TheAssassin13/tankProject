@@ -5,11 +5,13 @@ public class Terrain {
     public int[][] resolutionMatrix;
     public int height;
     public int width;
+    public int[] maxHeightTerrain;
 
     public Terrain(int height, int width) {
         this.height = height;
         this.width = width;
         this.resolutionMatrix = new int[height][width];
+        this.maxHeightTerrain = new int[width];
     }
 
     public void terrainGeneration(int seaLevel, boolean random) {
@@ -45,6 +47,7 @@ public class Terrain {
         int i = 0;
         while (i < width) {
             int maxHeight = seaLevel;
+            maxHeightTerrain[i] = seaLevel;
             for (int j = seaLevel; j < height; j++) {
                 resolutionMatrix[j][i] = 1;
                 if (j + 1 < height && resolutionMatrix[j+1][i] == 1) {
