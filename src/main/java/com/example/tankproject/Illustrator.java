@@ -23,7 +23,9 @@ public class Illustrator {
     }
 
     public static void drawTank(GraphicsContext gc, Tank tank) {
+        Double angle = tank.angle;
         int wheelSize = Constants.TANK_SIZE/3;
+
         gc.setFill(tank.color);
         // Wheels
         gc.fillOval(tank.position.getX() - wheelSize,tank.position.getY(),wheelSize,wheelSize);
@@ -35,7 +37,8 @@ public class Illustrator {
         gc.fillRect(tank.position.getX() - wheelSize/2, tank.position.getY() - wheelSize * 2, Constants.TANK_SIZE/2,wheelSize*2);
 
         // Canon(with rotation added)
-        Rotate rotation = new Rotate(tank.angle*-1, tank.position.getX(), tank.position.getY() - wheelSize * 1.8);
+        if (angle == null) angle = 0.0;
+        Rotate rotation = new Rotate(angle * -1, tank.position.getX(), tank.position.getY() - wheelSize * 1.8);
         gc.setTransform(rotation.getMxx(), rotation.getMyx(), rotation.getMxy(), rotation.getMyy(), rotation.getTx(), rotation.getTy());
         gc.fillRect(tank.position.getX(), tank.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE, wheelSize / 2);
         gc.setTransform(new Affine());
