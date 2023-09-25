@@ -182,16 +182,7 @@ public class GameController implements Initializable {
                     // Shot is out of the screen in the X-axis
                     if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX() < 0) {
                         stop();
-                        changeTurn();
-                        drawingMethods();
-                        shootButton.setDisable(false);
-                        if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
-                            angleTextField.setText(String.valueOf(turn.tank.angle));
-                            powerTextField.setText(String.valueOf(turn.tank.power));
-                        } else {
-                            angleTextField.clear();
-                            powerTextField.clear();
-                        }
+                        stopMethods(shootButton);
                     }
                     // Checks if a tank is hit
                     if (tanksCollision(s) != null) {
@@ -200,16 +191,7 @@ public class GameController implements Initializable {
                     // Checks if terrain is hit
                     if (s.terrainCollision(terrain)) {
                         stop();
-                        changeTurn();
-                        drawingMethods();
-                        shootButton.setDisable(false);
-                        if (turn.tank.power != -1.23 || turn.tank.angle != -1.23) {
-                            angleTextField.setText(String.valueOf(turn.tank.angle));
-                            powerTextField.setText(String.valueOf(turn.tank.power));
-                        }  else {
-                            angleTextField.clear();
-                            powerTextField.clear();
-                        }
+                        stopMethods(shootButton);
                     }
                     // Checks if there is only one player left
                     if (alivePlayers.size() == 1) {
@@ -221,6 +203,21 @@ public class GameController implements Initializable {
             }.start();
         }
         angleTextField.requestFocus();
+    }
+
+    // Encapsulation of methods in charge of turn change mechanic
+    public void stopMethods(Button shootButton) {
+        changeTurn();
+        drawingMethods();
+        shootButton.setDisable(false);
+        // Saves last angle and power
+        if (turn.tank.power != null || turn.tank.angle != null) {
+            angleTextField.setText(String.valueOf(turn.tank.angle));
+            powerTextField.setText(String.valueOf(turn.tank.power));
+        }  else {
+            angleTextField.clear();
+            powerTextField.clear();
+        }
     }
 
     // Turn change, if there's no next player comes back to the first one
