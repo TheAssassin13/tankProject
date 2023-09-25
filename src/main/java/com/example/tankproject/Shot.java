@@ -32,7 +32,7 @@ public class Shot {
         return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_SIZE);
     }
 
-    // Checks if terrain gets hit by the shot
+    // Checks if the shot hits the terrain
     public boolean terrainCollision(Terrain terrain) {
         if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() >= Constants.WINDOWS_WIDTH) {
             return false;
@@ -43,11 +43,9 @@ public class Shot {
         return false;
     }
 
+    // Adds one point to the shot trajectory
     public void addTrajectory() {
+        if (trajectory.size() != 0 && (Math.pow(trajectory.get(trajectory.size()-1).getX() - this.position.getX(),2) + Math.pow(trajectory.get(trajectory.size()-1).getY() - this.position.getY(),2)) < 400) return;
         trajectory.add(new Point(position.getX(), position.getY()));
-    }
-
-    public void deleteTrajectory() {
-        trajectory = new ArrayList<>();
     }
 }

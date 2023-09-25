@@ -49,7 +49,7 @@ public class GameController implements Initializable {
     public Button shootButton;
     public ImageView backgroundImage;
 
-    //Game interface, players and terrain initialization
+    // Game interface, players and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.gc = grid.getGraphicsContext2D();
@@ -68,7 +68,7 @@ public class GameController implements Initializable {
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
 
-        //updates the direction of the barrel when the user types an angle
+        // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
                 try {
@@ -76,7 +76,7 @@ public class GameController implements Initializable {
                     turn.tank.setAngle(newAngle);
                     Illustrator.drawTank(gc, turn.tank);
                 } catch (NumberFormatException e) {
-                    //invalid element
+                    // Invalid element
                 }
                 drawingMethods();
             }
@@ -86,7 +86,7 @@ public class GameController implements Initializable {
         drawingMethods();
     }
 
-    // Initialize the buttons panel of the interface
+    // Initializes the buttons panel of the interface
     public void buttonsPanelInitialize() {
         currentPlayerText.setText(turn.name + " is playing");
         buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
@@ -105,11 +105,12 @@ public class GameController implements Initializable {
         }
     }
 
+    // Placement of tanks on terrain with random distance
     public void tanksPlacement() {
         int gap = Constants.WINDOWS_WIDTH / Constants.TANKS_QUANTITY;
         ArrayList<Point> tanksPosition = new ArrayList<>();
 
-        //Position of the first tank
+        // Position of the first tank
         int x = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / (Constants.TANKS_QUANTITY * 2 + 1) + Constants.TANK_SIZE);
         int y = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
         tanksPosition.add(new Point(x, y));
@@ -119,7 +120,7 @@ public class GameController implements Initializable {
             tanksPosition.add(new Point(x, y));
         }
 
-        //In case the last one gets out of bound
+        // In case the last one gets out of bound
         if (tanksPosition.get(Constants.TANKS_QUANTITY-1).getX() + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
             tanksPosition.get(Constants.TANKS_QUANTITY-1).setX(Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2));
 
@@ -127,7 +128,7 @@ public class GameController implements Initializable {
             this.alivePlayers.get(i).tank.position.setX(tanksPosition.get(i).getX());
         }
 
-        //Position tanks on terrain
+        // Positions tanks on terrain
         for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
             for (int j = 0; j < Constants.CANVAS_HEIGHT; j++) {
                 if (terrain.resolutionMatrix[j][tanksPosition.get(i).getX()] == 1) {
@@ -148,7 +149,7 @@ public class GameController implements Initializable {
         return null;
     }
 
-    // Remove hit player from alive players and add to dead players
+    // Removes hit player from alive players and add to dead players
     public void deleteDeadPlayer(Player player) {
         this.deadPlayers.add(player);
         this.alivePlayers.remove(player);
@@ -162,9 +163,9 @@ public class GameController implements Initializable {
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
             turn.tank.angle = Double.parseDouble(angleTextField.getText());
             turn.tank.power = Double.parseDouble(powerTextField.getText());
-            // Create shot from user input
+            // Creates shot from user input
             Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
-            // Calculate max height and distance of the shot and display it to the interface
+            // Calculates max height and distance of the shot and display it to the interface
             maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));
             maxDistance = (int) Math.abs(((Math.pow(s.initialVelocity,2) * Math.sin(s.angle * 2)) / Constants.GRAVITY));
             maxDistanceTextField.setText("Max distance = " + maxDistance);
@@ -214,16 +215,15 @@ public class GameController implements Initializable {
                     if (alivePlayers.size() == 1) {
                         winScreen();
                     }
-                    //Trajectory is drawn
-                    if (now % 10 == 0) {
-                        s.addTrajectory();
-                    }
+                    // Trajectory point added
+                    s.addTrajectory();
                 }
             }.start();
         }
         angleTextField.requestFocus();
     }
 
+    // Turn change, if there's no next player comes back to the first one
     public void changeTurn() {
         for (int i = 0; i < this.alivePlayers.size(); i++) {
             if (this.turn == this.alivePlayers.get(i)) {
@@ -239,7 +239,7 @@ public class GameController implements Initializable {
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
     }
 
-    // Create the game win screen
+    // Creates the game win screen
     public void winScreen() {
         if (stackPane.getChildren().size() != 1) return;
         Color color = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
@@ -262,7 +262,7 @@ public class GameController implements Initializable {
         Button replayButton = new Button("",replayIconView);
         Button exitButton = new Button("",exitIconView);
 
-        // Disable buttons of the interface game
+        // Disables buttons of the interface game
         angleTextField.setDisable(true);
         powerTextField.setDisable(true);
         shootButton.setDisable(true);

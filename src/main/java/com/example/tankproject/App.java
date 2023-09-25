@@ -42,7 +42,7 @@ public class App extends Application {
         stage.show();
     }
 
-    // Close actual window and start a new one
+    // Closes actual window and start a new one
     public static void restartGame() throws IOException{
         stage.close();
         App newApp = new App();
@@ -50,7 +50,7 @@ public class App extends Application {
         App.setRoot("game");
     }
 
-    // Convert a Color object to a Hexadecimal string
+    // Converts a Color object to a Hexadecimal string
     public static String toHexString(Color color) {
         int red = (int) (color.getRed() * 255);
         int green = (int) (color.getGreen() * 255);
