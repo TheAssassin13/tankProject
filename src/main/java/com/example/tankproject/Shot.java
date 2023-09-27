@@ -9,13 +9,15 @@ public class Shot {
     public double initialVelocity;
     public double angle;
     public ArrayList<Point> trajectory;
+    public int damage;
 
-    public Shot(Point position, double initialVelocity, double angle) {
+    public Shot(Point position, double initialVelocity, double angle, int damage) {
         this.initialVelocity = initialVelocity;
         this.angle = Math.toRadians(angle);
         this.position = position;
         this.velocityX = initialVelocity * Math.cos(this.angle);
         this.velocityY = -initialVelocity * Math.sin(this.angle);
+        this.damage = damage;
         trajectory = new ArrayList<>();
     }
 

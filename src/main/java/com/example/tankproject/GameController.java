@@ -49,7 +49,21 @@ public class GameController implements Initializable {
     public Button shootButton;
     public ImageView backgroundImage;
     public long lastUpdateTime;
-
+    @FXML
+    private Button buttonBullet1, buttonBullet2, buttonBullet3;
+    private int selectedDamage = 5;
+    @FXML
+    private void selectBullet1() {
+        selectedDamage = 5;
+    }
+    @FXML
+    private void selectBullet2() {
+        selectedDamage = 10  ;
+    }
+    @FXML
+    private void selectBullet3() {
+        selectedDamage = 15;
+    }
     // Game interface, players and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -168,8 +182,8 @@ public class GameController implements Initializable {
             turn.tank.angle = Double.parseDouble(angleTextField.getText());
             turn.tank.power = Double.parseDouble(powerTextField.getText());
             // Creates shot from user input
-            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
-
+            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), selectedDamage);
+            System.out.println("Bullet Damage: " + selectedDamage);
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
@@ -190,7 +204,13 @@ public class GameController implements Initializable {
                         }
                         // Checks if a tank is hit
                         if (tanksCollision(shot) != null) {
-                            deleteDeadPlayer(tanksCollision(shot));
+                            Player hitPlayer = tanksCollision(shot);
+                            hitPlayer.reduceHealth(selectedDamage);
+                            stop();
+                            stopMethods(shootButton);
+                            if(hitPlayer.getHealth() <= 0) {
+                                deleteDeadPlayer(hitPlayer);
+                            }
                         }
                         // Checks if terrain is hit
                         if (shot.terrainCollision(terrain)) {
