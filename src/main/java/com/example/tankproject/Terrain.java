@@ -1,91 +1,81 @@
 package com.example.tankproject;
 
 
+import static java.lang.Math.round;
+import static java.lang.Math.sin;
+
 public class Terrain {
     public int[][] resolutionMatrix;
     public int height;
     public int width;
-    public int[] maxHeightTerrain;
+    public int[] maxTerrainHeight;
 
     public Terrain(int height, int width) {
         this.height = height;
         this.width = width;
         this.resolutionMatrix = new int[height][width];
-        this.maxHeightTerrain = new int[width];
+        this.maxTerrainHeight = new int[width];
     }
 
     public void terrainGeneration(int seaLevel, boolean random) {
         int margin = 50;
         //Reference points without random
-        int height1 = seaLevel - margin*3;
-        int height2 = seaLevel + margin*2;
-        int height3 = height1 + margin;
-        int height4 = height2 - margin;
-        int width1 = width/4 - margin;
-        int width2 = width/2 - margin;
-        int width3 = 3*width/4 - margin;
-        int width4 = width - margin;
-
-        if (random) {
-            //Reference points for mountains
-            height1 = (int) (seaLevel * Math.random());
-            if (height1 - margin * 2 > 0) height1 -= margin * 2;
-            width1 = (int) (width / 4 * Math.random()) + margin;
-            height3 = (int) (seaLevel * Math.random());
-            if (height3 - margin * 2 > 0) height3 -= margin * 2;
-            width3 = (int) (width / 4 * Math.random()) + width / 2;
-
-            //Reference points for craters
-            height2 = (int) (seaLevel * Math.random()) + seaLevel;
-            if (height2 + margin * 2 < height) height2 += margin * 2;
-            width2 = (int) (width / 4 * Math.random()) + width / 4;
-            height4 = (int) (seaLevel * Math.random()) + seaLevel;
-            if (height4 + margin * 2 < height) height4 += margin * 2;
-            width4 = (int) (width / 4 * Math.random()) + 3 * width / 4 - margin;
+        Point[] reference = new Point[5];
+        if (!random) {
+            reference[0] = new Point(width/5 - margin, seaLevel - margin*3);
+            reference[1] = new Point(2*width/5 - margin, seaLevel + margin*2);
+            reference[2] = new Point(3*width/5 - margin, reference[0].getY() + margin);
+            reference[3] = new Point(4*width/5 - margin, reference[1].getY() - margin);
+            reference[4] = new Point(width - margin, reference[2].getY() - margin*2);
+        } else {
+            // First hill
+            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), (int) round(seaLevel - margin*2 - Math.random()*(seaLevel - margin*2)));
+            for (int i = 1; i < reference.length; i++) {
+                if (i % 2 == 0) {
+                    // Hills
+                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), (int) round(seaLevel - margin*2 - Math.random()*(seaLevel - margin*2)));
+                } else {
+                    // Craters
+                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), (int) round(seaLevel + margin*2 + Math.random()*(height - seaLevel - margin*2)));
+                }
+            }
+            // In case the last reference point gets out of bound
+            if (reference[reference.length-1].getX() > width) reference[reference.length - 1].setX(width - margin);
         }
 
-        int i = 0;
-        while (i < width) {
-            int maxHeight = seaLevel;
-            maxHeightTerrain[i] = seaLevel;
-            for (int j = seaLevel; j < height; j++) {
-                resolutionMatrix[j][i] = 1;
-                if (j + 1 < height && resolutionMatrix[j+1][i] == 1) {
+        int x = 0;
+        int maxHeight = seaLevel;
+        int terrainHeight = seaLevel;
+        int referencePoint = 0;
+        while (x < width) {
+            maxTerrainHeight[x] = terrainHeight; // For the drawing method
+
+            // Fills the resolution matrix with 1's all the way to the bottom
+            for (int y = terrainHeight; y < height; y++) {
+                if (resolutionMatrix[y][x] == 1) break; // Optimization
+                resolutionMatrix[y][x] = 1;
+            }
+
+            // Checks which reference point it needs to follow
+            while (referencePoint < reference.length) {
+                if (x < reference[referencePoint].getX()){
+                    maxHeight = reference[referencePoint].getY();
                     break;
                 }
+                referencePoint++;
+            }
+            if (referencePoint > reference.length) maxHeight = height;
+
+            // Random y-axis
+            if (terrainHeight + margin > height || terrainHeight > maxHeight) terrainHeight -= round(Math.random());
+            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += round(Math.random());
+            else {
+                referencePoint++;
             }
 
-            //Random probability y-axis increments or decrements
-            if (seaLevel > 1 && i < width1) {
-                maxHeight = height1;
-                seaLevel -= Math.round(Math.random());
-
-            } else if (seaLevel < height - 1 && i < width2) {
-                maxHeight = height2;
-                seaLevel += Math.round(Math.random());
-
-            } else if (seaLevel > 1 && i < width3) {
-                maxHeight = height3;
-                seaLevel -= Math.round(Math.random());
-
-            } else if (seaLevel < height - 1 && i < width4) {
-                maxHeight = height4;
-                seaLevel += Math.round(Math.random());
-
-            } else if (seaLevel < height - 1 && seaLevel > 1){
-                seaLevel += Math.round(Math.random() * -Math.round(Math.random()));
-            }
-
-            //Random probability x-axis increments
-            if (Math.abs(maxHeight - seaLevel) > margin) {
-                int rand1 = (int) Math.round(Math.random());
-                int rand2 = (int) Math.round(Math.random());
-                if (rand1 == 1 || rand2 == 1) {
-                    i += (int) Math.round(Math.random());
-                }
-            } else {
-                i++;
-            }
+            // random x-axis
+            if (Math.abs(maxHeight - terrainHeight) > margin) x += round(Math.random());
+            else x++;
         }
     }
 }

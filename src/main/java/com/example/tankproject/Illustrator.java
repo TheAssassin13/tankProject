@@ -16,9 +16,9 @@ public class Illustrator {
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         for (int i = 0; i < Constants.WINDOWS_WIDTH; i++) {
             gc.setFill(Color.DARKORANGE);
-            gc.fillRect(i, terrain.maxHeightTerrain[i], 1, 2);
+            gc.fillRect(i, terrain.maxTerrainHeight[i], 1, 2);
             gc.setFill(Constants.TERRAIN_COLOR);
-            gc.fillRect(i, terrain.maxHeightTerrain[i] + 2, 1, Constants.CANVAS_HEIGHT - terrain.maxHeightTerrain[i]);
+            gc.fillRect(i, terrain.maxTerrainHeight[i] + 2, 1, Constants.CANVAS_HEIGHT - terrain.maxTerrainHeight[i]);
         }
     }
 

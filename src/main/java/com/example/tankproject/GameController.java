@@ -65,7 +65,7 @@ public class GameController implements Initializable {
         this.maxHeightTextField.setText("Max height = 0 pixels");
         this.maxDistanceTextField.setText("Max distance = 0 pixels");
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
-        this.terrain.terrainGeneration(Constants.SEA_LEVEL, false);
+        this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
@@ -120,7 +120,7 @@ public class GameController implements Initializable {
         tanksPosition.add(new Point(x, y));
 
         for (int i = 1; i < Constants.TANKS_QUANTITY; i++) {
-            x = (int) (tanksPosition.get(i-1).getX() + gap + (gap/Constants.TANKS_QUANTITY-1) * Math.random());
+            x = (int) (tanksPosition.get(i-1).getX() + gap + (gap/Constants.TANKS_QUANTITY) * Math.random());
             tanksPosition.add(new Point(x, y));
         }
 
