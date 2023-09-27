@@ -24,7 +24,6 @@ public class Shot {
         this.position.setX((int) (this.position.getX() + velocityX * Constants.SHOT_VELOCITY));
         this.position.setY((int) (this.position.getY() + velocityY * Constants.SHOT_VELOCITY));
         this.velocityY += Constants.GRAVITY;
-
     }
 
     // Checks if a tank gets hit by the shot

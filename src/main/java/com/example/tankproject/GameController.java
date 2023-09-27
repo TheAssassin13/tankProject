@@ -48,6 +48,7 @@ public class GameController implements Initializable {
     public StackPane stackPane;
     public Button shootButton;
     public ImageView backgroundImage;
+    public long lastUpdateTime;
 
     // Game interface, players and terrain initialization
     @Override
@@ -59,14 +60,17 @@ public class GameController implements Initializable {
             this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
         this.turn = alivePlayers.get((int) Math.round(Math.random()));
-        this.maxDistanceTextField.setText("Max distance = 0");
-        this.maxHeightTextField.setText("Max height = 0");
+        this.maxHeight = 0;
+        this.maxDistance = 0;
+        this.maxHeightTextField.setText("Max height = 0 pixels");
+        this.maxDistanceTextField.setText("Max distance = 0 pixels");
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, false);
         this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.lastUpdateTime = 0;
 
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -164,46 +168,61 @@ public class GameController implements Initializable {
             turn.tank.angle = Double.parseDouble(angleTextField.getText());
             turn.tank.power = Double.parseDouble(powerTextField.getText());
             // Creates shot from user input
-            Shot s = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
-            // Calculates max height and distance of the shot and display it to the interface
-            maxHeight = (int) ((Math.pow(s.initialVelocity,2) * Math.pow(Math.sin(s.angle),2)) / (2 * Constants.GRAVITY));
-            maxDistance = (int) Math.abs(((Math.pow(s.initialVelocity,2) * Math.sin(s.angle * 2)) / Constants.GRAVITY));
-            maxDistanceTextField.setText("Max distance = " + maxDistance);
-            maxHeightTextField.setText("Max height = " + maxHeight);
+            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
 
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
-                    s.shotPosition();
-                    drawingMethods();
-                    Illustrator.drawTrajectory(gc, s);
-                    Illustrator.drawShot(gc, s);
-                    shootButton.setDisable(true);
-                    // Shot is out of the screen in the X-axis
-                    if (s.position.getX() >= Constants.WINDOWS_WIDTH || s.position.getX() < 0) {
-                        stop();
-                        stopMethods(shootButton);
+                    // Makes animation fps constant
+                    if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                        shot.shotPosition();
+                        drawingMethods();
+                        Illustrator.drawTrajectory(gc, shot);
+                        Illustrator.drawShot(gc, shot);
+                        shootButton.setDisable(true);
+                        // Update max height and distance every frame
+                        calculateMax(shot, turn.tank);
+
+                        // Shot is out of the screen in the X-axis
+                        if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0) {
+                            stop();
+                            stopMethods(shootButton);
+                        }
+                        // Checks if a tank is hit
+                        if (tanksCollision(shot) != null) {
+                            deleteDeadPlayer(tanksCollision(shot));
+                        }
+                        // Checks if terrain is hit
+                        if (shot.terrainCollision(terrain)) {
+                            stop();
+                            stopMethods(shootButton);
+                        }
+                        // Checks if there is only one player left
+                        if (alivePlayers.size() == 1) {
+                            winScreen();
+                        }
+                        // Trajectory point added
+                        shot.addTrajectory();
+
+                        lastUpdateTime = now;
                     }
-                    // Checks if a tank is hit
-                    if (tanksCollision(s) != null) {
-                        deleteDeadPlayer(tanksCollision(s));
-                    }
-                    // Checks if terrain is hit
-                    if (s.terrainCollision(terrain)) {
-                        stop();
-                        stopMethods(shootButton);
-                    }
-                    // Checks if there is only one player left
-                    if (alivePlayers.size() == 1) {
-                        winScreen();
-                    }
-                    // Trajectory point added
-                    s.addTrajectory();
                 }
             }.start();
         }
         angleTextField.requestFocus();
     }
+
+    // Calculates max height and distance of the shot and display it to the interface
+    public void calculateMax(Shot shot, Tank tank) {
+        this.maxHeight = Math.max(this.maxHeight, tank.position.getY() - shot.position.getY());
+        this.maxDistance = Math.max(this.maxDistance, Math.abs(tank.position.getX() - shot.position.getX()));
+
+        if (this.maxHeight < 0) this.maxHeight = 0;
+
+        maxDistanceTextField.setText("Max distance = " + maxDistance + " pixels");
+        maxHeightTextField.setText("Max height = " + maxHeight + " pixels");
+    }
+
 
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods(Button shootButton) {
