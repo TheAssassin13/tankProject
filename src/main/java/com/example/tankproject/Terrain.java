@@ -2,7 +2,6 @@ package com.example.tankproject;
 
 
 import static java.lang.Math.round;
-import static java.lang.Math.sin;
 
 public class Terrain {
     public int[][] resolutionMatrix;
@@ -69,9 +68,7 @@ public class Terrain {
             // Random y-axis
             if (terrainHeight + margin > height || terrainHeight > maxHeight) terrainHeight -= round(Math.random());
             else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += round(Math.random());
-            else {
-                referencePoint++;
-            }
+            else referencePoint++;
 
             // random x-axis
             if (Math.abs(maxHeight - terrainHeight) > margin) x += round(Math.random());

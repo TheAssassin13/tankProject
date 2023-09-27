@@ -6,10 +6,11 @@
     -fx-blue-color: #00e1ff;
     -fx-yellow-color: #ffef50;
     -fx-orange-color: #ff9e05;
+    -fx-lightRed-color: #94484c;
 }
 
 .titleMenu {
-    -fx-font-size: 48px;
+    -fx-font-size: 100px;
     -fx-text-fill: -fx-white-color;
     -fx-font-weight: bold;
 }
@@ -20,20 +21,36 @@
 }
 
 .startButton {
-    -fx-background-color: -fx-green-color;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-white-color;
+    -fx-font-size: 36px;
+    -fx-background-radius: 0px;
 }
 
 .startButton:hover {
-    -fx-background-color: derive(-fx-green-color, 25%);
+    -fx-background-color: -fx-lightRed-color;
+}
+
+.optionsButton {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-white-color;
+    -fx-font-size: 36px;
+    -fx-background-radius: 0px;
+}
+
+.optionsButton:hover {
+    -fx-background-color: -fx-lightRed-color;
 }
 
 .exitButton {
-    -fx-background-color: -fx-red-color;
+    -fx-background-color: transparent;
     -fx-text-fill: -fx-white-color;
+    -fx-font-size: 36px;
+    -fx-background-radius: 0px;
 }
 
 .exitButton:hover {
-    -fx-background-color: derive(-fx-red-color,25%);
+    -fx-background-color: -fx-lightRed-color;
 }
 
 #shootButton {
@@ -58,7 +75,6 @@
 
 #exitWinButton:hover {
     -fx-background-color: derive(-fx-red-color,25%);
-
 }
 
 #replayWinButton {
@@ -77,10 +93,6 @@
     -fx-background-color: -fx-white-color;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-}
-
-.menu {
-    -fx-background-color: linear-gradient(to bottom, -fx-orange-color, black);
 }
 
 #maxTextsPanel {
