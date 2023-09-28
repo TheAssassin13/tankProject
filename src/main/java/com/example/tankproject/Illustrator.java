@@ -23,7 +23,7 @@ public class Illustrator {
     }
 
     public static void drawTank(GraphicsContext gc, Tank tank) {
-        Double angle = tank.angle;
+        Double angle = tank.getAngle();
         int wheelSize = Constants.TANK_SIZE/3;
 
         gc.setFill(tank.color);

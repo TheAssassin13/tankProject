@@ -25,6 +25,7 @@
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
     -fx-background-radius: 0px;
+    -fx-padding: 0px;
 }
 
 .startButton:hover {
@@ -36,6 +37,7 @@
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
     -fx-background-radius: 0px;
+    -fx-padding: 0px;
 }
 
 .optionsButton:hover {
@@ -47,6 +49,7 @@
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
     -fx-background-radius: 0px;
+    -fx-padding: 0px;
 }
 
 .exitButton:hover {

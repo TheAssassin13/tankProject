@@ -9,7 +9,7 @@ public class Shot {
     public double initialVelocity;
     public double angle;
     public ArrayList<Point> trajectory;
-    public int damage;
+    private int damage;
 
     public Shot(Point position, double initialVelocity, double angle, int damage) {
         this.initialVelocity = initialVelocity;
@@ -38,15 +38,20 @@ public class Shot {
         if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() >= Constants.WINDOWS_WIDTH) {
             return false;
         }
-        if (terrain.resolutionMatrix[this.position.getY()][this.position.getX()] == 1) {
-            return true;
-        }
-        return false;
+        return terrain.resolutionMatrix[this.position.getY()][this.position.getX()] == 1;
     }
 
     // Adds one point to the shot trajectory
     public void addTrajectory() {
-        if (trajectory.size() != 0 && (Math.pow(trajectory.get(trajectory.size()-1).getX() - this.position.getX(),2) + Math.pow(trajectory.get(trajectory.size()-1).getY() - this.position.getY(),2)) < 400) return;
+        if (!trajectory.isEmpty() && (Math.pow(trajectory.get(trajectory.size()-1).getX() - this.position.getX(),2) + Math.pow(trajectory.get(trajectory.size()-1).getY() - this.position.getY(),2)) < 400) return;
         trajectory.add(new Point(position.getX(), position.getY()));
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 }

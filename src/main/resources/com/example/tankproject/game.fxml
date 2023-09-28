@@ -3,8 +3,10 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
@@ -12,7 +14,7 @@
     <VBox fx:id="vbox">
         <StackPane alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
             <ImageView fx:id="backgroundImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Canvas fx:id="grid" height="200.0" width="600.0" />
+            <Canvas fx:id="gameCanvas" height="200.0" width="600.0" />
             <VBox fillWidth="false">
                 <padding>
                     <Insets left="20.0" top="20.0" />
@@ -34,56 +36,99 @@
                 </VBox>
             </VBox>
         </StackPane>
-        <GridPane id="buttonsPanel" fx:id="buttonsPanel" alignment="BOTTOM_CENTER" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
-            <columnConstraints>
-                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints fillHeight="false" maxHeight="75.0" minHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints fillHeight="false" maxHeight="75.0" minHeight="10.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
-                <Label text="Angle">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="angleTextField" prefHeight="35.0" prefWidth="55.0" promptText="degree">
-                    <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </HBox.margin>
-                </TextField>
-                <Label layoutX="31.0" layoutY="33.0" text="Power">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <TextField fx:id="powerTextField" prefHeight="35.0" prefWidth="55.0" promptText="m/s">
-                    <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </HBox.margin>
-                </TextField>
-            </HBox>
-            <Button id="shootButton" fx:id="shootButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="200.0" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onShootButtonClick" prefWidth="125.0" text="SHOOT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <font>
-                    <Font name="Arial Bold" size="14.0" />
-                </font>
-                <GridPane.margin>
-                    <Insets />
-                </GridPane.margin>
-            </Button>
-            <StackPane id="currentPlayerPanel" fx:id="currentPlayerPanel" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="175.0" prefHeight="60.0">
-                <GridPane.margin>
-                    <Insets bottom="10.0" left="25.0" right="10.0" top="10.0" />
-                </GridPane.margin>
+        <HBox id="buttonsPanel" fx:id="buttonsPanel" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                 <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0">
                     <font>
-                        <Font name="Arial" size="18.0" />
+                        <Font name="Arial" size="18.0"/>
                     </font>
                 </Text>
-            </StackPane>
-        </GridPane>
+                <HBox alignment="CENTER" fillHeight="false">
+                    <Text fx:id="currentPlayerLife" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <font>
+                            <Font name="Arial" size="18.0"/>
+                        </font>
+                    </Text>
+                    <ImageView fx:id="currentPlayerLifeIcon" fitHeight="25.0" fitWidth="25.0"
+                               pickOnBounds="true" preserveRatio="true"/>
+                </HBox>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <Label text="Angle">
+                        <font>
+                            <Font name="Arial" size="12.0"/>
+                        </font>
+                    </Label>
+                    <TextField fx:id="angleTextField" prefHeight="35.0" prefWidth="55.0" promptText="degree">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </TextField>
+                    <Label layoutX="31.0" layoutY="33.0" text="Power">
+                        <font>
+                            <Font name="Arial" size="12.0"/>
+                        </font>
+                    </Label>
+                    <TextField fx:id="powerTextField" prefHeight="35.0" prefWidth="55.0" promptText="m/s">
+                        <HBox.margin>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        </HBox.margin>
+                    </TextField>
+                </HBox>
+                <Button id="shootButton" fx:id="shootButton" alignment="CENTER" contentDisplay="CENTER"
+                        defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="200.0" minHeight="40.0"
+                        minWidth="-Infinity" mnemonicParsing="false" onAction="#onShootButtonClick"
+                        prefWidth="125.0" text="SHOOT">
+                    <font>
+                        <Font name="Arial Bold" size="14.0"/>
+                    </font>
+                </Button>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0"
+                  HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" fillHeight="false">
+                    <Circle fx:id="lightAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
+                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+                        <effect>
+                            <Bloom threshold="0.5"/>
+                        </effect>
+                    </Circle>
+                    <Text fx:id="lightAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
+                    <ToggleButton fx:id="lightAmmoButton" mnemonicParsing="false" selected="true" text="Bala 1">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="ammunitionButtons"/>
+                        </toggleGroup>
+                    </ToggleButton>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="56.0">
+                    <Circle fx:id="mediumAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
+                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+                        <effect>
+                            <Bloom threshold="0.5"/>
+                        </effect>
+                    </Circle>
+                    <Text fx:id="mediumAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
+                    <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" text="Bala 2"
+                                  toggleGroup="$ammunitionButtons"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="43.0">
+                    <Circle fx:id="heavyAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
+                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+                        <effect>
+                            <Bloom threshold="0.5"/>
+                        </effect>
+                    </Circle>
+                    <Text fx:id="heavyAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
+                    <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" text="Bala 3"
+                                  toggleGroup="$ammunitionButtons"/>
+                </HBox>
+            </VBox>
+            <HBox fx:id="replayExitButtonsHbox" alignment="BOTTOM_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+            </HBox>
+        </HBox>
     </VBox>
 </StackPane>

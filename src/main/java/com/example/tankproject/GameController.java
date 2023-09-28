@@ -11,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -25,16 +26,15 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.example.tankproject.App.restartGame;
-import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
     @FXML
     public VBox vbox;
-    public Canvas grid;
-    public GraphicsContext gc;
+    public Canvas gameCanvas;
+    public GraphicsContext gameCanvasGraphicContext;
     public Player turn;
     public Text currentPlayerText;
-    public GridPane buttonsPanel;
+    public HBox buttonsPanel;
     public TextField angleTextField;
     public TextField powerTextField;
     public Terrain terrain;
@@ -44,30 +44,26 @@ public class GameController implements Initializable {
     public int maxHeight;
     public Text maxDistanceTextField;
     public int maxDistance;
-    public StackPane currentPlayerPanel;
     public StackPane stackPane;
     public Button shootButton;
     public ImageView backgroundImage;
     public long lastUpdateTime;
-    @FXML
-    private Button buttonBullet1, buttonBullet2, buttonBullet3;
-    private int selectedDamage = 5;
-    @FXML
-    private void selectBullet1() {
-        selectedDamage = 5;
-    }
-    @FXML
-    private void selectBullet2() {
-        selectedDamage = 10  ;
-    }
-    @FXML
-    private void selectBullet3() {
-        selectedDamage = 15;
-    }
+    public Text currentPlayerLife;
+    public ImageView currentPlayerLifeIcon;
+    public HBox replayExitButtonsHbox;
+    public Text lightAmmoQuantityText;
+    public Text mediumAmmoQuantityText;
+    public Text heavyAmmoQuantityText;
+    public ToggleButton lightAmmoButton;
+    public ToggleButton mediumAmmoButton;
+    public ToggleButton heavyAmmoButton;
+    public Button replayButton;
+    public Button exitButton;
+
     // Game interface, players and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.gc = grid.getGraphicsContext2D();
+        this.gameCanvasGraphicContext = gameCanvas.getGraphicsContext2D();
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
         for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
@@ -76,14 +72,13 @@ public class GameController implements Initializable {
         this.turn = alivePlayers.get((int) Math.round(Math.random()));
         this.maxHeight = 0;
         this.maxDistance = 0;
-        this.maxHeightTextField.setText("Max height = 0 pixels");
-        this.maxDistanceTextField.setText("Max distance = 0 pixels");
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
-        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
+
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.backgroundImage.setPreserveRatio(false);
         this.lastUpdateTime = 0;
 
         // Updates the direction of the barrel when the user types an angle
@@ -92,34 +87,43 @@ public class GameController implements Initializable {
                 try {
                     double newAngle = Double.parseDouble(newValue);
                     turn.tank.setAngle(newAngle);
-                    Illustrator.drawTank(gc, turn.tank);
+                    Illustrator.drawTank(gameCanvasGraphicContext, turn.tank);
                 } catch (NumberFormatException e) {
                     // Invalid element
                 }
                 drawingMethods();
             }
         });
-        buttonsPanelInitialize();
+
+        calculateMax(new Shot(new Point(0,0),0,0,0),this.turn.tank);
         tanksPlacement();
+        buttonsPanelInitialize();
         drawingMethods();
     }
 
     // Initializes the buttons panel of the interface
     public void buttonsPanelInitialize() {
-        currentPlayerText.setText(turn.name + " is playing");
-        buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        grid.setHeight(Constants.CANVAS_HEIGHT);
-        grid.setWidth(Constants.WINDOWS_WIDTH);
+        this.replayButton = createReplayButton(25,25);
+        this.exitButton = createExitButton(25,25);
+        this.currentPlayerText.setText(turn.name + " is playing");
+        this.currentPlayerLife.setText("Life : " +this.turn.getHealth() + " / 100");
+        this.currentPlayerLifeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("icons/half_heart_icon.png")).toExternalForm()));
+        this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        this.buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
+        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
+        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
+        this.replayExitButtonsHbox.getChildren().add(this.replayButton);
+        this.replayExitButtonsHbox.getChildren().add(this.exitButton);
+        ammunitionPanelControl();
     }
 
     // All drawing methods that should render every frame
     public void drawingMethods() {
-        gc.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        Illustrator.drawTerrain(this.gc, this.terrain);
+        this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
+        Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
         for (Player p : this.alivePlayers) {
-            Illustrator.drawTank(this.gc, p.tank);
+            Illustrator.drawTank(this.gameCanvasGraphicContext, p.tank);
         }
     }
 
@@ -175,24 +179,27 @@ public class GameController implements Initializable {
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
     public void onShootButtonClick(ActionEvent ignoredActionEvent) {
-        maxHeight = 0;
-        maxDistance = 0;
+        this.maxHeight = 0;
+        this.maxDistance = 0;
         // Checks if the input is not empty
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
-            turn.tank.angle = Double.parseDouble(angleTextField.getText());
-            turn.tank.power = Double.parseDouble(powerTextField.getText());
+            this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
+            this.turn.tank.power = Double.parseDouble(powerTextField.getText());
             // Creates shot from user input
-            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), selectedDamage);
-            System.out.println("Bullet Damage: " + selectedDamage);
-            new AnimationTimer() {
+            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), 0);
+            if (lightAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[0]);
+            if (mediumAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[1]);
+            if (heavyAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[2]);
+
+                new AnimationTimer() {
                 @Override
                 public void handle(long now) {
                     // Makes animation fps constant
                     if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                         shot.shotPosition();
                         drawingMethods();
-                        Illustrator.drawTrajectory(gc, shot);
-                        Illustrator.drawShot(gc, shot);
+                        Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
+                        Illustrator.drawShot(gameCanvasGraphicContext, shot);
                         shootButton.setDisable(true);
                         // Update max height and distance every frame
                         calculateMax(shot, turn.tank);
@@ -205,10 +212,10 @@ public class GameController implements Initializable {
                         // Checks if a tank is hit
                         if (tanksCollision(shot) != null) {
                             Player hitPlayer = tanksCollision(shot);
-                            hitPlayer.reduceHealth(selectedDamage);
+                            hitPlayer.reduceHealth(shot.getDamage());
                             stop();
                             stopMethods(shootButton);
-                            if(hitPlayer.getHealth() <= 0) {
+                            if (hitPlayer.getHealth() <= 0) {
                                 deleteDeadPlayer(hitPlayer);
                             }
                         }
@@ -229,7 +236,7 @@ public class GameController implements Initializable {
                 }
             }.start();
         }
-        angleTextField.requestFocus();
+        this.angleTextField.requestFocus();
     }
 
     // Calculates max height and distance of the shot and display it to the interface
@@ -239,24 +246,30 @@ public class GameController implements Initializable {
 
         if (this.maxHeight < 0) this.maxHeight = 0;
 
-        maxDistanceTextField.setText("Max distance = " + maxDistance + " pixels");
-        maxHeightTextField.setText("Max height = " + maxHeight + " pixels");
+        this.maxDistanceTextField.setText("Max distance = " + this.maxDistance + " m");
+        this.maxHeightTextField.setText("Max height = " + this.maxHeight + " m");
     }
 
 
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods(Button shootButton) {
+
         changeTurn();
         drawingMethods();
         shootButton.setDisable(false);
+        ammunitionPanelControl();
+
         // Saves last angle and power
-        if (turn.tank.power != null || turn.tank.angle != null) {
-            angleTextField.setText(String.valueOf(turn.tank.angle));
-            powerTextField.setText(String.valueOf(turn.tank.power));
+        if (this.turn.tank.power != null || this.turn.tank.getAngle() != null) {
+            this.angleTextField.setText(String.valueOf(this.turn.tank.getAngle()));
+            this.powerTextField.setText(String.valueOf(this.turn.tank.power));
         }  else {
-            angleTextField.clear();
-            powerTextField.clear();
+            this.angleTextField.clear();
+            this.powerTextField.clear();
         }
+        this.currentPlayerText.setText(this.turn.name + " is playing");
+        this.currentPlayerLife.setText("Life : " +this.turn.getHealth() + " / 100");
+
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -271,13 +284,11 @@ public class GameController implements Initializable {
                 break;
             }
         }
-        this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentPlayerPanel.setStyle(currentPlayerPanel.getStyle() + "-fx-background-color:" + toHexString(this.turn.color) + ";");
     }
 
     // Creates the game win screen
     public void winScreen() {
-        if (stackPane.getChildren().size() != 1) return;
+        if (this.stackPane.getChildren().size() != 1) return;
         Color color = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
         BackgroundFill backgroundFill = new BackgroundFill(color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
         Background background = new Background(backgroundFill);
@@ -290,43 +301,24 @@ public class GameController implements Initializable {
         Text winnerText = new Text(this.alivePlayers.get(0).name + " won!");
         Label replayLabel = new Label("Replay");
         Label exitLabel = new Label("Exit");
-        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon.png")).toExternalForm());
-        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm());
-        ImageView replayIconView = new ImageView(replayIcon);
-        ImageView exitIconView = new ImageView(exitIcon);
 
-        Button replayButton = new Button("",replayIconView);
-        Button exitButton = new Button("",exitIconView);
+        Button replayButton = createReplayButton(45,45);
+        Button exitButton = createExitButton(45,45);
 
         // Disables buttons of the interface game
-        angleTextField.setDisable(true);
-        powerTextField.setDisable(true);
-        shootButton.setDisable(true);
-
-        // Replay button action
-        replayButton.setOnAction(event -> {
-            try {
-                restartGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        // Exit button action
-        exitButton.setOnAction(event -> Platform.exit());
+        this.angleTextField.setDisable(true);
+        this.powerTextField.setDisable(true);
+        this.shootButton.setDisable(true);
+        this.replayButton.setDisable(true);
+        this.exitButton.setDisable(true);
+        this.lightAmmoButton.setDisable(true);
+        this.mediumAmmoButton.setDisable(true);
+        this.heavyAmmoButton.setDisable(true);
 
         replayLabel.setTextFill(Color.BLACK);
         exitLabel.setTextFill(Color.BLACK);
-        replayIconView.setFitHeight(45);
-        replayIconView.setFitWidth(45);
-        exitIconView.setFitHeight(45);
-        exitIconView.setFitWidth(45);
         replayLabel.setFont(labelFont);
         exitLabel.setFont(labelFont);
-        replayButton.getStyleClass().add("winScreenButton");
-        exitButton.getStyleClass().add("winScreenButton");
-        replayButton.setId("replayWinButton");
-        exitButton.setId("exitWinButton");
         winnerText.setFont(font);
         replayVbox.getChildren().add(replayButton);
         replayVbox.getChildren().add(replayLabel);
@@ -345,6 +337,58 @@ public class GameController implements Initializable {
         vbox.alignmentProperty().set(Pos.CENTER);
         vbox.setSpacing(30);
         vbox.setBackground(background);
-        stackPane.getChildren().add(vbox);
+        this.stackPane.getChildren().add(vbox);
+    }
+
+    public Button createReplayButton(int height, int width) {
+        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon.png")).toExternalForm());
+        ImageView replayIconView = new ImageView(replayIcon);
+        Button replayButton = new Button("",replayIconView);
+
+        replayButton.getStyleClass().add("winScreenButton");
+        replayButton.setId("replayWinButton");
+        replayButton.setPrefHeight(height);
+        replayButton.setPrefWidth(width);
+        replayButton.setMaxSize(width,height);
+        replayIconView.setFitHeight(height);
+        replayIconView.setFitWidth(width);
+
+        // Replay button action
+        replayButton.setOnAction(event -> {
+            try {
+                restartGame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return replayButton;
+    }
+
+    public Button createExitButton(int height, int width) {
+        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm());
+        ImageView exitIconView = new ImageView(exitIcon);
+        Button exitButton = new Button("",exitIconView);
+
+        exitButton.getStyleClass().add("winScreenButton");
+        exitButton.setId("exitWinButton");
+        exitButton.setPrefHeight(height);
+        exitButton.setPrefWidth(width);
+        exitButton.setMaxSize(width,height);
+        exitIconView.setFitHeight(height);
+        exitIconView.setFitWidth(width);
+
+        // Exit button action
+        exitButton.setOnAction(event -> Platform.exit());
+
+        return exitButton;
+    }
+
+    public void ammunitionPanelControl() {
+        this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet30") + " / 3");
+        this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet40") + " / 10");
+        this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet50") + " / 3");
+
     }
 }
+

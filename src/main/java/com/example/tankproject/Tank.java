@@ -1,13 +1,12 @@
 package com.example.tankproject;
 
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Tank {
     public Color color;
     public Point position;
-    public Double angle;
+    private Double angle;
     public Double power;
     public HashMap<String,Integer> ammunition;
 
@@ -22,17 +21,15 @@ public class Tank {
         this.angle = angle;
     }
 
-    public double getAngle() {
+    public Double getAngle() {
         return angle;
     }
 
-
-
     public HashMap<String, Integer> reloadAmmunition() {
         HashMap<String, Integer> temp = new HashMap<>();
-        temp.put("Bullet50", 3);
-        temp.put("Bullet40", 10);
-        temp.put("Bullet30", 3);
+        temp.put("Bullet30", Constants.AMMO_QUANTITY[0]);
+        temp.put("Bullet40", Constants.AMMO_QUANTITY[1]);
+        temp.put("Bullet50", Constants.AMMO_QUANTITY[2]);
         return temp;
     }
 }

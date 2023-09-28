@@ -8,7 +8,7 @@ public class Constants {
     public static long FRAME_TIME = 1_000_000_000L / FPS;
     public static int WINDOWS_HEIGHT = 720;
     public static int WINDOWS_WIDTH = 1280;
-    public static int BUTTONS_PANEL_HEIGHT = 150;
+    public static int BUTTONS_PANEL_HEIGHT = 160;
     public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
     public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
     public static int TANKS_QUANTITY = 2;
@@ -22,4 +22,6 @@ public class Constants {
     public static Color TRAJECTORY_COLOR = Color.LIGHTGRAY;
     public static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};
     public static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
+    public static int[] AMMO_QUANTITY = {3,10,3}; // Light, medium and heavy
+    public static int[] AMMO_DAMAGE= {30,40,50}; // Light, medium and heavy
 }

@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="menu" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
-   <children>
-      <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
-      <VBox alignment="CENTER_LEFT" fillWidth="false" StackPane.alignment="CENTER">
-         <children>
-            <VBox fx:id="vbox" alignment="CENTER" spacing="30.0">
-               <children>
-                  <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER">
-                     <font>
-                        <Font name="Arial" size="48.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="startButton" maxHeight="1.7976931348623157E308" maxWidth="300.0" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onStartButtonClick" prefWidth="200.0" styleClass="startButton" text="Play">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="startButton1" layoutX="10.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onStartButtonClick" prefWidth="200.0" styleClass="optionsButton" text="Options">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="300.0" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onExitButtonClick" prefWidth="200.0" styleClass="exitButton" text="Exit game">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
+<StackPane fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           prefHeight="400.0" prefWidth="600.0" styleClass="menu" stylesheets="@styles.css"
+           xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.tankproject.MenuController">
+   <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true"/>
+   <VBox alignment="CENTER_LEFT" fillWidth="false" StackPane.alignment="CENTER">
+      <VBox fx:id="vbox" alignment="CENTER" spacing="25.0">
+         <VBox.margin>
+            <Insets left="65.0"/>
+         </VBox.margin>
+         <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK GAME"
+                textAlignment="CENTER">
+            <font>
+               <Font name="Arial" size="48.0"/>
+            </font>
+            <padding>
+               <Insets bottom="30.0"/>
+            </padding>
+         </Label>
+         <Button fx:id="startButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
+                 mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="55.0" prefWidth="200.0"
+                 styleClass="startButton" text="Play">
+            <font>
+               <Font name="Arial Bold" size="12.0"/>
+            </font>
+         </Button>
+         <Button layoutX="10.0" layoutY="110.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
+                 mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="optionsButton"
+                 text="Options">
+            <font>
+               <Font name="Arial Bold" size="12.0"/>
+            </font>
+         </Button>
+         <Button fx:id="exitButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
+                 mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="55.0" prefWidth="200.0"
+                 styleClass="exitButton" text="Exit game">
+            <font>
+               <Font name="Arial Bold" size="12.0"/>
+            </font>
+         </Button>
       </VBox>
-   </children>
+   </VBox>
 </StackPane>
