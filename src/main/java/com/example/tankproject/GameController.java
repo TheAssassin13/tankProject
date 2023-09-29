@@ -106,7 +106,7 @@ public class GameController implements Initializable {
         this.replayButton = createReplayButton(25,25);
         this.exitButton = createExitButton(25,25);
         this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentPlayerLife.setText("Life : " +this.turn.getHealth() + " / 100");
+        this.currentPlayerLife.setText("Life : " + this.turn.getHealth() + " / 100");
         this.currentPlayerLifeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("icons/half_heart_icon.png")).toExternalForm()));
         this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);

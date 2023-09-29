@@ -75,4 +75,21 @@ public class Terrain {
             else x++;
         }
     }
+
+    public boolean terrainFalling() {
+        boolean change = false;
+
+        for (int j = 0; j < this.width; j++) {
+            for (int i = 0; i < this.height; i++) {
+                if (this.resolutionMatrix[i][j] == 1 && this.resolutionMatrix[i+1][j] == 0 ) {
+                    this.resolutionMatrix[i][j] = 0;
+                    this.resolutionMatrix[i+1][j] = 1;
+                    this.maxTerrainHeight[j]--;
+                    change = true;
+                }
+
+            }
+        }
+     return change;
+    }
 }
