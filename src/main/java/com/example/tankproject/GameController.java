@@ -91,14 +91,14 @@ public class GameController implements Initializable {
                 } catch (NumberFormatException e) {
                     // Invalid element
                 }
-                drawingMethods();
+                drawingMethods(false);
             }
         });
 
         calculateMax(new Shot(new Point(0,0),0,0,0),this.turn.tank);
         tanksPlacement();
         buttonsPanelInitialize();
-        drawingMethods();
+        drawingMethods(false);
     }
 
     // Initializes the buttons panel of the interface
@@ -119,9 +119,10 @@ public class GameController implements Initializable {
     }
 
     // All drawing methods that should render every frame
-    public void drawingMethods() {
+    public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
+        if (collision) Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
+        else Illustrator.drawTerrainOptimized(this.gameCanvasGraphicContext, this.terrain);
         for (Player p : this.alivePlayers) {
             Illustrator.drawTank(this.gameCanvasGraphicContext, p.tank);
         }
@@ -197,7 +198,7 @@ public class GameController implements Initializable {
                     // Makes animation fps constant
                     if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                         shot.shotPosition();
-                        drawingMethods();
+                        drawingMethods(false);
                         Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
                         Illustrator.drawShot(gameCanvasGraphicContext, shot);
                         shootButton.setDisable(true);
@@ -214,6 +215,7 @@ public class GameController implements Initializable {
                             Player hitPlayer = tanksCollision(shot);
                             hitPlayer.reduceHealth(shot.getDamage());
                             stop();
+                            terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
                             stopMethods(shootButton);
                             if (hitPlayer.getHealth() <= 0) {
@@ -223,6 +225,7 @@ public class GameController implements Initializable {
                         // Checks if terrain is hit
                         if (shot.terrainCollision(terrain)) {
                             stop();
+                            terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
                             stopMethods(shootButton);
                         }
@@ -247,7 +250,8 @@ public class GameController implements Initializable {
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                    terrain.terrainFalling();
+                    stopMethods(shootButton);
+                    if (!terrain.terrainFalling()) stop();
                 }
             }
         }.start();
@@ -264,12 +268,10 @@ public class GameController implements Initializable {
         this.maxHeightTextField.setText("Max height = " + this.maxHeight + " m");
     }
 
-
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods(Button shootButton) {
-
         changeTurn();
-        drawingMethods();
+        drawingMethods(true);
         shootButton.setDisable(false);
         ammunitionPanelControl();
 

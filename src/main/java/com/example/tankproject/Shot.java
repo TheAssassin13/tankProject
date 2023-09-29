@@ -10,6 +10,7 @@ public class Shot {
     public double angle;
     public ArrayList<Point> trajectory;
     private int damage;
+    public int area = 300;
 
     public Shot(Point position, double initialVelocity, double angle, int damage) {
         this.initialVelocity = initialVelocity;

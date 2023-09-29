@@ -1,6 +1,9 @@
 package com.example.tankproject;
 
 
+import java.util.Random;
+
+import static java.lang.Math.pow;
 import static java.lang.Math.round;
 
 public class Terrain {
@@ -32,10 +35,10 @@ public class Terrain {
             for (int i = 1; i < reference.length; i++) {
                 if (i % 2 == 0) {
                     // Hills
-                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), (int) round(seaLevel - margin*2 - Math.random()*(seaLevel - margin*2)));
+                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), seaLevel - margin*2 - new Random().nextInt(seaLevel - margin*2));
                 } else {
                     // Craters
-                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), (int) round(seaLevel + margin*2 + Math.random()*(height - seaLevel - margin*2)));
+                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), seaLevel + margin*2 + new Random().nextInt(height - seaLevel - margin*2));
                 }
             }
             // In case the last reference point gets out of bound
@@ -66,14 +69,35 @@ public class Terrain {
             if (referencePoint > reference.length) maxHeight = height;
 
             // Random y-axis
-            if (terrainHeight + margin > height || terrainHeight > maxHeight) terrainHeight -= round(Math.random());
-            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += round(Math.random());
+            if (terrainHeight > height || terrainHeight > maxHeight) terrainHeight -= new Random().nextInt(2);
+            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += new Random().nextInt(2);
             else referencePoint++;
 
             // random x-axis
-            if (Math.abs(maxHeight - terrainHeight) > margin) x += round(Math.random());
-            else x++;
+            x += new Random().nextInt(2);
         }
+    }
+
+    public void calculateMaxHeight() {
+        for (int i = 0; i < this.width; i++) {
+            for (int j = maxTerrainHeight[i]; j < this.height; j++) {
+                if (resolutionMatrix[j][i] == 1) {
+                    maxTerrainHeight[i] = j;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void destroyTerrain(Point center, int radius) {
+        for (int i = 0; i < this.height; i++) {
+            for (int j = 0; j < this.width; j++) {
+                if (Math.pow(center.getX() - j,2) + Math.pow(center.getY() - i,2) <= radius) {
+                    resolutionMatrix[i][j] = 0;
+                }
+            }
+        }
+        calculateMaxHeight();
     }
 
     public boolean terrainFalling() {
@@ -92,9 +116,10 @@ public class Terrain {
                 if (this.resolutionMatrix[i][j] == 0 && this.resolutionMatrix[i-1][j] == 1) {
                     this.resolutionMatrix[i][j] = 1;
                     this.resolutionMatrix[i-1][j] = 0;
-                    this.maxTerrainHeight[j]++;
+                    this.maxTerrainHeight[j] = i;
                     change = true;
                 }
+
             }
         }
      return change;

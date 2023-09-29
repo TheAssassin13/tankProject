@@ -13,12 +13,35 @@ public class Illustrator {
     but for the functioning code we use the resolution matrix.
     1 means terrain, 0 means air.
      */
-    public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
+    public static void drawTerrainOptimized(GraphicsContext gc, Terrain terrain) {
         for (int i = 0; i < Constants.WINDOWS_WIDTH; i++) {
             gc.setFill(Color.DARKORANGE);
             gc.fillRect(i, terrain.maxTerrainHeight[i], 1, 2);
             gc.setFill(Constants.TERRAIN_COLOR);
             gc.fillRect(i, terrain.maxTerrainHeight[i] + 2, 1, Constants.CANVAS_HEIGHT - terrain.maxTerrainHeight[i]);
+        }
+    }
+
+    // This method draws the terrain without the optimization
+    public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
+        gc.setFill(Constants.TERRAIN_COLOR);
+        for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
+            int i = 0;
+            while (i < Constants.CANVAS_HEIGHT) {
+                if (terrain.resolutionMatrix[i][j] == 1) {
+                    if (i > 0 && terrain.resolutionMatrix[i-1][j] == 0) {
+                        // Border is added
+                        gc.setFill(Color.DARKORANGE);
+                        gc.fillRect(j, i, 1, 1);
+                        gc.fillRect(j, i+1, 1, 1);
+                        gc.setFill(Constants.TERRAIN_COLOR);
+                        i++;
+                    } else {
+                        gc.fillRect(j, i, 1, 1);
+                    }
+                }
+                i++;
+            }
         }
     }
 
