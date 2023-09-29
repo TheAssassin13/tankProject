@@ -214,6 +214,7 @@ public class GameController implements Initializable {
                             Player hitPlayer = tanksCollision(shot);
                             hitPlayer.reduceHealth(shot.getDamage());
                             stop();
+                            terrainFallAnimationTimer();
                             stopMethods(shootButton);
                             if (hitPlayer.getHealth() <= 0) {
                                 deleteDeadPlayer(hitPlayer);
@@ -222,6 +223,7 @@ public class GameController implements Initializable {
                         // Checks if terrain is hit
                         if (shot.terrainCollision(terrain)) {
                             stop();
+                            terrainFallAnimationTimer();
                             stopMethods(shootButton);
                         }
                         // Checks if there is only one player left
@@ -237,6 +239,18 @@ public class GameController implements Initializable {
             }.start();
         }
         this.angleTextField.requestFocus();
+    }
+
+    public void terrainFallAnimationTimer() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Makes animation fps constant
+                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                    terrain.terrainFalling();
+                }
+            }
+        }.start();
     }
 
     // Calculates max height and distance of the shot and display it to the interface

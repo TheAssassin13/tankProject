@@ -79,15 +79,22 @@ public class Terrain {
     public boolean terrainFalling() {
         boolean change = false;
 
+        // Iterates terrain from bottom to top
         for (int j = 0; j < this.width; j++) {
-            for (int i = 0; i < this.height; i++) {
-                if (this.resolutionMatrix[i][j] == 1 && this.resolutionMatrix[i+1][j] == 0 ) {
-                    this.resolutionMatrix[i][j] = 0;
-                    this.resolutionMatrix[i+1][j] = 1;
-                    this.maxTerrainHeight[j]--;
+            for (int i = this.height - 1; i > 1; i--) {
+                // Corner case
+                if (this.resolutionMatrix[i][j] == 1 && this.resolutionMatrix[i-1][j] == 0 && this.resolutionMatrix[i-2][j] == 1) {
+                    this.resolutionMatrix[i-1][j] = 1;
+                    this.resolutionMatrix[i-2][j] = 0;
                     change = true;
                 }
-
+                // If there's air and terrain above it, drag terrain down
+                if (this.resolutionMatrix[i][j] == 0 && this.resolutionMatrix[i-1][j] == 1) {
+                    this.resolutionMatrix[i][j] = 1;
+                    this.resolutionMatrix[i-1][j] = 0;
+                    this.maxTerrainHeight[j]++;
+                    change = true;
+                }
             }
         }
      return change;

@@ -24,4 +24,5 @@ public class Constants {
     public static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
     public static int[] AMMO_QUANTITY = {3,10,3}; // Light, medium and heavy
     public static int[] AMMO_DAMAGE= {30,40,50}; // Light, medium and heavy
+    public static int TANK_HEALTH = 100;
 }
