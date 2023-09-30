@@ -31,7 +31,7 @@ public class Terrain {
             reference[4] = new Point(width - margin, reference[2].getY() - margin*2);
         } else {
             // First hill
-            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), (int) round(seaLevel - margin*2 - Math.random()*(seaLevel - margin*2)));
+            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), seaLevel - margin*2 - new Random().nextInt(seaLevel - margin*2));
             for (int i = 1; i < reference.length; i++) {
                 if (i % 2 == 0) {
                     // Hills
@@ -42,7 +42,7 @@ public class Terrain {
                 }
             }
             // In case the last reference point gets out of bound
-            if (reference[reference.length-1].getX() > width) reference[reference.length - 1].setX(width - margin);
+            if (reference[reference.length-1].getX() > width - margin) reference[reference.length - 1].setX(width - margin*2);
         }
 
         int x = 0;

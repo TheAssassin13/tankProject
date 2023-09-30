@@ -131,6 +131,7 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
+        // If there's a collision it draws the terrain without the optimization
         if (collision) Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
         else Illustrator.drawTerrainOptimized(this.gameCanvasGraphicContext, this.terrain);
         for (Player p : this.alivePlayers) {
@@ -266,7 +267,8 @@ public class GameController implements Initializable {
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                    stopMethods();
+                    drawingMethods(true);
+                    // When the terrain stops falling, the animation stops
                     if (!terrain.terrainFalling()) stop();
                 }
             }

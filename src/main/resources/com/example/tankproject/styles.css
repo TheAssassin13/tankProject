@@ -7,6 +7,7 @@
     -fx-yellow-color: #ffef50;
     -fx-orange-color: #ff9e05;
     -fx-lightRed-color: #94484c;
+    -fx-transparentPurple-color: #310B34ee;
     -fx-buttonsPanel-color: #19212A;
     -fx-buttonsPanelContainer-color: #151C23;
     -fx-buttonsPanelBorder-color: #D5CBC5;
@@ -57,6 +58,28 @@
 }
 
 .exitMenuButton:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
+.optionsMenu {
+    -fx-background-radius: 6px;
+    -fx-background-color: -fx-transparentPurple-color;
+    -fx-font-size: 32px;
+}
+
+.optionsTitleMenu {
+    -fx-font-size: 48px;
+    -fx-text-fill: -fx-white-color;
+}
+
+.saveOptionsButton {
+    -fx-font-size: 24px;
+    -fx-text-fill: -fx-white-color;
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.saveOptionsButton:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
