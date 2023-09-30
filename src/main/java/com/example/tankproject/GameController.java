@@ -59,6 +59,7 @@ public class GameController implements Initializable {
     public ToggleButton heavyAmmoButton;
     public Button replayButton;
     public Button exitButton;
+    public StackPane stackPaneCanvas;
 
     // Game interface, players and terrain initialization
     @Override
@@ -72,22 +73,30 @@ public class GameController implements Initializable {
         this.turn = alivePlayers.get((int) Math.round(Math.random()));
         this.maxHeight = 0;
         this.maxDistance = 0;
+        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
+        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
-
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
         this.backgroundImage.setPreserveRatio(false);
         this.lastUpdateTime = 0;
+        this.stackPane.setPrefHeight(Constants.WINDOWS_HEIGHT);
+        this.stackPane.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.stackPane.setMaxSize(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+        this.stackPaneCanvas.setPrefHeight(Constants.CANVAS_HEIGHT);
+        this.stackPaneCanvas.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.stackPaneCanvas.setMaxSize(Constants.WINDOWS_WIDTH,Constants.CANVAS_HEIGHT);
+        this.vbox.setPrefHeight(Constants.WINDOWS_HEIGHT);
+        this.vbox.setPrefWidth(Constants.WINDOWS_WIDTH);
 
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
                 try {
                     double newAngle = Double.parseDouble(newValue);
-                    turn.tank.setAngle(newAngle);
-                    Illustrator.drawTank(gameCanvasGraphicContext, turn.tank);
+                    this.turn.tank.setAngle(newAngle);
                 } catch (NumberFormatException e) {
                     // Invalid element
                 }
@@ -111,8 +120,9 @@ public class GameController implements Initializable {
         this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
-        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
+        this.buttonsPanel.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.buttonsPanel.setMinWidth(Constants.WINDOWS_WIDTH);
+        this.buttonsPanel.setMaxWidth(Constants.WINDOWS_WIDTH);
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
         ammunitionPanelControl();
@@ -192,23 +202,30 @@ public class GameController implements Initializable {
             if (mediumAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[1]);
             if (heavyAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[2]);
 
-                new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    // Makes animation fps constant
-                    if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                        shot.shotPosition();
-                        drawingMethods(false);
-                        Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
-                        Illustrator.drawShot(gameCanvasGraphicContext, shot);
-                        shootButton.setDisable(true);
-                        // Update max height and distance every frame
-                        calculateMax(shot, turn.tank);
+            gameAnimationTimer(shot);
+        }
+
+        this.angleTextField.requestFocus();
+   }
+
+   public void gameAnimationTimer(Shot shot) {
+       new AnimationTimer() {
+           @Override
+           public void handle(long now) {
+               // Makes animation fps constant
+               if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                   shot.shotPosition();
+                   drawingMethods(false);
+                   Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
+                   Illustrator.drawShot(gameCanvasGraphicContext, shot);
+                   shootButton.setDisable(true);
+                   // Update max height and distance every frame
+                   calculateMax(shot, turn.tank);
 
                         // Shot is out of the screen in the X-axis
                         if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0) {
                             stop();
-                            stopMethods(shootButton);
+                            stopMethods();
                         }
                         // Checks if a tank is hit
                         if (tanksCollision(shot) != null) {
@@ -217,7 +234,7 @@ public class GameController implements Initializable {
                             stop();
                             terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
-                            stopMethods(shootButton);
+                            stopMethods();
                             if (hitPlayer.getHealth() <= 0) {
                                 deleteDeadPlayer(hitPlayer);
                             }
@@ -227,7 +244,7 @@ public class GameController implements Initializable {
                             stop();
                             terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
-                            stopMethods(shootButton);
+                            stopMethods();
                         }
                         // Checks if there is only one player left
                         if (alivePlayers.size() == 1) {
@@ -236,13 +253,12 @@ public class GameController implements Initializable {
                         // Trajectory point added
                         shot.addTrajectory();
 
-                        lastUpdateTime = now;
-                    }
-                }
-            }.start();
-        }
-        this.angleTextField.requestFocus();
-    }
+                   lastUpdateTime = now;
+               }
+           }
+       }.start();
+
+   }
 
     public void terrainFallAnimationTimer() {
         new AnimationTimer() {
@@ -250,7 +266,7 @@ public class GameController implements Initializable {
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                    stopMethods(shootButton);
+                    stopMethods();
                     if (!terrain.terrainFalling()) stop();
                 }
             }
@@ -269,7 +285,7 @@ public class GameController implements Initializable {
     }
 
     // Encapsulation of methods in charge of turn change mechanic
-    public void stopMethods(Button shootButton) {
+    public void stopMethods() {
         changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -357,7 +373,7 @@ public class GameController implements Initializable {
     }
 
     public Button createReplayButton(int height, int width) {
-        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon.png")).toExternalForm());
+        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon_white.png")).toExternalForm());
         ImageView replayIconView = new ImageView(replayIcon);
         Button replayButton = new Button("",replayIconView);
 
@@ -382,7 +398,7 @@ public class GameController implements Initializable {
     }
 
     public Button createExitButton(int height, int width) {
-        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm());
+        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon_white.png")).toExternalForm());
         ImageView exitIconView = new ImageView(exitIcon);
         Button exitButton = new Button("",exitIconView);
 

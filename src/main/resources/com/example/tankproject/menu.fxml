@@ -25,23 +25,23 @@
                <Insets bottom="30.0"/>
             </padding>
          </Label>
-         <Button fx:id="startButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
+         <Button fx:id="startMenuButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
                  mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="55.0" prefWidth="200.0"
-                 styleClass="startButton" text="Play">
+                 styleClass="startMenuButton" text="Play">
             <font>
                <Font name="Arial Bold" size="12.0"/>
             </font>
          </Button>
          <Button layoutX="10.0" layoutY="110.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
-                 mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="optionsButton"
+                 mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="optionsMenuButton"
                  text="Options">
             <font>
                <Font name="Arial Bold" size="12.0"/>
             </font>
          </Button>
-         <Button fx:id="exitButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
+         <Button fx:id="exitMenuButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity"
                  mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="55.0" prefWidth="200.0"
-                 styleClass="exitButton" text="Exit game">
+                 styleClass="exitMenuButton" text="Exit game">
             <font>
                <Font name="Arial Bold" size="12.0"/>
             </font>

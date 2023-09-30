@@ -8,7 +8,7 @@ public class Constants {
     public static long FRAME_TIME = 1_000_000_000L / FPS;
     public static int WINDOWS_HEIGHT = 720;
     public static int WINDOWS_WIDTH = 1280;
-    public static int BUTTONS_PANEL_HEIGHT = 160;
+    public static int BUTTONS_PANEL_HEIGHT = 175;
     public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
     public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
     public static int TANKS_QUANTITY = 2;

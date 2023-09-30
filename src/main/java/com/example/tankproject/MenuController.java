@@ -18,8 +18,8 @@ import java.util.ResourceBundle;
 public class MenuController implements Initializable {
     public VBox vbox;
     public Label titleMenu;
-    public Button startButton;
-    public Button exitButton;
+    public Button startMenuButton;
+    public Button exitMenuButton;
     public StackPane stackpane;
     public ImageView backgroundImage;
 

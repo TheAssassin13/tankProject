@@ -7,6 +7,10 @@
     -fx-yellow-color: #ffef50;
     -fx-orange-color: #ff9e05;
     -fx-lightRed-color: #94484c;
+    -fx-buttonsPanel-color: #19212A;
+    -fx-buttonsPanelContainer-color: #151C23;
+    -fx-buttonsPanelBorder-color: #D5CBC5;
+    -fx-winExitButtons-color: #324254;
 }
 
 .titleMenu {
@@ -20,7 +24,7 @@
     -fx-background-radius: 6px;
 }
 
-.startButton {
+.startMenuButton {
     -fx-background-color: transparent;
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
@@ -28,11 +32,11 @@
     -fx-padding: 0px;
 }
 
-.startButton:hover {
+.startMenuButton:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
-.optionsButton {
+.optionsMenuButton {
     -fx-background-color: transparent;
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
@@ -40,11 +44,11 @@
     -fx-padding: 0px;
 }
 
-.optionsButton:hover {
+.optionsMenuButton:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
-.exitButton {
+.exitMenuButton {
     -fx-background-color: transparent;
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
@@ -52,7 +56,7 @@
     -fx-padding: 0px;
 }
 
-.exitButton:hover {
+.exitMenuButton:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
@@ -70,12 +74,18 @@
     -fx-background-radius: 6px;
     -fx-pref-height: 75px;
     -fx-pref-width: 75px;
+    -fx-background-color: -fx-winExitButtons-color;
 }
+
+.winScreenButton:hover {
+    -fx-background-color: derive(-fx-winExitButtons-color,25%);
+}
+
+/*
 
 #exitWinButton {
     -fx-background-color: -fx-red-color;
-}
-
+    }
 #exitWinButton:hover {
     -fx-background-color: derive(-fx-red-color,25%);
 }
@@ -87,9 +97,17 @@
 #replayWinButton:hover {
     -fx-background-color: derive(-fx-green-color,25%);
 }
-
+*/
 #buttonsPanel {
-    -fx-background-color: -fx-white-color;
+    -fx-background-color: -fx-buttonsPanel-color;
+}
+
+.buttonsPanelContainer {
+    -fx-background-color: -fx-buttonsPanelContainer-color;
+    -fx-border-color: -fx-buttonsPanelBorder-color;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-pref-height: 150px;
 }
 
 #currentPlayerPanel {
@@ -104,3 +122,4 @@
     -fx-background-radius: 6px;
     -fx-border-color: -fx-white-color;
 }
+

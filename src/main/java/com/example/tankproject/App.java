@@ -29,16 +29,13 @@ public class App extends Application {
     }
 
     public void initializeGame() throws IOException {
-        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
+        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon2.png")).toExternalForm());
         scene = new Scene(loadFXML("menu"), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
-        stage.setMinWidth(Constants.WINDOWS_WIDTH);
-        stage.setMinHeight(Constants.WINDOWS_HEIGHT + 40);
-        stage.setMaxWidth(Constants.WINDOWS_WIDTH);
-        stage.setMaxHeight(Constants.WINDOWS_HEIGHT + 40);
         stage.getIcons().add(icon);
         stage.setTitle("Tank Project");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
