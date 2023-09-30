@@ -9,17 +9,14 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
+<StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
 
     <VBox fx:id="vbox">
-        <StackPane alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
-            <ImageView fx:id="backgroundImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Canvas fx:id="gameCanvas" height="200.0" width="600.0" />
-            <VBox fillWidth="false">
-                <padding>
-                    <Insets left="20.0" top="20.0" />
-                </padding>
-                <VBox id="maxTextsPanel" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" spacing="10.0">
+        <StackPane fx:id="stackPaneCanvas" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+            <ImageView fx:id="backgroundImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+            <Canvas fx:id="gameCanvas" height="200.0" width="600.0" StackPane.alignment="CENTER" />
+            <VBox fillWidth="false" maxHeight="1.7976931348623157E308">
+                <VBox id="maxTextsPanel" spacing="10.0">
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
@@ -34,99 +31,114 @@
                         </font>
                     </Text>
                 </VBox>
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
             </VBox>
         </StackPane>
-        <HBox id="buttonsPanel" fx:id="buttonsPanel" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                <Text fx:id="currentPlayerText" strokeType="OUTSIDE" strokeWidth="0.0">
+        <HBox id="buttonsPanel" fx:id="buttonsPanel" alignment="CENTER" fillHeight="false" spacing="20.0">
+            <VBox alignment="CENTER" prefHeight="140.0" styleClass="buttonsPanelContainer">
+                <Text fx:id="currentPlayerText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
                     <font>
-                        <Font name="Arial" size="18.0"/>
+                        <Font name="Arial" size="18.0" />
                     </font>
                 </Text>
                 <HBox alignment="CENTER" fillHeight="false">
-                    <Text fx:id="currentPlayerLife" strokeType="OUTSIDE" strokeWidth="0.0">
+                    <Text fx:id="currentPlayerLife" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
                         <font>
-                            <Font name="Arial" size="18.0"/>
+                            <Font name="Arial" size="18.0" />
                         </font>
                     </Text>
-                    <ImageView fx:id="currentPlayerLifeIcon" fitHeight="25.0" fitWidth="25.0"
-                               pickOnBounds="true" preserveRatio="true"/>
+                    <ImageView fx:id="currentPlayerLifeIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                 </HBox>
+            <padding>
+               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
             </VBox>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" HBox.hgrow="ALWAYS">
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                    <Label text="Angle">
+            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="140.0" spacing="20.0" styleClass="buttonsPanelContainer">
+                <HBox alignment="CENTER">
+                    <Label text="Angle" textFill="WHITE">
                         <font>
-                            <Font name="Arial" size="12.0"/>
+                            <Font name="Arial" size="12.0" />
                         </font>
                     </Label>
                     <TextField fx:id="angleTextField" prefHeight="35.0" prefWidth="55.0" promptText="degree">
                         <HBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </HBox.margin>
                     </TextField>
-                    <Label layoutX="31.0" layoutY="33.0" text="Power">
+                    <Label layoutX="31.0" layoutY="33.0" text="Power" textFill="WHITE">
                         <font>
-                            <Font name="Arial" size="12.0"/>
+                            <Font name="Arial" size="12.0" />
                         </font>
                     </Label>
                     <TextField fx:id="powerTextField" prefHeight="35.0" prefWidth="55.0" promptText="m/s">
                         <HBox.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </HBox.margin>
                     </TextField>
                 </HBox>
-                <Button id="shootButton" fx:id="shootButton" alignment="CENTER" contentDisplay="CENTER"
-                        defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="200.0" minHeight="40.0"
-                        minWidth="-Infinity" mnemonicParsing="false" onAction="#onShootButtonClick"
-                        prefWidth="125.0" text="SHOOT">
+                <Button id="shootButton" fx:id="shootButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="200.0" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onShootButtonClick" prefWidth="125.0" text="SHOOT">
                     <font>
-                        <Font name="Arial Bold" size="14.0"/>
+                        <Font name="Arial Bold" size="14.0" />
                     </font>
                 </Button>
+            <padding>
+               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
             </VBox>
-            <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0"
-                  HBox.hgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" fillHeight="false">
-                    <Circle fx:id="lightAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
-                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+            <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="140.0" styleClass="buttonsPanelContainer">
+                <HBox alignment="CENTER" fillHeight="false" VBox.vgrow="NEVER">
+                    <Circle fx:id="lightAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
                         <effect>
-                            <Bloom threshold="0.5"/>
+                            <Bloom threshold="0.5" />
                         </effect>
                     </Circle>
-                    <Text fx:id="lightAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
+                    <Text fx:id="lightAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
                     <ToggleButton fx:id="lightAmmoButton" mnemonicParsing="false" selected="true" text="Bala 1">
                         <toggleGroup>
-                            <ToggleGroup fx:id="ammunitionButtons"/>
+                            <ToggleGroup fx:id="ammunitionButtons" />
                         </toggleGroup>
                     </ToggleButton>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="56.0">
-                    <Circle fx:id="mediumAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
-                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="56.0" VBox.vgrow="NEVER">
+                    <Circle fx:id="mediumAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
                         <effect>
-                            <Bloom threshold="0.5"/>
+                            <Bloom threshold="0.5" />
                         </effect>
                     </Circle>
-                    <Text fx:id="mediumAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
-                    <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" text="Bala 2"
-                                  toggleGroup="$ammunitionButtons"/>
+                    <Text fx:id="mediumAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
+                    <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" text="Bala 2" toggleGroup="$ammunitionButtons" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="43.0">
-                    <Circle fx:id="heavyAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK"
-                            strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
+                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="43.0" VBox.vgrow="NEVER">
+                    <Circle fx:id="heavyAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="2.0">
                         <effect>
-                            <Bloom threshold="0.5"/>
+                            <Bloom threshold="0.5" />
                         </effect>
                     </Circle>
-                    <Text fx:id="heavyAmmoQuantityText" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3"/>
-                    <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" text="Bala 3"
-                                  toggleGroup="$ammunitionButtons"/>
+                    <Text fx:id="heavyAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
+                    <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" text="Bala 3" toggleGroup="$ammunitionButtons" />
                 </HBox>
+            <padding>
+               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
             </VBox>
-            <HBox fx:id="replayExitButtonsHbox" alignment="BOTTOM_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+         <VBox alignment="CENTER" layoutX="400.0" layoutY="10.0" prefHeight="140.0" styleClass="buttonsPanelContainer">
+            <padding>
+               <Insets bottom="15.0" left="40.0" right="40.0" top="15.0" />
+            </padding>
+            <children>
+               <Circle fill="#0d0839" radius="45.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="5.0" />
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Radar">
+                  <font>
+                     <Font name="Arial" size="18.0" />
+                  </font>
+               </Text>
+            </children>
+         </VBox>
+            <HBox fx:id="replayExitButtonsHbox" alignment="BOTTOM_CENTER" fillHeight="false" prefHeight="140.0" spacing="10.0">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    <Insets left="10.0" right="10.0" top="10.0" />
                 </padding>
             </HBox>
         </HBox>
