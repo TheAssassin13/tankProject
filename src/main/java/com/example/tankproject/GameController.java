@@ -248,6 +248,7 @@ public class GameController implements Initializable {
                             stop();
                             terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
+                            tankFallAnimationTimer();
                             stopMethods();
                             if (hitPlayer.getHealth() <= 0) {
                                 deleteDeadPlayer(hitPlayer);
@@ -258,6 +259,7 @@ public class GameController implements Initializable {
                             stop();
                             terrain.destroyTerrain(shot.position, shot.area);
                             terrainFallAnimationTimer();
+                            tankFallAnimationTimer();
                             stopMethods();
                         }
                         // Checks if there is only one player left
@@ -283,6 +285,26 @@ public class GameController implements Initializable {
                     drawingMethods(true);
                     // When the terrain stops falling, the animation stops
                     if (!terrain.terrainFalling()) stop();
+                }
+            }
+        }.start();
+    }
+
+    public void tankFallAnimationTimer() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Makes animation fps constant
+                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                    drawingMethods(true);
+                    int flag = 0;
+                    for (Player p : alivePlayers) {
+                        if (terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
+                            p.tank.position.setY(p.tank.position.getY()+1);
+                            flag = 1;
+                        }
+                    }
+                    if (flag == 0) stop();
                 }
             }
         }.start();
