@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class App extends Application {
     }
 
     public void initializeGame() throws IOException {
-        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon2.png")).toExternalForm());
+        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
         scene = new Scene(loadFXML("menu"), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
         stage.getIcons().add(icon);
@@ -39,22 +38,6 @@ public class App extends Application {
         stage.show();
     }
 
-    // Closes actual window and start a new one
-    public static void restartGame() throws IOException{
-        stage.close();
-        App newApp = new App();
-        newApp.start(new Stage());
-        App.setRoot("game");
-    }
-
-    // Converts a Color object to a Hexadecimal string
-    public static String toHexString(Color color) {
-        int red = (int) (color.getRed() * 255);
-        int green = (int) (color.getGreen() * 255);
-        int blue = (int) (color.getBlue() * 255);
-
-        return String.format("#%02x%02x%02x", red, green, blue);
-    }
     public static void main(String[] args) {
         launch();
     }

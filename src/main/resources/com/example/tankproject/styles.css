@@ -104,23 +104,6 @@
     -fx-background-color: derive(-fx-winExitButtons-color,25%);
 }
 
-/*
-
-#exitWinButton {
-    -fx-background-color: -fx-red-color;
-    }
-#exitWinButton:hover {
-    -fx-background-color: derive(-fx-red-color,25%);
-}
-
-#replayWinButton {
-    -fx-background-color: -fx-green-color;
-}
-
-#replayWinButton:hover {
-    -fx-background-color: derive(-fx-green-color,25%);
-}
-*/
 #buttonsPanel {
     -fx-background-color: -fx-buttonsPanel-color;
 }

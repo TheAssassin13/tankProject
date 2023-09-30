@@ -44,7 +44,7 @@
                     </font>
                 </Text>
                 <HBox alignment="CENTER" fillHeight="false">
-                    <Text fx:id="currentPlayerLife" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
+                    <Text fx:id="currentPlayerHealth" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
                         <font>
                             <Font name="Arial" size="18.0" />
                         </font>
@@ -123,19 +123,18 @@
                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
             </VBox>
-         <VBox alignment="CENTER" layoutX="400.0" layoutY="10.0" prefHeight="140.0" styleClass="buttonsPanelContainer">
-            <padding>
-               <Insets bottom="15.0" left="40.0" right="40.0" top="15.0" />
-            </padding>
-            <children>
-               <Circle fill="#0d0839" radius="45.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="5.0" />
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Radar">
-                  <font>
-                     <Font name="Arial" size="18.0" />
-                  </font>
-               </Text>
-            </children>
-         </VBox>
+            <VBox alignment="CENTER" layoutX="400.0" layoutY="10.0" prefHeight="140.0"
+                  styleClass="buttonsPanelContainer">
+                <padding>
+                    <Insets bottom="15.0" left="40.0" right="40.0" top="15.0"/>
+                </padding>
+                <Circle fill="#0d0839" radius="45.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="5.0"/>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Radar">
+                    <font>
+                        <Font name="Arial" size="18.0"/>
+                    </font>
+                </Text>
+            </VBox>
             <HBox fx:id="replayExitButtonsHbox" alignment="BOTTOM_CENTER" fillHeight="false" prefHeight="140.0" spacing="10.0">
                 <padding>
                     <Insets left="10.0" right="10.0" top="10.0" />

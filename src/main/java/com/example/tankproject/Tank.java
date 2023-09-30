@@ -1,5 +1,6 @@
 package com.example.tankproject;
 
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ public class Tank {
     public Point position;
     private Double angle;
     public Double power;
+    private ToggleButton ammoSelected;
     public HashMap<String,Integer> ammunition;
 
     public Tank(Color color, Point position) {
@@ -15,6 +17,7 @@ public class Tank {
         this.position = position;
         this.angle = null;
         this.power = null;
+        this.ammoSelected = null;
         this.ammunition = reloadAmmunition();
     }
     public void setAngle(double angle) {
@@ -31,5 +34,13 @@ public class Tank {
         temp.put("Bullet40", Constants.AMMO_QUANTITY[1]);
         temp.put("Bullet50", Constants.AMMO_QUANTITY[2]);
         return temp;
+    }
+
+    public void setAmmoSelected(ToggleButton ammoSelected) {
+        this.ammoSelected = ammoSelected;
+    }
+
+    public ToggleButton getAmmoSelected() {
+        return this.ammoSelected;
     }
 }

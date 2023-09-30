@@ -19,13 +19,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import static com.example.tankproject.App.restartGame;
 
 public class GameController implements Initializable {
     @FXML
@@ -48,7 +45,7 @@ public class GameController implements Initializable {
     public Button shootButton;
     public ImageView backgroundImage;
     public long lastUpdateTime;
-    public Text currentPlayerLife;
+    public Text currentPlayerHealth;
     public ImageView currentPlayerLifeIcon;
     public HBox replayExitButtonsHbox;
     public Text lightAmmoQuantityText;
@@ -60,36 +57,32 @@ public class GameController implements Initializable {
     public Button replayButton;
     public Button exitButton;
     public StackPane stackPaneCanvas;
+    public VBox winScreenVbox;
 
     // Game interface, players and terrain initialization
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+       gameInitialize();
+    }
+
+    // Encapsulation of all methods responsible for initializing the game
+    public void gameInitialize() {
         this.gameCanvasGraphicContext = gameCanvas.getGraphicsContext2D();
+        this.maxHeight = 0;
+        this.maxDistance = 0;
+        this.lastUpdateTime = 0;
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
+        this.angleTextField.clear();
+        this.powerTextField.clear();
+        this.mediumAmmoButton.setSelected(true);
         for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
             this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
-        this.turn = alivePlayers.get((int) Math.round(Math.random()));
-        this.maxHeight = 0;
-        this.maxDistance = 0;
-        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
-        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
+        this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
-        this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
-        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.backgroundImage.setPreserveRatio(false);
-        this.lastUpdateTime = 0;
-        this.stackPane.setPrefHeight(Constants.WINDOWS_HEIGHT);
-        this.stackPane.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.stackPane.setMaxSize(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
-        this.stackPaneCanvas.setPrefHeight(Constants.CANVAS_HEIGHT);
-        this.stackPaneCanvas.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.stackPaneCanvas.setMaxSize(Constants.WINDOWS_WIDTH,Constants.CANVAS_HEIGHT);
-        this.vbox.setPrefHeight(Constants.WINDOWS_HEIGHT);
-        this.vbox.setPrefWidth(Constants.WINDOWS_WIDTH);
 
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -104,27 +97,47 @@ public class GameController implements Initializable {
             }
         });
 
+        buttonsPanelInitialize();
         calculateMax(new Shot(new Point(0,0),0,0,0),this.turn.tank);
         tanksPlacement();
-        buttonsPanelInitialize();
+        componentsSizesInitialize();
         drawingMethods(false);
     }
 
-    // Initializes the buttons panel of the interface
-    public void buttonsPanelInitialize() {
-        this.replayButton = createReplayButton(25,25);
-        this.exitButton = createExitButton(25,25);
-        this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentPlayerLife.setText("Life : " + this.turn.getHealth() + " / 100");
-        this.currentPlayerLifeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResource("icons/half_heart_icon.png")).toExternalForm()));
+    // Encapsulation of methods responsible for changing the size of components
+    public void componentsSizesInitialize() {
+        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
+        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
+        this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
+        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.backgroundImage.setPreserveRatio(false);
+        this.stackPane.setPrefHeight(Constants.WINDOWS_HEIGHT);
+        this.stackPane.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.stackPane.setMaxSize(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+        this.stackPaneCanvas.setPrefHeight(Constants.CANVAS_HEIGHT);
+        this.stackPaneCanvas.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.stackPaneCanvas.setMaxSize(Constants.WINDOWS_WIDTH,Constants.CANVAS_HEIGHT);
+        this.vbox.setPrefHeight(Constants.WINDOWS_HEIGHT);
+        this.vbox.setPrefWidth(Constants.WINDOWS_WIDTH);
         this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setPrefWidth(Constants.WINDOWS_WIDTH);
         this.buttonsPanel.setMinWidth(Constants.WINDOWS_WIDTH);
         this.buttonsPanel.setMaxWidth(Constants.WINDOWS_WIDTH);
+    }
+
+    // Initializes the buttons panel of the interface
+    public void buttonsPanelInitialize() {
+        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        this.replayExitButtonsHbox.getChildren().clear();
+        this.replayButton = createReplayButton(25,25);
+        this.exitButton = createExitButton(25,25);
+        this.currentPlayerText.setText(turn.name + " is playing");
+        this.currentPlayerHealth.setText("Health : " + this.turn.getHealth() + " / 100");
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
+        this.currentPlayerLifeIcon.setImage(heartIcon);
         ammunitionPanelControl();
     }
 
@@ -288,6 +301,7 @@ public class GameController implements Initializable {
 
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods() {
+        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
         changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -301,9 +315,13 @@ public class GameController implements Initializable {
             this.angleTextField.clear();
             this.powerTextField.clear();
         }
-        this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentPlayerLife.setText("Life : " +this.turn.getHealth() + " / 100");
 
+        this.currentPlayerText.setText(this.turn.name + " is playing");
+        this.currentPlayerHealth.setText("Health : " +this.turn.getHealth() + " / 100");
+        if (this.turn.getHealth() == Constants.TANK_HEALTH) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        if (this.turn.getHealth() <= Constants.TANK_HEALTH / 2) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
+        if (this.turn.getHealth() == 0) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
+        this.currentPlayerLifeIcon.setImage(heartIcon);
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -371,7 +389,8 @@ public class GameController implements Initializable {
         vbox.alignmentProperty().set(Pos.CENTER);
         vbox.setSpacing(30);
         vbox.setBackground(background);
-        this.stackPane.getChildren().add(vbox);
+        this.winScreenVbox = vbox;
+        this.stackPane.getChildren().add(this.winScreenVbox);
     }
 
     public Button createReplayButton(int height, int width) {
@@ -389,16 +408,27 @@ public class GameController implements Initializable {
 
         // Replay button action
         replayButton.setOnAction(event -> {
-            try {
-                restartGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            // WinScreen is in screen
+            if (this.stackPane.getChildren().size() != 1) {
+                disableWinScreen();
             }
+            gameInitialize();
         });
 
         return replayButton;
     }
 
+    public void disableWinScreen() {
+        this.stackPane.getChildren().remove(this.winScreenVbox);
+        this.angleTextField.setDisable(false);
+        this.powerTextField.setDisable(false);
+        this.shootButton.setDisable(false);
+        this.replayButton.setDisable(false);
+        this.exitButton.setDisable(false);
+        this.lightAmmoButton.setDisable(false);
+        this.mediumAmmoButton.setDisable(false);
+        this.heavyAmmoButton.setDisable(false);
+    }
     public Button createExitButton(int height, int width) {
         Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon_white.png")).toExternalForm());
         ImageView exitIconView = new ImageView(exitIcon);
