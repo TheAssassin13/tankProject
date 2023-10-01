@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -23,6 +20,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
     @FXML
@@ -58,6 +57,9 @@ public class GameController implements Initializable {
     public Button exitButton;
     public StackPane stackPaneCanvas;
     public VBox winScreenVbox;
+    public ImageView currentPlayerTankImage;
+    public StackPane currentPlayerTankStackPane;
+    public ToggleGroup ammunitionButtons;
 
     // Game interface, players and terrain initialization
     @Override
@@ -138,6 +140,13 @@ public class GameController implements Initializable {
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
         this.currentPlayerLifeIcon.setImage(heartIcon);
+        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/currentTank.png")).toExternalForm()));
+        this.currentPlayerTankStackPane.setPrefWidth(120);
+        this.currentPlayerTankStackPane.setPrefHeight(80);
+        this.currentPlayerTankImage.setFitWidth(120);
+        this.currentPlayerTankImage.setFitHeight(80);
+        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
+        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         ammunitionPanelControl();
     }
 
@@ -210,11 +219,12 @@ public class GameController implements Initializable {
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
             this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
             this.turn.tank.power = Double.parseDouble(powerTextField.getText());
+            this.turn.tank.setAmmoSelected((ToggleButton) this.ammunitionButtons.getSelectedToggle());
+
             // Creates shot from user input
             Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), 0);
-            if (lightAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[0]);
-            if (mediumAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[1]);
-            if (heavyAmmoButton.isSelected()) shot.setDamage(Constants.AMMO_DAMAGE[2]);
+            // Sets damage from selected ammunition
+            shot.setDamage((Integer) this.turn.tank.getAmmoSelected().getUserData());
 
             gameAnimationTimer(shot);
         }
@@ -316,12 +326,21 @@ public class GameController implements Initializable {
             this.powerTextField.clear();
         }
 
+        // Saves last selected ammunition
+        if (this.turn.tank.getAmmoSelected() != null) {
+            this.ammunitionButtons.selectToggle(this.turn.tank.getAmmoSelected());
+        } else {
+            this.ammunitionButtons.selectToggle(this.mediumAmmoButton);
+        }
+
+
         this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentPlayerHealth.setText("Health : " +this.turn.getHealth() + " / 100");
         if (this.turn.getHealth() == Constants.TANK_HEALTH) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
         if (this.turn.getHealth() <= Constants.TANK_HEALTH / 2) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
         if (this.turn.getHealth() == 0) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
         this.currentPlayerLifeIcon.setImage(heartIcon);
+        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -452,7 +471,17 @@ public class GameController implements Initializable {
         this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet30") + " / 3");
         this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet40") + " / 10");
         this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet50") + " / 3");
+        this.lightAmmoButton.setUserData(Constants.AMMO_DAMAGE[0]);
+        this.mediumAmmoButton.setUserData(Constants.AMMO_DAMAGE[1]);
+        this.heavyAmmoButton.setUserData(Constants.AMMO_DAMAGE[2]);
 
+        // Verifies that is always a button selected
+        this.ammunitionButtons.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                // If no button is selected, selects the last one
+                this.ammunitionButtons.selectToggle(oldToggle);
+            }
+        });
     }
 }
 
