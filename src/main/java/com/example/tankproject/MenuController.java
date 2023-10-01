@@ -27,6 +27,7 @@ public class MenuController implements Initializable {
     public VBox optionsMenu;
     public Label resolutionOption;
     public TextField tanksQuantityField;
+    MusicPlayer backgroundMusic;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -37,9 +38,14 @@ public class MenuController implements Initializable {
         this.tanksQuantityField.setText(String.valueOf(Constants.TANKS_QUANTITY));
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
+        this.backgroundMusic = new MusicPlayer("music/menuMusic.wav");
+        backgroundMusic.play();
     }
 
     public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
+        this.backgroundMusic.stop();
+        this.backgroundMusic = new MusicPlayer("music/gameMusic.wav");
+        this.backgroundMusic.play();
         App.setRoot("game");
     }
 
