@@ -45,12 +45,15 @@
                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
                   <children>
                      <Label alignment="TOP_CENTER" styleClass="optionsTitleMenu" text="Options" />
-                     <Label fx:id="resolutionOption" text="Label" />
+                     <Label fx:id="resolutionOption" text="Label" textFill="WHITE" />
                      <Slider maxWidth="-Infinity" prefWidth="350.0" />
-                     <Label text="Tanks Quantity" />
+                     <Label text="Tanks Quantity" textFill="WHITE" />
                      <TextField fx:id="tanksQuantityField" maxWidth="-Infinity" prefWidth="100.0" />
                      <Button mnemonicParsing="false" onAction="#onSaveButtonClick" styleClass="saveOptionsButton" text="Save" />
                   </children>
+                  <padding>
+                     <Insets bottom="100.0" />
+                  </padding>
                </VBox>
             </children>
             <HBox.margin>

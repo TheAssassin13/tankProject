@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import static com.example.tankproject.App.toHexString;
@@ -228,7 +229,6 @@ public class GameController implements Initializable {
 
             gameAnimationTimer(shot);
         }
-
         this.angleTextField.requestFocus();
    }
 
@@ -247,7 +247,8 @@ public class GameController implements Initializable {
                    calculateMax(shot, turn.tank);
 
                         // Shot is out of the screen in the X-axis
-                        if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0) {
+                        if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
+                        || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
                             stop();
                             stopMethods();
                         }
@@ -293,6 +294,7 @@ public class GameController implements Initializable {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                     drawingMethods(true);
+                    vibration();
                     // When the terrain stops falling, the animation stops
                     if (!terrain.terrainFalling()) stop();
                 }
@@ -319,6 +321,11 @@ public class GameController implements Initializable {
                 }
             }
         }.start();
+    }
+
+    public void vibration() {
+        Random random = new Random();
+        gameCanvasGraphicContext.translate(random.nextInt(-2,2), random.nextInt(-2,2));
     }
 
     // Calculates max height and distance of the shot and display it to the interface
