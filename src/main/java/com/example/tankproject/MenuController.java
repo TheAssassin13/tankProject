@@ -27,7 +27,7 @@ public class MenuController implements Initializable {
     public VBox optionsMenu;
     public Label resolutionOption;
     public TextField tanksQuantityField;
-    MusicPlayer backgroundMusic;
+    public MusicPlayer backgroundMusic;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

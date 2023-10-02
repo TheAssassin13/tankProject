@@ -309,7 +309,8 @@ public class GameController implements Initializable {
                     drawingMethods(true);
                     int flag = 0;
                     for (Player p : alivePlayers) {
-                        if (terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
+                        if (p.tank.position.getY() + Constants.TANK_SIZE/3 < Constants.CANVAS_HEIGHT &&
+                                terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             flag = 1;
                         }

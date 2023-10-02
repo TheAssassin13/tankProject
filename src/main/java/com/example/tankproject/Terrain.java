@@ -3,8 +3,7 @@ package com.example.tankproject;
 
 import java.util.Random;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 public class Terrain {
     public int[][] resolutionMatrix;
@@ -30,21 +29,23 @@ public class Terrain {
             reference[3] = new Point(4*width/5 - margin, reference[1].getY() - margin);
             reference[4] = new Point(width - margin, reference[2].getY() - margin*2);
         } else {
+            Random random1 = new Random();
             // First hill
-            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), seaLevel - margin*2 - new Random().nextInt(seaLevel - margin*2));
+            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), margin + random1.nextInt(seaLevel - margin*2));
             for (int i = 1; i < reference.length; i++) {
                 if (i % 2 == 0) {
                     // Hills
-                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), seaLevel - margin*2 - new Random().nextInt(seaLevel - margin*2));
+                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), margin + random1.nextInt(seaLevel - margin*2));
                 } else {
                     // Craters
-                    reference[i] = new Point((int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5)), seaLevel + margin*2 + new Random().nextInt(height - seaLevel - margin*2));
+                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), seaLevel + margin*2 + random1.nextInt(height - seaLevel - margin*2));
                 }
             }
             // In case the last reference point gets out of bound
             if (reference[reference.length-1].getX() > width - margin) reference[reference.length - 1].setX(width - margin*2);
         }
 
+        Random random1 = new Random();
         int x = 0;
         int maxHeight = seaLevel;
         int terrainHeight = seaLevel;
@@ -66,12 +67,14 @@ public class Terrain {
                 }
                 referencePoint++;
             }
-            if (referencePoint > reference.length) maxHeight = height;
+            if (referencePoint > reference.length) maxHeight = random1.nextInt(seaLevel + margin, height);
 
             // Random y-axis
-            if (terrainHeight > height || terrainHeight > maxHeight) terrainHeight -= new Random().nextInt(2);
-            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += new Random().nextInt(2);
-            else referencePoint++;
+            if (terrainHeight > height || terrainHeight > maxHeight) terrainHeight -= random1.nextInt(2);
+            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += random1.nextInt(2);
+            else {
+                referencePoint++;
+            }
 
             // random x-axis
             x += new Random().nextInt(2);
