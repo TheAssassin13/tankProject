@@ -61,6 +61,8 @@ public class GameController implements Initializable {
     public ImageView currentPlayerTankImage;
     public StackPane currentPlayerTankStackPane;
     public ToggleGroup ammunitionButtons;
+    public Random random;
+    public ArrayList<MysteryBox> boxes;
 
     // Game interface, players and terrain initialization
     @Override
@@ -86,6 +88,8 @@ public class GameController implements Initializable {
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
+        random = new Random();
+        boxes = new ArrayList<>();
 
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -160,6 +164,9 @@ public class GameController implements Initializable {
         for (Player p : this.alivePlayers) {
             Illustrator.drawTank(this.gameCanvasGraphicContext, p.tank);
         }
+        for (MysteryBox box : this.boxes) {
+            Illustrator.drawMysteryBox(gameCanvasGraphicContext, box);
+        }
     }
 
     // Placement of tanks on terrain with random distance
@@ -221,6 +228,11 @@ public class GameController implements Initializable {
             this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
             this.turn.tank.power = Double.parseDouble(powerTextField.getText());
             this.turn.tank.setAmmoSelected((ToggleButton) this.ammunitionButtons.getSelectedToggle());
+            // There's a 1/5 chance a mystery box appears
+            if (random.nextInt(5) == 4) {
+                boxes.add(new MysteryBox(new Point(random.nextInt(Constants.WINDOWS_WIDTH), 0)));
+                mysteryBoxFalling();
+            }
 
             // Creates shot from user input
             Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), 0);
@@ -252,27 +264,9 @@ public class GameController implements Initializable {
                             stop();
                             stopMethods();
                         }
-                        // Checks if a tank is hit
-                        if (tanksCollision(shot) != null) {
-                            Player hitPlayer = tanksCollision(shot);
-                            hitPlayer.reduceHealth(shot.getDamage());
-                            stop();
-                            terrain.destroyTerrain(shot.position, shot.area);
-                            terrainFallAnimationTimer();
-                            tankFallAnimationTimer();
-                            stopMethods();
-                            if (hitPlayer.getHealth() <= 0) {
-                                deleteDeadPlayer(hitPlayer);
-                            }
-                        }
-                        // Checks if terrain is hit
-                        if (shot.terrainCollision(terrain)) {
-                            stop();
-                            terrain.destroyTerrain(shot.position, shot.area);
-                            terrainFallAnimationTimer();
-                            tankFallAnimationTimer();
-                            stopMethods();
-                        }
+
+                        if (shotCollision(shot)) stop();
+
                         // Checks if there is only one player left
                         if (alivePlayers.size() == 1) {
                             winScreen();
@@ -308,7 +302,7 @@ public class GameController implements Initializable {
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                    drawingMethods(true);
+                    drawingMethods(false);
                     int flag = 0;
                     for (Player p : alivePlayers) {
                         if (p.tank.position.getY() + Constants.TANK_SIZE/3 < Constants.CANVAS_HEIGHT &&
@@ -323,9 +317,68 @@ public class GameController implements Initializable {
         }.start();
     }
 
+    public void mysteryBoxFalling() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Makes animation fps constant
+                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                    drawingMethods(false);
+                    int flag = 0;
+                    for (MysteryBox box : boxes) {
+                        if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Constants.CANVAS_HEIGHT &&
+                                terrain.resolutionMatrix[box.position.getY() + Constants.BOX_SIZE/2 + 1][box.position.getX()] == 0) {
+                            box.position.setY(box.position.getY()+1);
+                            flag = 1;
+                        }
+                    }
+                    if (flag == 0) stop();
+                }
+            }
+        }.start();
+    }
+
     public void vibration() {
-        Random random = new Random();
         gameCanvasGraphicContext.translate(random.nextInt(-2,2), random.nextInt(-2,2));
+    }
+
+    // Checks all the possible collisions with a shot
+    public boolean shotCollision(Shot shot) {
+        // Checks if a tank is hit
+        if (tanksCollision(shot) != null) {
+            Player hitPlayer = tanksCollision(shot);
+            hitPlayer.reduceHealth(shot.getDamage());
+            terrain.destroyTerrain(shot.position, shot.area);
+            terrainFallAnimationTimer();
+            tankFallAnimationTimer();
+            stopMethods();
+            if (hitPlayer.getHealth() <= 0) {
+                deleteDeadPlayer(hitPlayer);
+            }
+            return true;
+        }
+        // Checks if terrain is hit
+        else if (shot.terrainCollision(terrain)) {
+            terrain.destroyTerrain(shot.position, shot.area);
+            terrainFallAnimationTimer();
+            tankFallAnimationTimer();
+            stopMethods();
+            return true;
+        }
+        // Checks if a box is hit
+        else {
+            for (MysteryBox box : boxes) {
+                if (shot.mysteryBoxCollision(box)) {
+                    box.obtainPowerUp(turn);
+                    terrain.destroyTerrain(shot.position, shot.area);
+                    terrainFallAnimationTimer();
+                    tankFallAnimationTimer();
+                    stopMethods();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Calculates max height and distance of the shot and display it to the interface

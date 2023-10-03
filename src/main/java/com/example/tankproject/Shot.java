@@ -42,6 +42,11 @@ public class Shot {
         return terrain.resolutionMatrix[this.position.getY()][this.position.getX()] == 1;
     }
 
+    // Checks if a mystery box gets hit by the shot
+    public boolean mysteryBoxCollision(MysteryBox box) {
+        return (Math.pow(box.position.getX() - this.position.getX(),2) + Math.pow(box.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.BOX_SIZE, 2) - Constants.SHOT_SIZE);
+    }
+
     // Adds one point to the shot trajectory
     public void addTrajectory() {
         if (!trajectory.isEmpty() && (Math.pow(trajectory.get(trajectory.size()-1).getX() - this.position.getX(),2) + Math.pow(trajectory.get(trajectory.size()-1).getY() - this.position.getY(),2)) < 400) return;

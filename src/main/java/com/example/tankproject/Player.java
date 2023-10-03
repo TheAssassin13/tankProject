@@ -23,4 +23,6 @@ public class Player {
             this.health = 0;
         }
     }
+
+    public void restoreHealth() { this.health = Constants.TANK_HEALTH; }
 }

@@ -9,7 +9,7 @@ public class Illustrator {
 
     /* This method draws the terrain generated in the resolution matrix.
     This matrix includes every "pixel" of the screen.
-    To optimize in this method we use an array of the highest points,
+    Because of optimization, in this method we use an array of the highest points,
     but for the functioning code we use the resolution matrix.
     1 means terrain, 0 means air.
      */
@@ -26,7 +26,7 @@ public class Illustrator {
     public static void drawTerrain(GraphicsContext gc, Terrain terrain) {
         gc.setFill(Constants.TERRAIN_COLOR);
         for (int j = 0; j < Constants.WINDOWS_WIDTH; j++) {
-            int i = 0;
+            int i = terrain.maxTerrainHeight[j];
             while (i < Constants.CANVAS_HEIGHT) {
                 if (terrain.resolutionMatrix[i][j] == 1) {
                     if (i > 0 && terrain.resolutionMatrix[i-1][j] == 0) {
@@ -78,5 +78,10 @@ public class Illustrator {
         for (int i = 0; i < shot.trajectory.size(); i++) {
             gc.fillOval(shot.trajectory.get(i).getX() - Constants.SHOT_SIZE / 2,shot.trajectory.get(i).getY() - Constants.SHOT_SIZE / 2, Constants.SHOT_SIZE/2, Constants.SHOT_SIZE/2);
         }
+    }
+
+    public static void drawMysteryBox(GraphicsContext gc, MysteryBox box) {
+        gc.setFill(Constants.BOX_COLOR);
+        gc.fillRect(box.position.getX() - Constants.BOX_SIZE/2, box.position.getY() - Constants.BOX_SIZE/2, Constants.BOX_SIZE, Constants.BOX_SIZE);
     }
 }

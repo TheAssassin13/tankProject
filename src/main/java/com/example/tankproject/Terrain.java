@@ -19,7 +19,7 @@ public class Terrain {
     }
 
     public void terrainGeneration(int seaLevel, boolean random) {
-        int margin = 50;
+        int margin = Constants.TERRAIN_MARGIN;
         //Reference points without random
         Point[] reference = new Point[5];
         if (!random) {
