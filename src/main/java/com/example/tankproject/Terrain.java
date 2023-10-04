@@ -6,9 +6,9 @@ import java.util.Random;
 import static java.lang.Math.*;
 
 public class Terrain {
-    public int[][] resolutionMatrix;
     public int height;
     public int width;
+    public int[][] resolutionMatrix;
     public int[] maxTerrainHeight;
 
     public Terrain(int height, int width) {

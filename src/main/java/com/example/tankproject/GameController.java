@@ -13,9 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -61,10 +65,16 @@ public class GameController implements Initializable {
     public ImageView currentPlayerTankImage;
     public StackPane currentPlayerTankStackPane;
     public ToggleGroup ammunitionButtons;
+    public Circle lightAmmoQuantityLight;
+    public Circle mediumAmmoQuantityLight;
+    public Circle heavyAmmoQuantityLight;
+    public Rectangle tankRadarPointer;
+    public Rotate tankRadarPointerRotate;
+    public StackPane tankRadarStackPane;
     public Random random;
     public ArrayList<MysteryBox> boxes;
 
-    // Game interface, players and terrain initialization
+    // Initializes JavaFX windows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
        gameInitialize();
@@ -87,7 +97,9 @@ public class GameController implements Initializable {
         this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
+        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/Background.jpg")).toExternalForm()));
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
+        this.tankRadarStackPane.getChildren().clear();
         random = new Random();
         boxes = new ArrayList<>();
 
@@ -105,10 +117,12 @@ public class GameController implements Initializable {
         });
 
         buttonsPanelInitialize();
+        tankRadarInitialize();
         calculateMax(new Shot(new Point(0,0),0,0,0),this.turn.tank);
         tanksPlacement();
         componentsSizesInitialize();
         drawingMethods(false);
+
     }
 
     // Encapsulation of methods responsible for changing the size of components
@@ -145,14 +159,14 @@ public class GameController implements Initializable {
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
         this.currentPlayerLifeIcon.setImage(heartIcon);
-        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/currentTank.png")).toExternalForm()));
+        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/CurrentTank.png")).toExternalForm()));
         this.currentPlayerTankStackPane.setPrefWidth(120);
         this.currentPlayerTankStackPane.setPrefHeight(80);
         this.currentPlayerTankImage.setFitWidth(120);
         this.currentPlayerTankImage.setFitHeight(80);
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        ammunitionPanelControl();
+        ammunitionPanelControlInitialize();
     }
 
     // All drawing methods that should render every frame
@@ -255,24 +269,26 @@ public class GameController implements Initializable {
                    Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
                    Illustrator.drawShot(gameCanvasGraphicContext, shot);
                    shootButton.setDisable(true);
+                   replayButton.setDisable(true);
+                   tankRadar(shot);
                    // Update max height and distance every frame
                    calculateMax(shot, turn.tank);
 
-                        // Shot is out of the screen in the X-axis
-                        if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
+                   // Shot is out of the screen in the X-axis
+                   if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
                         || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
-                            stop();
-                            stopMethods();
-                        }
+                       stop();
+                       stopMethods();
+                   }
 
-                        if (shotCollision(shot)) stop();
+                   if (shotCollision(shot)) stop();
 
-                        // Checks if there is only one player left
-                        if (alivePlayers.size() == 1) {
-                            winScreen();
-                        }
-                        // Trajectory point added
-                        shot.addTrajectory();
+                   // Checks if there is only one player left
+                   if (alivePlayers.size() == 1) {
+                       winScreen();
+                   }
+                   // Trajectory point added
+                   shot.addTrajectory();
 
                    lastUpdateTime = now;
                }
@@ -398,8 +414,8 @@ public class GameController implements Initializable {
         changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
+        replayButton.setDisable(false);
         ammunitionPanelControl();
-
         // Saves last angle and power
         if (this.turn.tank.power != null || this.turn.tank.getAngle() != null) {
             this.angleTextField.setText(String.valueOf(this.turn.tank.getAngle()));
@@ -416,7 +432,7 @@ public class GameController implements Initializable {
             this.ammunitionButtons.selectToggle(this.mediumAmmoButton);
         }
 
-
+        this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentPlayerHealth.setText("Health : " +this.turn.getHealth() + " / 100");
         if (this.turn.getHealth() == Constants.TANK_HEALTH) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
@@ -495,6 +511,7 @@ public class GameController implements Initializable {
         this.stackPane.getChildren().add(this.winScreenVbox);
     }
 
+    // Creates replay button
     public Button createReplayButton(int height, int width) {
         Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon_white.png")).toExternalForm());
         ImageView replayIconView = new ImageView(replayIcon);
@@ -520,17 +537,7 @@ public class GameController implements Initializable {
         return replayButton;
     }
 
-    public void disableWinScreen() {
-        this.stackPane.getChildren().remove(this.winScreenVbox);
-        this.angleTextField.setDisable(false);
-        this.powerTextField.setDisable(false);
-        this.shootButton.setDisable(false);
-        this.replayButton.setDisable(false);
-        this.exitButton.setDisable(false);
-        this.lightAmmoButton.setDisable(false);
-        this.mediumAmmoButton.setDisable(false);
-        this.heavyAmmoButton.setDisable(false);
-    }
+    // Creates exit button
     public Button createExitButton(int height, int width) {
         Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon_white.png")).toExternalForm());
         ImageView exitIconView = new ImageView(exitIcon);
@@ -550,14 +557,40 @@ public class GameController implements Initializable {
         return exitButton;
     }
 
+    // Disables win screen to keep playing
+    public void disableWinScreen() {
+        this.stackPane.getChildren().remove(this.winScreenVbox);
+        this.angleTextField.setDisable(false);
+        this.powerTextField.setDisable(false);
+        this.shootButton.setDisable(false);
+        this.replayButton.setDisable(false);
+        this.exitButton.setDisable(false);
+        this.lightAmmoButton.setDisable(false);
+        this.mediumAmmoButton.setDisable(false);
+        this.heavyAmmoButton.setDisable(false);
+    }
+
+    // Encapsulation of methods responsible for updating remaining ammo and ammo lights color every turn
     public void ammunitionPanelControl() {
         this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet30") + " / 3");
         this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet40") + " / 10");
         this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet50") + " / 3");
+        if (this.turn.tank.ammunition.get("Bullet30") == Constants.AMMO_QUANTITY[0]) this.lightAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get("Bullet30") <= Constants.AMMO_QUANTITY[0] / 2) this.lightAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get("Bullet30") == 0) this.lightAmmoQuantityLight.setFill(Color.RED);
+        if (this.turn.tank.ammunition.get("Bullet40") == Constants.AMMO_QUANTITY[1]) this.mediumAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get("Bullet40") <= Constants.AMMO_QUANTITY[1] / 2) this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get("Bullet40") == 0) this.mediumAmmoQuantityLight.setFill(Color.RED);
+        if (this.turn.tank.ammunition.get("Bullet50") == Constants.AMMO_QUANTITY[2]) this.heavyAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get("Bullet50") <= Constants.AMMO_QUANTITY[2] / 2) this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get("Bullet50") == 0) this.heavyAmmoQuantityLight.setFill(Color.RED);
+    }
+
+    // Encapsulation of methods responsible for initializing toggle buttons, data related
+    public void ammunitionPanelControlInitialize() {
         this.lightAmmoButton.setUserData(Constants.AMMO_DAMAGE[0]);
         this.mediumAmmoButton.setUserData(Constants.AMMO_DAMAGE[1]);
         this.heavyAmmoButton.setUserData(Constants.AMMO_DAMAGE[2]);
-
         // Verifies that is always a button selected
         this.ammunitionButtons.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
             if (newToggle == null) {
@@ -566,5 +599,55 @@ public class GameController implements Initializable {
             }
         });
     }
+
+    public void tankRadar(Shot shot) {
+        boolean rightDirection = true;
+        double deltaX = shot.position.getX() - this.turn.tank.position.getX();
+        double deltaY = this.turn.tank.position.getY() - shot.position.getY();
+        double angle;
+
+        if (deltaX < 0) {
+            rightDirection = false;
+            deltaX = deltaX * -1;
+        }
+        angle = Math.toDegrees(Math.atan(deltaX / deltaY));
+
+        if (!rightDirection) {
+            angle = angle * -1;
+        }
+
+        if (angle >= -75 && angle <= 75) {
+            this.tankRadarPointerRotate.setAngle(angle);
+        }
+
+    }
+
+    public void tankRadarInitialize() {
+        Circle circle = new Circle(45);
+        Rectangle pointer = new Rectangle();
+        double height = 45;
+        double width = 3;
+
+        this.tankRadarPointerRotate = new Rotate();
+        this.tankRadarPointerRotate.setPivotX(width);
+        this.tankRadarPointerRotate.setPivotY(height);
+        this.tankRadarPointerRotate.setAngle(0);
+        this.tankRadarStackPane.getChildren().add(circle);
+        this.tankRadarStackPane.getChildren().add(pointer);
+        this.tankRadarPointer = pointer;
+
+        circle.setId("tankRadarCircle");
+        circle.setStroke(Color.WHITE);
+        circle.setStrokeWidth(2);
+        pointer.setId("tankRadarPointer");
+        pointer.setWidth(width);
+        pointer.setHeight(height);
+        pointer.setArcHeight(4);
+        pointer.setArcWidth(4);
+        pointer.setFill(Color.WHITE);
+        pointer.getTransforms().addAll(this.tankRadarPointerRotate);
+
+    }
+
 }
 

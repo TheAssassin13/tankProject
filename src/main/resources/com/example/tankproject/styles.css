@@ -62,7 +62,7 @@
 }
 
 .optionsMenu {
-    -fx-background-radius: 6px;
+    -fx-background-radius: 12px;
     -fx-background-color: -fx-transparentPurple-color;
     -fx-font-size: 32px;
 }
@@ -129,3 +129,6 @@
     -fx-border-color: -fx-white-color;
 }
 
+#tankRadarCircle {
+    -fx-fill: #0c1015;
+}
