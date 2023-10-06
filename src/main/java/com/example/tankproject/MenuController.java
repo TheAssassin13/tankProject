@@ -31,7 +31,7 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/MenuBackground.png")).toExternalForm()));
+        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/menu_background_image.png")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
         this.resolutionOption.setText(Constants.WINDOWS_WIDTH + " X " + Constants.WINDOWS_HEIGHT);
@@ -42,19 +42,19 @@ public class MenuController implements Initializable {
         backgroundMusic.play();
     }
 
-    public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onStartButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.backgroundMusic.stop();
         this.backgroundMusic = new MusicPlayer("music/gameMusic.wav");
         this.backgroundMusic.play();
         App.setRoot("game");
     }
 
-    public void onExitButtonClick(ActionEvent actionEvent) {
+    public void onExitButtonClick(ActionEvent ignoredActionEvent) {
         Platform.exit();
     }
 
     // When the options button is clicked, the options menu appears or disappears
-    public void onOptionsButtonClick(ActionEvent actionEvent) {
+    public void onOptionsButtonClick(ActionEvent ignoredActionEvent) {
         if (this.optionsMenu.isVisible()) {
             this.optionsMenu.setDisable(true);
             this.optionsMenu.setVisible(false);
@@ -64,7 +64,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    public void onSaveButtonClick(ActionEvent ignoredActionEvent) {
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
     }

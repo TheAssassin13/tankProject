@@ -97,8 +97,7 @@ public class GameController implements Initializable {
         this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/Background.jpg")).toExternalForm()));
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background.jpg")).toExternalForm()));
+        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background_image.jpg")).toExternalForm()));
         this.tankRadarStackPane.getChildren().clear();
         random = new Random();
         boxes = new ArrayList<>();
@@ -159,12 +158,11 @@ public class GameController implements Initializable {
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
         this.currentPlayerLifeIcon.setImage(heartIcon);
-        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/CurrentTank.png")).toExternalForm()));
+        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
         this.currentPlayerTankStackPane.setPrefWidth(120);
         this.currentPlayerTankStackPane.setPrefHeight(80);
         this.currentPlayerTankImage.setFitWidth(120);
         this.currentPlayerTankImage.setFitHeight(80);
-        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         ammunitionPanelControlInitialize();
     }
@@ -270,7 +268,7 @@ public class GameController implements Initializable {
                    Illustrator.drawShot(gameCanvasGraphicContext, shot);
                    shootButton.setDisable(true);
                    replayButton.setDisable(true);
-                   tankRadar(shot);
+                   tankRadarUpdate(shot);
                    // Update max height and distance every frame
                    calculateMax(shot, turn.tank);
 
@@ -600,10 +598,12 @@ public class GameController implements Initializable {
         });
     }
 
-    public void tankRadar(Shot shot) {
+    public void tankRadarUpdate(Shot shot) {
         boolean rightDirection = true;
-        double deltaX = shot.position.getX() - this.turn.tank.position.getX();
-        double deltaY = this.turn.tank.position.getY() - shot.position.getY();
+        double posX = this.turn.tank.position.getX();
+        double posY = this.turn.tank.position.getY();
+        double deltaX = shot.position.getX() - posX;
+        double deltaY = posY - shot.position.getY();
         double angle;
 
         if (deltaX < 0) {
@@ -619,7 +619,6 @@ public class GameController implements Initializable {
         if (angle >= -75 && angle <= 75) {
             this.tankRadarPointerRotate.setAngle(angle);
         }
-
     }
 
     public void tankRadarInitialize() {
@@ -646,7 +645,6 @@ public class GameController implements Initializable {
         pointer.setArcWidth(4);
         pointer.setFill(Color.WHITE);
         pointer.getTransforms().addAll(this.tankRadarPointerRotate);
-
     }
 
 }
