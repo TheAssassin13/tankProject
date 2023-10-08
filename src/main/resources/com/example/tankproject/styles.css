@@ -8,6 +8,7 @@
     -fx-orange-color: #ff9e05;
     -fx-lightRed-color: #94484c;
     -fx-transparentPurple-color: #310B34ee;
+    -fx-purple-color: #310B34;
     -fx-buttonsPanel-color: #19212A;
     -fx-buttonsPanelContainer-color: #151C23;
     -fx-buttonsPanelBorder-color: #D5CBC5;
@@ -131,4 +132,14 @@
 
 #tankRadarCircle {
     -fx-fill: #0c1015;
+}
+
+#winnerTankBackground {
+    -fx-background-radius: 12px;
+    -fx-background-color: -fx-purple-color;
+    -fx-padding: 30px 0 30px 0;
+}
+
+#winScreenButtonHbox {
+    -fx-padding: 0 15px 0 0;
 }
