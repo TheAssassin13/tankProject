@@ -89,11 +89,6 @@
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>shaded</shadedClassifierName>
-                            <excludes>
-                                <exclude>META-INF/substrate/config/reflectionconfig.json</exclude>
-                                <exclude>META-INF/MANIFEST.MF</exclude>
-                                <exclude>META-INF/substrate/config/*</exclude>
-                            </excludes>
 
                             <transformers>
                                 <transformer implementation=

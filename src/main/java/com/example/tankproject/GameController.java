@@ -80,6 +80,8 @@ public class GameController implements Initializable {
     public Media backgroundMusic;
     public MediaPlayer music;
     public MediaPlayer sounds;
+    public Image umbrella;
+    public Point umbrellaPosition;
 
     // Initializes JavaFX windows
     @Override
@@ -183,6 +185,7 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
+        if (umbrella != null) gameCanvasGraphicContext.drawImage(umbrella, umbrellaPosition.getX(), umbrellaPosition.getY());
         // If there's a collision it draws the terrain without the optimization
         if (collision) Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
         else Illustrator.drawTerrainOptimized(this.gameCanvasGraphicContext, this.terrain);
@@ -242,6 +245,10 @@ public class GameController implements Initializable {
     public void deleteDeadPlayer(Player player) {
         this.deadPlayers.add(player);
         this.alivePlayers.remove(player);
+        // Checks if there is only one player left
+        if (alivePlayers.size() == 1) {
+            winScreen();
+        }
     }
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
@@ -295,10 +302,6 @@ public class GameController implements Initializable {
                    // Checks all the possible collisions
                    if (shotCollision(shot)) stop();
 
-                   // Checks if there is only one player left
-                   if (alivePlayers.size() == 1) {
-                       winScreen();
-                   }
                    // Trajectory point added
                    shot.addTrajectory();
 
@@ -336,6 +339,10 @@ public class GameController implements Initializable {
                         if (p.tank.position.getY() + Constants.TANK_SIZE/3 < Constants.CANVAS_HEIGHT &&
                                 terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
+                            p.reduceHealth(1);
+                            if (p.getHealth() <= 0) {
+                                deleteDeadPlayer(p);
+                            }
                             flag = 1;
                         }
                     }
@@ -364,6 +371,23 @@ public class GameController implements Initializable {
                 }
             }
         }.start();
+    }
+
+    public void mysteryBoxPower(MysteryBox box) {
+        if (box.powerUp == 0) {
+            turn.restoreHealth();
+        } else if (box.powerUp == 1) {
+            this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
+            this.umbrellaPosition = new Point(turn.tank.position.getX(), turn.tank.position.getY()-10);
+            bombardment();
+            this.umbrella = null;
+        }
+    }
+
+    public void bombardment() {
+        for (int i = 0; i < 10; i++) {
+            gameAnimationTimer(new Shot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90, 10));
+        }
     }
 
     public void vibration() {
@@ -397,7 +421,6 @@ public class GameController implements Initializable {
         else {
             for (MysteryBox box : boxes) {
                 if (shot.mysteryBoxCollision(box)) {
-                    box.obtainPowerUp(turn);
                     boxes.remove(box);
                     terrain.destroyTerrain(shot.position, shot.area);
                     terrainFallAnimationTimer();
@@ -406,6 +429,7 @@ public class GameController implements Initializable {
                     sounds.stop();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
                     sounds.play();
+                    mysteryBoxPower(box);
                     return true;
                 }
             }
@@ -580,6 +604,7 @@ public class GameController implements Initializable {
             if (this.stackPane.getChildren().size() != 1) {
                 disableWinScreen();
             }
+            this.music.stop();
             gameInitialize();
         });
 
