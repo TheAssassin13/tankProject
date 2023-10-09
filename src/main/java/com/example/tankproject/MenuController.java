@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +29,8 @@ public class MenuController implements Initializable {
     public VBox optionsMenu;
     public Label resolutionOption;
     public TextField tanksQuantityField;
-    public MusicPlayer backgroundMusic;
+    public Media backgroundMusic;
+    public MediaPlayer mediaPlayer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -38,14 +41,15 @@ public class MenuController implements Initializable {
         this.tanksQuantityField.setText(String.valueOf(Constants.TANKS_QUANTITY));
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
-        this.backgroundMusic = new MusicPlayer("music/menuMusic.wav");
-        backgroundMusic.play();
+        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm());
+        this.mediaPlayer = new MediaPlayer(backgroundMusic);
+        this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        this.mediaPlayer.play();
+        this.mediaPlayer.setVolume(0.5);
     }
 
     public void onStartButtonClick(ActionEvent ignoredActionEvent) throws IOException {
-        this.backgroundMusic.stop();
-        this.backgroundMusic = new MusicPlayer("music/gameMusic.wav");
-        this.backgroundMusic.play();
+        this.mediaPlayer.stop();
         App.setRoot("game");
     }
 

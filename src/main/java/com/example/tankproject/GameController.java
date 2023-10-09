@@ -19,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -75,6 +77,9 @@ public class GameController implements Initializable {
     public Random random;
     public ArrayList<MysteryBox> boxes;
     public Button menuExitButton;
+    public Media backgroundMusic;
+    public MediaPlayer music;
+    public MediaPlayer sounds;
 
     // Initializes JavaFX windows
     @Override
@@ -100,6 +105,10 @@ public class GameController implements Initializable {
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background_image.jpg")).toExternalForm()));
+        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
+        this.music = new MediaPlayer(backgroundMusic);
+        this.music.setCycleCount(MediaPlayer.INDEFINITE);
+        this.music.play();
         this.tankRadarStackPane.getChildren().clear();
         random = new Random();
         boxes = new ArrayList<>();
@@ -283,6 +292,7 @@ public class GameController implements Initializable {
                        stopMethods();
                    }
 
+                   // Checks all the possible collisions
                    if (shotCollision(shot)) stop();
 
                    // Checks if there is only one player left
@@ -388,10 +398,14 @@ public class GameController implements Initializable {
             for (MysteryBox box : boxes) {
                 if (shot.mysteryBoxCollision(box)) {
                     box.obtainPowerUp(turn);
+                    boxes.remove(box);
                     terrain.destroyTerrain(shot.position, shot.area);
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
                     stopMethods();
+                    sounds.stop();
+                    sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+                    sounds.play();
                     return true;
                 }
             }
@@ -442,6 +456,8 @@ public class GameController implements Initializable {
         if (this.turn.getHealth() == 0) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
         this.currentPlayerLifeIcon.setImage(heartIcon);
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
+        this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+        sounds.play();
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -539,6 +555,9 @@ public class GameController implements Initializable {
 
         this.winScreenVbox = backgroundVbox;
         this.stackPane.getChildren().add(this.winScreenVbox);
+        music.stop();
+        music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        music.play();
     }
 
     // Creates replay button
@@ -604,6 +623,7 @@ public class GameController implements Initializable {
         // Menu exit button action
         menuExitButton.setOnAction(event -> {
             try {
+                this.music.stop();
                 App.setRoot("menu");
             } catch (IOException e) {
                 throw new RuntimeException(e);
