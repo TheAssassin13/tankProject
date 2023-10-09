@@ -11,7 +11,7 @@
 
 <StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.GameController">
 
-    <VBox fx:id="vbox">
+    <VBox fx:id="gameVBox">
         <StackPane fx:id="stackPaneCanvas" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
             <ImageView fx:id="backgroundImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
             <Canvas fx:id="gameCanvas" height="200.0" width="600.0" StackPane.alignment="CENTER" />
@@ -47,12 +47,12 @@
                     </font>
                 </Text>
                 <HBox alignment="CENTER" fillHeight="false" spacing="5.0">
-                    <Text fx:id="currentPlayerHealth" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
+                    <Text fx:id="currentTankHealth" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
                         <font>
                             <Font name="Arial" size="18.0" />
                         </font>
                     </Text>
-                    <ImageView fx:id="currentPlayerLifeIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                    <ImageView fx:id="currentTankHealthIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                 </HBox>
             <padding>
                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -150,4 +150,5 @@
             </HBox>
         </HBox>
     </VBox>
+
 </StackPane>
