@@ -100,10 +100,18 @@ public class GameController implements Initializable {
         this.angleTextField.clear();
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
-        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
-            this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+        //for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+            this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
+            this.alivePlayers.add(new CPU("CPU " + (1), Constants.TANK_COLORS[1], new Tank(Constants.TANK_COLORS[1], new Point(0, 0))));
+        //}
+
+        for (Player p: this.alivePlayers) {
+            if (p instanceof CPU) {
+                this.turn = this.alivePlayers.get(0);
+                break;
+            }
         }
-        this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
+        if (this.turn == null) this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background_image.jpg")).toExternalForm()));
@@ -157,6 +165,7 @@ public class GameController implements Initializable {
             if (this.stackPane.getChildren().size() != 1) {
                 disableWinScreen();
             }
+            music.stop();
             gameInitialize();
         });
     }
@@ -226,7 +235,7 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        if (umbrella != null) gameCanvasGraphicContext.drawImage(umbrella, umbrellaPosition.getX(), umbrellaPosition.getY());
+        if (umbrella != null) gameCanvasGraphicContext.drawImage(umbrella, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
         if (collision) Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
         else Illustrator.drawTerrainOptimized(this.gameCanvasGraphicContext, this.terrain);
@@ -294,6 +303,7 @@ public class GameController implements Initializable {
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
     public void onShootButtonClick(ActionEvent ignoredActionEvent) {
+        this.umbrella = null;
         this.maxHeight = 0;
         this.maxDistance = 0;
         // Checks if the input is not empty
@@ -421,9 +431,8 @@ public class GameController implements Initializable {
             turn.restoreHealth();
         } else if (box.powerUp == 1) {
             this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
-            this.umbrellaPosition = new Point(turn.tank.position.getX(), turn.tank.position.getY()-10);
+            this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
-            this.umbrella = null;
         }
     }
 
@@ -470,11 +479,11 @@ public class GameController implements Initializable {
                     terrain.destroyTerrain(shot.position, shot.area);
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
-                    stopMethods();
                     sounds.stop();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
                     sounds.play();
                     mysteryBoxPower(box);
+                    stopMethods();
                     return true;
                 }
             }
@@ -523,6 +532,7 @@ public class GameController implements Initializable {
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
         sounds.play();
+        if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(0).tank.position);
     }
 
     // Turn change, if there's no next player comes back to the first one
