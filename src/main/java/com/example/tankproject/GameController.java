@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -15,8 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.media.Media;
@@ -29,11 +26,12 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import static com.example.tankproject.App.scene;
 import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
     @FXML
-    public VBox vbox;
+    public VBox gameVBox;
     public Canvas gameCanvas;
     public GraphicsContext gameCanvasGraphicContext;
     public Player turn;
@@ -52,8 +50,8 @@ public class GameController implements Initializable {
     public Button shootButton;
     public ImageView backgroundImage;
     public long lastUpdateTime;
-    public Text currentPlayerHealth;
-    public ImageView currentPlayerLifeIcon;
+    public Text currentTankHealth;
+    public ImageView currentTankHealthIcon;
     public HBox replayExitButtonsHbox;
     public Text lightAmmoQuantityText;
     public Text mediumAmmoQuantityText;
@@ -63,8 +61,9 @@ public class GameController implements Initializable {
     public ToggleButton heavyAmmoButton;
     public Button replayButton;
     public Button exitButton;
+    public Button menuExitButton;
     public StackPane stackPaneCanvas;
-    public VBox winScreenVbox;
+    public VBox winScreenVBox;
     public ImageView currentPlayerTankImage;
     public StackPane currentPlayerTankStackPane;
     public ToggleGroup ammunitionButtons;
@@ -76,12 +75,13 @@ public class GameController implements Initializable {
     public StackPane tankRadarStackPane;
     public Random random;
     public ArrayList<MysteryBox> boxes;
-    public Button menuExitButton;
     public Media backgroundMusic;
     public MediaPlayer music;
     public MediaPlayer sounds;
     public Image umbrella;
     public Point umbrellaPosition;
+
+    public HBox healthRemainingHBox;
 
     // Initializes JavaFX windows
     @Override
@@ -114,6 +114,11 @@ public class GameController implements Initializable {
         this.tankRadarStackPane.getChildren().clear();
         random = new Random();
         boxes = new ArrayList<>();
+        this.stackPane.getChildren().remove(this.healthRemainingHBox);
+        this.healthRemainingHBox = new HBox();
+        this.healthRemainingHBox.setId("healthRemainingHBox");
+        this.healthRemainingHBox.setVisible(false);
+        this.stackPane.getChildren().add(this.healthRemainingHBox);
 
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -134,7 +139,43 @@ public class GameController implements Initializable {
         tanksPlacement();
         componentsSizesInitialize();
         drawingMethods(false);
+        buttonsActionInitialize();
+        healthRemainingBoxMouseEvents();
+    }
 
+    // Encapsulation of all methods responsible for initializing buttons of the interface game actions
+    public void buttonsActionInitialize() {
+        setReplayButtonAction(this.replayButton);
+        setExitButtonAction(this.exitButton);
+        setMenuExitButtonAction(this.menuExitButton);
+    }
+
+    // Sets replay button action
+    public void setReplayButtonAction(Button replayButton) {
+        replayButton.setOnAction(event -> {
+            // WinScreen is in screen
+            if (this.stackPane.getChildren().size() != 1) {
+                disableWinScreen();
+            }
+            gameInitialize();
+        });
+    }
+
+    // Sets exit button action
+    public void setExitButtonAction(Button exitButton) {
+        exitButton.setOnAction(event -> Platform.exit());
+    }
+
+    // Sets menu exit button action
+    public void setMenuExitButtonAction(Button menuExitButton) {
+        menuExitButton.setOnAction(event -> {
+            try {
+                this.music.stop();
+                App.setRoot("menu");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // Encapsulation of methods responsible for changing the size of components
@@ -150,8 +191,8 @@ public class GameController implements Initializable {
         this.stackPaneCanvas.setPrefHeight(Constants.CANVAS_HEIGHT);
         this.stackPaneCanvas.setPrefWidth(Constants.WINDOWS_WIDTH);
         this.stackPaneCanvas.setMaxSize(Constants.WINDOWS_WIDTH,Constants.CANVAS_HEIGHT);
-        this.vbox.setPrefHeight(Constants.WINDOWS_HEIGHT);
-        this.vbox.setPrefWidth(Constants.WINDOWS_WIDTH);
+        this.gameVBox.setPrefHeight(Constants.WINDOWS_HEIGHT);
+        this.gameVBox.setPrefWidth(Constants.WINDOWS_WIDTH);
         this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
         this.buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
@@ -168,15 +209,15 @@ public class GameController implements Initializable {
     public void buttonsPanelInitialize() {
         Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
         this.replayExitButtonsHbox.getChildren().clear();
-        this.replayButton = createReplayButton(25,25);
-        this.exitButton = createExitButton(25,25);
-        this.menuExitButton = createMenuExitButton(25,25);
+        this.replayButton = ComponentsCreator.createReplayButton(25,25);
+        this.exitButton = ComponentsCreator.createExitButton(25,25);
+        this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
         this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentPlayerHealth.setText("Health : " + this.turn.getHealth() + " / 100");
+        this.currentTankHealth.setText("Health : " + this.turn.getHealth() + " / 100");
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
-        this.currentPlayerLifeIcon.setImage(heartIcon);
+        this.currentTankHealthIcon.setImage(heartIcon);
         this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         ammunitionPanelControlInitialize();
@@ -288,11 +329,13 @@ public class GameController implements Initializable {
                    Illustrator.drawShot(gameCanvasGraphicContext, shot);
                    shootButton.setDisable(true);
                    replayButton.setDisable(true);
+
+                   // Update tank radar every frame
                    tankRadarUpdate(shot);
                    // Update max height and distance every frame
                    calculateMax(shot, turn.tank);
 
-                   // Shot is out of the screen in the X-axis
+                   // Shot is out of the screen
                    if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
                         || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
                        stop();
@@ -403,6 +446,8 @@ public class GameController implements Initializable {
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
+            healthRemainingBox(hitPlayer);
+
             stopMethods();
             if (hitPlayer.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
@@ -450,7 +495,6 @@ public class GameController implements Initializable {
 
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods() {
-        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
         changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -474,11 +518,8 @@ public class GameController implements Initializable {
 
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentPlayerHealth.setText("Health : " +this.turn.getHealth() + " / 100");
-        if (this.turn.getHealth() == Constants.TANK_HEALTH) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        if (this.turn.getHealth() <= Constants.TANK_HEALTH / 2) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
-        if (this.turn.getHealth() == 0) heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
-        this.currentPlayerLifeIcon.setImage(heartIcon);
+        this.currentTankHealth.setText("Health : " + this.turn.getHealth() + " / 100");
+        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
         sounds.play();
@@ -500,24 +541,14 @@ public class GameController implements Initializable {
 
     // Creates the game win screen
     public void winScreen() {
+        if (this.healthRemainingHBox != null) this.stackPane.getChildren().remove(this.healthRemainingHBox);
         if (this.stackPane.getChildren().size() != 1) return;
-        Color backgroundColor = Color.rgb((int) (Color.GRAY.getRed() * 255), (int) (Color.GRAY.getGreen() * 255), (int) (Color.GRAY.getBlue() * 255), 0.5);
-        StackPane winnerTankBackground = new StackPane();
-        Image winnerTankImage = new Image(Objects.requireNonNull(getClass().getResource("images/winner_tank_image.png")).toExternalForm());
-        ImageView winnerTankImageView = new ImageView(winnerTankImage);
-        Image healthIconImage = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        ImageView healthIconImageView;
-        VBox backgroundVbox = new VBox();
-        VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        HBox healthRemainingHbox = new HBox();
-        Font primaryFont = Font.font("Arial",FontWeight.BOLD,50);
-        Font secondaryFont = Font.font("Arial",FontWeight.NORMAL,30);
-        Text victoryText = new Text("Victory!");
-        Text winnerNameText = new Text(this.alivePlayers.get(0).name);
-        Text healthRemainingText = new Text("Health remaining: " + this.alivePlayers.get(0).getHealth());
-        Button replayButton = createReplayButton(40,40);
-        Button exitButton = createExitButton(40,40);
+        Button replayButton = ComponentsCreator.createReplayButton(40,40);
+        Button exitButton = ComponentsCreator.createExitButton(40,40);
+        VBox backgroundVbox = ComponentsCreator.createWinScreenVBox(this.alivePlayers.get(0),replayButton,exitButton);
+
+        setReplayButtonAction(replayButton);
+        setExitButtonAction(exitButton);
 
         // Disables buttons of the interface game
         this.angleTextField.setDisable(true);
@@ -530,136 +561,17 @@ public class GameController implements Initializable {
         this.mediumAmmoButton.setDisable(true);
         this.heavyAmmoButton.setDisable(true);
 
-        if (this.alivePlayers.get(0).getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        if (this.alivePlayers.get(0).getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
-        if (this.alivePlayers.get(0).getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
+        this.winScreenVBox = backgroundVbox;
+        this.stackPane.getChildren().add(this.winScreenVBox);
 
-        winnerTankBackground.setBackground(new Background(new BackgroundFill(this.alivePlayers.get(0).color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        winnerTankBackground.setMaxWidth(150);
-        winnerTankBackground.setPrefWidth(150);
-        winnerTankBackground.getChildren().add(winnerTankImageView);
-
-        victoryText.setFont(primaryFont);
-        victoryText.setFill(Color.WHITE);
-
-        healthRemainingText.setFont(secondaryFont);
-        healthRemainingText.setFill(Color.WHITE);
-
-        winnerNameText.setFont(secondaryFont);
-        winnerNameText.setFill(Color.WHITE);
-
-        healthIconImageView = new ImageView(healthIconImage);
-        healthIconImageView.setFitWidth(35);
-        healthIconImageView.setFitHeight(35);
-
-        healthRemainingHbox.setAlignment(Pos.CENTER);
-        healthRemainingHbox.setSpacing(15);
-        healthRemainingHbox.getChildren().add(healthRemainingText);
-        healthRemainingHbox.getChildren().add(healthIconImageView);
-
-        hbox.setId("winScreenButtonHbox");
-        hbox.alignmentProperty().set(Pos.CENTER_RIGHT);
-        hbox.setSpacing(30);
-        hbox.getChildren().add(replayButton);
-        hbox.getChildren().add(exitButton);
-
-        vbox.setId("winnerTankBackground");
-        vbox.alignmentProperty().set(Pos.CENTER);
-        vbox.setSpacing(15);
-        vbox.maxWidthProperty().bind(winnerTankBackground.widthProperty());
-        vbox.getChildren().add(winnerTankBackground);
-        vbox.getChildren().add(victoryText);
-        vbox.getChildren().add(winnerNameText);
-        vbox.getChildren().add(healthRemainingHbox);
-        vbox.getChildren().add(hbox);
-
-        backgroundVbox.setBackground(new Background(new BackgroundFill(backgroundColor,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        backgroundVbox.setAlignment(Pos.CENTER);
-        backgroundVbox.getChildren().add(vbox);
-
-        this.winScreenVbox = backgroundVbox;
-        this.stackPane.getChildren().add(this.winScreenVbox);
         music.stop();
         music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
         music.play();
     }
 
-    // Creates replay button
-    public Button createReplayButton(int height, int width) {
-        Image replayIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon_white.png")).toExternalForm());
-        ImageView replayIconView = new ImageView(replayIcon);
-        Button replayButton = new Button("",replayIconView);
-
-        replayButton.getStyleClass().add("winScreenButton");
-        replayButton.setId("replayWinButton");
-        replayButton.setPrefHeight(height);
-        replayButton.setPrefWidth(width);
-        replayButton.setMaxSize(width,height);
-        replayIconView.setFitHeight(height);
-        replayIconView.setFitWidth(width);
-
-        // Replay button action
-        replayButton.setOnAction(event -> {
-            // WinScreen is in screen
-            if (this.stackPane.getChildren().size() != 1) {
-                disableWinScreen();
-            }
-            this.music.stop();
-            gameInitialize();
-        });
-
-        return replayButton;
-    }
-
-    // Creates exit button
-    public Button createExitButton(int height, int width) {
-        Image exitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon_white.png")).toExternalForm());
-        ImageView exitIconView = new ImageView(exitIcon);
-        Button exitButton = new Button("",exitIconView);
-
-        exitButton.getStyleClass().add("winScreenButton");
-        exitButton.setId("exitWinButton");
-        exitButton.setPrefHeight(height);
-        exitButton.setPrefWidth(width);
-        exitButton.setMaxSize(width,height);
-        exitIconView.setFitHeight(height);
-        exitIconView.setFitWidth(width);
-
-        // Exit button action
-        exitButton.setOnAction(event -> Platform.exit());
-
-        return exitButton;
-    }
-
-    // Creates menu exit button
-    public Button createMenuExitButton(int height, int width) {
-        Image menuExitIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/menu_exit_icon_white.png")).toExternalForm());
-        ImageView menuExitIconView = new ImageView(menuExitIcon);
-        Button menuExitButton = new Button("",menuExitIconView);
-
-        menuExitButton.getStyleClass().add("winScreenButton");
-        menuExitButton.setId("menuExitButton");
-        menuExitButton.setPrefHeight(height);
-        menuExitButton.setPrefWidth(width);
-        menuExitButton.setMaxSize(width,height);
-        menuExitIconView.setFitHeight(height);
-        menuExitIconView.setFitWidth(width);
-
-        // Menu exit button action
-        menuExitButton.setOnAction(event -> {
-            try {
-                this.music.stop();
-                App.setRoot("menu");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        return menuExitButton;
-    }
-
     // Disables win screen to keep playing
     public void disableWinScreen() {
-        this.stackPane.getChildren().remove(this.winScreenVbox);
+        this.stackPane.getChildren().remove(this.winScreenVBox);
         this.angleTextField.setDisable(false);
         this.powerTextField.setDisable(false);
         this.shootButton.setDisable(false);
@@ -727,30 +639,44 @@ public class GameController implements Initializable {
 
     // Initializes the tank radar of the interface
     public void tankRadarInitialize() {
-        Circle circle = new Circle(45);
-        Rectangle pointer = new Rectangle();
-        double height = 45;
-        double width = 3;
+        int height = 45;
+        int width = 3;
+        Rectangle pointer = ComponentsCreator.createTankRadarPointer(height,width);
+        Circle background = ComponentsCreator.createTankRadarCircle(height);
 
         this.tankRadarPointerRotate = new Rotate();
         this.tankRadarPointerRotate.setPivotX(width);
         this.tankRadarPointerRotate.setPivotY(height);
         this.tankRadarPointerRotate.setAngle(0);
-        this.tankRadarStackPane.getChildren().add(circle);
+        this.tankRadarStackPane.getChildren().add(background);
         this.tankRadarStackPane.getChildren().add(pointer);
         this.tankRadarPointer = pointer;
 
-        circle.setId("tankRadarCircle");
-        circle.setStroke(Color.WHITE);
-        circle.setStrokeWidth(2);
-        pointer.setId("tankRadarPointer");
-        pointer.setWidth(width);
-        pointer.setHeight(height);
-        pointer.setArcHeight(4);
-        pointer.setArcWidth(4);
-        pointer.setFill(Color.WHITE);
         pointer.getTransforms().addAll(this.tankRadarPointerRotate);
     }
 
+    // Creates a box showing the tank remaining health
+    public void healthRemainingBox(Player player) {
+        this.healthRemainingHBox.setVisible(true);
+        this.healthRemainingHBox.getChildren().clear();
+        this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(player,14,20, "Health:",5,Color.BLACK));
+        this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(player.tank.position.getX()) + 50);
+        this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(player.tank.position.getY()) - 50);
+    }
+
+    public void healthRemainingBoxMouseEvents() {
+
+        scene.setOnMouseMoved(event -> {
+            double mouseX = event.getSceneX();
+            double mouseY = event.getSceneY();
+            for (Player p : alivePlayers) {
+
+                if ((Math.pow(p.tank.position.getX() - mouseX,2) + Math.pow(p.tank.position.getY() - mouseY,2))  <= (Math.pow(Constants.TANK_SIZE, 2))) {
+                    healthRemainingBox(p);
+                }
+
+            }
+        });
+    }
 }
 

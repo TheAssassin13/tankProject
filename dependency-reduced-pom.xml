@@ -23,13 +23,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.tankproject/com.example.tankproject.App</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
-              <noManPages>true</noManPages>
-              <stripDebug>true</stripDebug>
-              <noHeaderFiles>true</noHeaderFiles>
+              <mainClass>com.example.tankproject.Main</mainClass>
             </configuration>
           </execution>
         </executions>
@@ -46,14 +40,9 @@
             <configuration>
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <shadedClassifierName>shaded</shadedClassifierName>
-              <excludes>
-                <exclude>META-INF/substrate/config/reflectionconfig.json</exclude>
-                <exclude>META-INF/MANIFEST.MF</exclude>
-                <exclude>META-INF/substrate/config/*</exclude>
-              </excludes>
               <transformers>
                 <transformer>
-                  <mainClass>com.example.tankproject/com.example.tankproject.Main</mainClass>
+                  <mainClass>com.example.tankproject.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -102,6 +91,7 @@
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javafx.version>17.0.2</javafx.version>
     <junit.version>5.9.1</junit.version>
   </properties>
 </project>

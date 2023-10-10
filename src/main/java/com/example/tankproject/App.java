@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class App extends Application {
     private static Stage stage;
-    private static Scene scene;
+    public static Scene scene;
 
     public static void setRoot(String fxml) throws IOException {
         App.scene.setRoot(loadFXML(fxml));

@@ -140,6 +140,18 @@
     -fx-padding: 30px 0 30px 0;
 }
 
-#winScreenButtonHbox {
+#winScreenButtonHBox {
     -fx-padding: 0 15px 0 0;
+}
+
+#healthRemainingHBox {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 3px;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 145px;
+    -fx-max-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-min-width: -fx-pref-width;
+    -fx-alignment: center;
 }
