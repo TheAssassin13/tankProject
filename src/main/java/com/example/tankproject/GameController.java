@@ -146,6 +146,7 @@ public class GameController implements Initializable {
         componentsSizesInitialize();
         drawingMethods(false);
         buttonsActionInitialize();
+        ammunitionPanelControl();
         this.healthRemainingHUD.healthRemainingBoxMouseEvents(this.alivePlayers);
     }
 
@@ -296,22 +297,25 @@ public class GameController implements Initializable {
                 mysteryBoxAppears();
             }
 
-            String selectedAmmo = this.turn.tank.getAmmoSelected().getText();
+            ToggleButton selectedAmmo = this.turn.tank.getAmmoSelected();
             Shot shot;
-            if(selectedAmmo == "heavyAmmoButton"){
+
+            if (selectedAmmo == this.heavyAmmoButton){
                 shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             }
-            else if(selectedAmmo == "mediumAmmoButton"){
+            else if(selectedAmmo == this.mediumAmmoButton){
                 shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             }
             else{
                 shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             }
+
             gameAnimationTimer(shot, true);
         }
         this.angleTextField.requestFocus();
    }
-   public void gameAnimationTimer(Shot shot, boolean fromTank) {
+
+    public void gameAnimationTimer(Shot shot, boolean fromTank) {
        new AnimationTimer() {
            @Override
            public void handle(long now) {
