@@ -296,16 +296,22 @@ public class GameController implements Initializable {
                 mysteryBoxAppears();
             }
 
-            // Creates shot from user input
-            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
-            // Sets damage from selected ammunition
-            shot.setDamage((Integer) this.turn.tank.getAmmoSelected().getUserData());
-
+            String selectedAmmo = this.turn.tank.getAmmoSelected().getText();
+            Shot shot;
+            if(selectedAmmo == "heavyAmmoButton"){
+                shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+            }
+            else if(selectedAmmo == "mediumAmmoButton"){
+                shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+            }
+            else{
+                shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+            }
             gameAnimationTimer(shot, true);
         }
         this.angleTextField.requestFocus();
    }
-    public void gameAnimationTimer(Shot shot, boolean fromTank) {
+   public void gameAnimationTimer(Shot shot, boolean fromTank) {
        new AnimationTimer() {
            @Override
            public void handle(long now) {
@@ -673,7 +679,7 @@ public class GameController implements Initializable {
         if (angle >= -75 && angle <= 75) {
             this.tankRadarPointerRotate.setAngle(angle);
         }
-    }
-
+            }
+        
 }
 
