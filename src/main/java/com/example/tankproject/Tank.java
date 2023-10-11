@@ -75,13 +75,13 @@ public class Tank {
 
         // Body tank
         gc.fillRect(this.position.getX() - wheelSize, this.position.getY() - wheelSize, Constants.TANK_SIZE, wheelSize);
-        gc.fillRect(this.position.getX() - wheelSize/2, this.position.getY() - wheelSize * 2, Constants.TANK_SIZE/2,wheelSize*2);
+        gc.fillRect(this.position.getX() - wheelSize / 2.0, this.position.getY() - wheelSize * 2, Constants.TANK_SIZE / 2.0,wheelSize * 2);
 
         // Canon(with rotation added)
         if (angle == null) angle = 0.0;
         Rotate rotation = new Rotate(angle * -1, this.position.getX(), this.position.getY() - wheelSize * 1.8);
         gc.setTransform(rotation.getMxx(), rotation.getMyx(), rotation.getMxy(), rotation.getMyy(), rotation.getTx(), rotation.getTy());
-        gc.fillRect(this.position.getX(), this.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE, wheelSize / 2);
+        gc.fillRect(this.position.getX(), this.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE, wheelSize / 2.0);
         gc.setTransform(new Affine());
 
     }

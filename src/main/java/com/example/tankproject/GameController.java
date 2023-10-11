@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import static com.example.tankproject.App.scene;
 import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
@@ -80,8 +79,8 @@ public class GameController implements Initializable {
     public MediaPlayer sounds;
     public Image umbrella;
     public Point umbrellaPosition;
-
     public HBox healthRemainingHBox;
+    public HealthRemainingHUD healthRemainingHUD;
 
     // Initializes JavaFX windows
     @Override
@@ -123,11 +122,10 @@ public class GameController implements Initializable {
         random = new Random();
         boxes = new ArrayList<>();
         this.stackPane.getChildren().remove(this.healthRemainingHBox);
-        this.healthRemainingHBox = new HBox();
-        this.healthRemainingHBox.setId("healthRemainingHBox");
-        this.healthRemainingHBox.setVisible(false);
-        this.stackPane.getChildren().add(this.healthRemainingHBox);
+        this.healthRemainingHUD = new HealthRemainingHUD();
+        this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
 
+        this.stackPane.getChildren().add(this.healthRemainingHBox);
         // Updates the direction of the barrel when the user types an angle
         angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
@@ -148,7 +146,7 @@ public class GameController implements Initializable {
         componentsSizesInitialize();
         drawingMethods(false);
         buttonsActionInitialize();
-        healthRemainingBoxMouseEvents();
+        this.healthRemainingHUD.healthRemainingBoxMouseEvents(this.alivePlayers);
     }
 
     // Encapsulation of all methods responsible for initializing buttons of the interface game actions
@@ -212,24 +210,6 @@ public class GameController implements Initializable {
         this.currentPlayerTankStackPane.setPrefHeight(80);
         this.currentPlayerTankImage.setFitWidth(120);
         this.currentPlayerTankImage.setFitHeight(80);
-    }
-
-    // Initializes the buttons panel of the interface
-    public void buttonsPanelInitialize() {
-        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        this.replayExitButtonsHbox.getChildren().clear();
-        this.replayButton = ComponentsCreator.createReplayButton(25,25);
-        this.exitButton = ComponentsCreator.createExitButton(25,25);
-        this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
-        this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
-        this.replayExitButtonsHbox.getChildren().add(this.replayButton);
-        this.replayExitButtonsHbox.getChildren().add(this.menuExitButton);
-        this.replayExitButtonsHbox.getChildren().add(this.exitButton);
-        this.currentTankHealthIcon.setImage(heartIcon);
-        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
-        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        ammunitionPanelControlInitialize();
     }
 
     // All drawing methods that should render every frame
@@ -325,8 +305,7 @@ public class GameController implements Initializable {
         }
         this.angleTextField.requestFocus();
    }
-
-   public void gameAnimationTimer(Shot shot, boolean fromTank) {
+    public void gameAnimationTimer(Shot shot, boolean fromTank) {
        new AnimationTimer() {
            @Override
            public void handle(long now) {
@@ -473,7 +452,7 @@ public class GameController implements Initializable {
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            healthRemainingBox(hitPlayer);
+            healthRemainingHUD.healthRemainingBox(hitPlayer.tank);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             sounds.play();
             if (fromTank) stopMethods();
@@ -548,7 +527,7 @@ public class GameController implements Initializable {
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
-        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn));
+        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(0).tank.position);
     }
@@ -611,6 +590,24 @@ public class GameController implements Initializable {
         this.heavyAmmoButton.setDisable(false);
     }
 
+    // Initializes the buttons panel of the interface
+    public void buttonsPanelInitialize() {
+        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        this.replayExitButtonsHbox.getChildren().clear();
+        this.replayButton = ComponentsCreator.createReplayButton(25,25);
+        this.exitButton = ComponentsCreator.createExitButton(25,25);
+        this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
+        this.currentPlayerText.setText(turn.name + " is playing");
+        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
+        this.replayExitButtonsHbox.getChildren().add(this.replayButton);
+        this.replayExitButtonsHbox.getChildren().add(this.menuExitButton);
+        this.replayExitButtonsHbox.getChildren().add(this.exitButton);
+        this.currentTankHealthIcon.setImage(heartIcon);
+        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
+        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
+        ammunitionPanelControlInitialize();
+    }
+
     // Encapsulation of methods responsible for updating remaining ammo and ammo lights color every turn
     public void ammunitionPanelControl() {
         this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet30") + " / 3");
@@ -641,30 +638,6 @@ public class GameController implements Initializable {
         });
     }
 
-    // Changes the angle of the radar pointer every frame
-    public void tankRadarUpdate(Shot shot) {
-        boolean rightDirection = true;
-        double posX = this.turn.tank.position.getX();
-        double posY = this.turn.tank.position.getY();
-        double deltaX = shot.position.getX() - posX;
-        double deltaY = posY - shot.position.getY();
-        double angle;
-
-        if (deltaX < 0) {
-            rightDirection = false;
-            deltaX = deltaX * -1;
-        }
-        angle = Math.toDegrees(Math.atan(deltaX / deltaY));
-
-        if (!rightDirection) {
-            angle = angle * -1;
-        }
-
-        if (angle >= -75 && angle <= 75) {
-            this.tankRadarPointerRotate.setAngle(angle);
-        }
-    }
-
     // Initializes the tank radar of the interface
     public void tankRadarInitialize() {
         int height = 45;
@@ -683,28 +656,24 @@ public class GameController implements Initializable {
         pointer.getTransforms().addAll(this.tankRadarPointerRotate);
     }
 
-    // Creates a box showing the tank remaining health
-    public void healthRemainingBox(Player player) {
-        this.healthRemainingHBox.setVisible(true);
-        this.healthRemainingHBox.getChildren().clear();
-        this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(player,14,20, "Health:",5,Color.BLACK));
-        this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(player.tank.position.getX()) + 50);
-        this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(player.tank.position.getY()) - 50);
+    // Changes the angle of the radar pointer every frame
+    public void tankRadarUpdate(Shot shot) {
+        double screenXRadar = this.tankRadarStackPane.localToScene(0,0).getX();
+        double screenYRadar = this.tankRadarStackPane.localToScene(0,0).getY();
+        double posXRadar = screenXRadar + this.tankRadarStackPane.getWidth() / 2;
+        double posYRadar = Constants.WINDOWS_HEIGHT - (screenYRadar + this.tankRadarStackPane.getHeight() / 2);
+        double posXShot = shot.position.getX();
+        double posYShot = Constants.CANVAS_HEIGHT - shot.position.getY();
+        double deltaX = posXShot - posXRadar;
+        double deltaY = posYShot - posYRadar;
+        double angle;
+
+        angle = Math.toDegrees(Math.atan(deltaX / deltaY));
+
+        if (angle >= -75 && angle <= 75) {
+            this.tankRadarPointerRotate.setAngle(angle);
+        }
     }
 
-    public void healthRemainingBoxMouseEvents() {
-
-        scene.setOnMouseMoved(event -> {
-            double mouseX = event.getSceneX();
-            double mouseY = event.getSceneY();
-            for (Player p : alivePlayers) {
-
-                if ((Math.pow(p.tank.position.getX() - mouseX,2) + Math.pow(p.tank.position.getY() - mouseY,2))  <= (Math.pow(Constants.TANK_SIZE, 2))) {
-                    healthRemainingBox(p);
-                }
-
-            }
-        });
-    }
 }
 

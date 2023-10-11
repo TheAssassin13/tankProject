@@ -73,7 +73,7 @@ public class ComponentsCreator {
 
     // Creates win screen
     public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
-        Color backgroundColor = Color.rgb((int) (Color.GRAY.getRed() * 255), (int) (Color.GRAY.getGreen() * 255), (int) (Color.GRAY.getBlue() * 255), 0.5);
+        Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
         StackPane winnerTankBackground = new StackPane();
         Image winnerTankImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("images/winner_tank_image.png")).toExternalForm());
         ImageView winnerTankImageView = new ImageView(winnerTankImage);
@@ -83,7 +83,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer,30,35, "Health remaining:",25, Color.WHITE);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health remaining:",25, Color.WHITE);
 
         winnerTankBackground.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
         winnerTankBackground.setMaxWidth(150);
@@ -144,10 +144,11 @@ public class ComponentsCreator {
         return pointer;
     }
 
-    public static HBox createHealthRemainingHBox(Player player, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
+    // Creates tank health remaining HBox
+    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
         HBox healthRemainingHbox = new HBox();
-        Text healthRemainingText = new Text(text + " " + player.tank.getHealth() + " / " + Constants.TANK_HEALTH);
-        Image healthIconImage = healthIcon(player);
+        Text healthRemainingText = new Text(text + " " + tank.getHealth() + " / " + Constants.TANK_HEALTH);
+        Image healthIconImage = healthIcon(tank);
         ImageView healthIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
 
@@ -166,21 +167,23 @@ public class ComponentsCreator {
         return healthRemainingHbox;
     }
 
-
-    public static Image healthIcon(Player player) {
+    // Choose the health icon image according to tank health
+    public static Image healthIcon(Tank tank) {
         Image healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
 
-        if (player.tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        if (player.tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
-        if (player.tank.getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
+        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
+        if (tank.getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
 
         return healthIconImage;
     }
 
+    // Transforms x-coordinates to a translation x-distance from the center of the screen, used in StackPane translations
     public static double transformX(double posX) {
         return posX - Constants.WINDOWS_WIDTH / 2.0;
     }
 
+    // Transforms y-coordinates to a translation y-distance from the center of the screen, used in StackPane translations
     public static double transformY(double posY) {
         return posY - Constants.WINDOWS_HEIGHT / 2.0;
     }

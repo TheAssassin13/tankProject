@@ -64,13 +64,13 @@ public class Shot {
 
     public void drawShot(GraphicsContext gc) {
         gc.setFill(Constants.SHOT_COLOR);
-        gc.fillOval(this.position.getX() - Constants.SHOT_SIZE / 2,this.position.getY() - Constants.SHOT_SIZE / 2,Constants.SHOT_SIZE,Constants.SHOT_SIZE);
+        gc.fillOval(this.position.getX() - Constants.SHOT_SIZE / 2.0,this.position.getY() - Constants.SHOT_SIZE / 2.0,Constants.SHOT_SIZE,Constants.SHOT_SIZE);
     }
 
     public void drawTrajectory(GraphicsContext gc) {
         gc.setFill(Constants.TRAJECTORY_COLOR);
         for (Point point : this.trajectory) {
-            gc.fillOval(point.getX() - Constants.SHOT_SIZE / 2, point.getY() - Constants.SHOT_SIZE / 2, Constants.SHOT_SIZE / 2, Constants.SHOT_SIZE / 2);
+            gc.fillOval(point.getX() - Constants.SHOT_SIZE / 2.0, point.getY() - Constants.SHOT_SIZE / 2.0, Constants.SHOT_SIZE / 2.0, Constants.SHOT_SIZE / 2.0);
         }
     }
 }
