@@ -143,7 +143,7 @@ public class GameController implements Initializable {
 
         buttonsPanelInitialize();
         tankRadarInitialize();
-        calculateMax(new Shot(new Point(0,0),0,0,0),this.turn.tank);
+        calculateMax(new Shot(new Point(0,0),0,0),this.turn.tank);
         tanksPlacement();
         componentsSizesInitialize();
         drawingMethods(false);
@@ -222,7 +222,7 @@ public class GameController implements Initializable {
         this.exitButton = ComponentsCreator.createExitButton(25,25);
         this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
         this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.getHealth() + " / 100");
+        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
         this.replayExitButtonsHbox.getChildren().add(this.replayButton);
         this.replayExitButtonsHbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsHbox.getChildren().add(this.exitButton);
@@ -317,7 +317,7 @@ public class GameController implements Initializable {
             }
 
             // Creates shot from user input
-            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), 0);
+            Shot shot = new Shot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
             // Sets damage from selected ammunition
             shot.setDamage((Integer) this.turn.tank.getAmmoSelected().getUserData());
 
@@ -391,8 +391,8 @@ public class GameController implements Initializable {
                         if (p.tank.position.getY() + Constants.TANK_SIZE/3 < Constants.CANVAS_HEIGHT &&
                                 terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
-                            p.reduceHealth(1);
-                            if (p.getHealth() <= 0) {
+                            p.tank.reduceHealth(1);
+                            if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
                             }
                             flag = 1;
@@ -446,7 +446,7 @@ public class GameController implements Initializable {
 
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
-            turn.restoreHealth();
+            turn.tank.restoreHealth();
         } else if (box.powerUp == 1) {
             this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
@@ -456,7 +456,7 @@ public class GameController implements Initializable {
 
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new Shot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90, 10), false);
+            gameAnimationTimer(new LightShot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90), false);
         }
     }
 
@@ -469,7 +469,7 @@ public class GameController implements Initializable {
         // Checks if a tank is hit
         if (tanksCollision(shot) != null) {
             Player hitPlayer = tanksCollision(shot);
-            hitPlayer.reduceHealth(shot.getDamage());
+            hitPlayer.tank.reduceHealth(shot.getDamage());
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
@@ -477,7 +477,7 @@ public class GameController implements Initializable {
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             sounds.play();
             if (fromTank) stopMethods();
-            if (hitPlayer.getHealth() <= 0) {
+            if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
             }
             return true;
@@ -547,7 +547,7 @@ public class GameController implements Initializable {
 
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.getHealth() + " / 100");
+        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(0).tank.position);

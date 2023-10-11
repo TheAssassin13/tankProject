@@ -146,7 +146,7 @@ public class ComponentsCreator {
 
     public static HBox createHealthRemainingHBox(Player player, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
         HBox healthRemainingHbox = new HBox();
-        Text healthRemainingText = new Text(text + " " + player.getHealth() + " / " + Constants.TANK_HEALTH);
+        Text healthRemainingText = new Text(text + " " + player.tank.getHealth() + " / " + Constants.TANK_HEALTH);
         Image healthIconImage = healthIcon(player);
         ImageView healthIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
@@ -170,9 +170,9 @@ public class ComponentsCreator {
     public static Image healthIcon(Player player) {
         Image healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
 
-        if (player.getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        if (player.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
-        if (player.getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
+        if (player.tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        if (player.tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
+        if (player.tank.getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
 
         return healthIconImage;
     }
