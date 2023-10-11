@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Tank {
@@ -14,7 +15,7 @@ public class Tank {
     private Double angle;
     public Double power;
     private ToggleButton ammoSelected;
-    public HashMap<String,Integer> ammunition;
+    public ArrayList<Integer> ammunition;
     private int health;
 
     public Tank(Color color, Point position) {
@@ -47,11 +48,11 @@ public class Tank {
 
     public void restoreHealth() { this.health = Constants.TANK_HEALTH; }
 
-    public HashMap<String, Integer> reloadAmmunition() {
-        HashMap<String, Integer> temp = new HashMap<>();
-        temp.put("Bullet30", Constants.AMMO_QUANTITY[0]);
-        temp.put("Bullet40", Constants.AMMO_QUANTITY[1]);
-        temp.put("Bullet50", Constants.AMMO_QUANTITY[2]);
+    public ArrayList<Integer> reloadAmmunition() {
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(Constants.AMMO_QUANTITY[0]);
+        temp.add(Constants.AMMO_QUANTITY[1]);
+        temp.add(Constants.AMMO_QUANTITY[2]);
         return temp;
     }
 
