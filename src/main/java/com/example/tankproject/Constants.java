@@ -14,7 +14,9 @@ public class Constants {
     public final static int TANKS_QUANTITY = 2;
     public final static double GRAVITY_FACTOR = 0.25;
     public final static double GRAVITY = 9.8 * Constants.GRAVITY_FACTOR;
-    public final static int SHOT_SIZE = 10;
+    public final static int SHOT_TRAJECTORY_SIZE = 10;
+    public final static double[] SHOT_HEIGHT = {24, 24, 24};
+    public final static double[] SHOT_WIDTH = {25.4, 25.4, 25.4};
     public final static int TANK_SIZE = 30;
     public final static int BOX_SIZE = 20;
     public final static double SHOT_VELOCITY = 0.3;

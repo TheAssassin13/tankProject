@@ -13,10 +13,12 @@ public class CPU extends Player{
     }
 
     public void shoot(Button button, TextField angle, TextField power, Point positionEnemy) {
-        if (this.tank.getHealth() == 0) return;
+        /*if (this.tank.getHealth() == 0) return;
         Random random = new Random();
         angle.setText(String.valueOf(random.nextDouble(100, 180)));
         power.setText(String.valueOf(random.nextDouble(30, 110)));
         button.fire();
+
+         */
     }
 }

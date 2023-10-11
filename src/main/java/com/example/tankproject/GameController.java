@@ -318,7 +318,7 @@ public class GameController implements Initializable {
                // Makes animation fps constant
                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                    shot.shotPosition();
-                   drawingMethods(false);
+                   drawingMethods(!fromTank);
                    shot.drawTrajectory(gameCanvasGraphicContext);
                    shot.drawShot(gameCanvasGraphicContext);
                    shootButton.setDisable(true);
@@ -616,18 +616,18 @@ public class GameController implements Initializable {
 
     // Encapsulation of methods responsible for updating remaining ammo and ammo lights color every turn
     public void ammunitionPanelControl() {
-        this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet30") + " / 3");
-        this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet40") + " / 10");
-        this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get("Bullet50") + " / 3");
-        if (this.turn.tank.ammunition.get("Bullet30") == Constants.AMMO_QUANTITY[0]) this.lightAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get("Bullet30") <= Constants.AMMO_QUANTITY[0] / 2) this.lightAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get("Bullet30") == 0) this.lightAmmoQuantityLight.setFill(Color.RED);
-        if (this.turn.tank.ammunition.get("Bullet40") == Constants.AMMO_QUANTITY[1]) this.mediumAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get("Bullet40") <= Constants.AMMO_QUANTITY[1] / 2) this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get("Bullet40") == 0) this.mediumAmmoQuantityLight.setFill(Color.RED);
-        if (this.turn.tank.ammunition.get("Bullet50") == Constants.AMMO_QUANTITY[2]) this.heavyAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get("Bullet50") <= Constants.AMMO_QUANTITY[2] / 2) this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get("Bullet50") == 0) this.heavyAmmoQuantityLight.setFill(Color.RED);
+        this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get(0) + " / 3");
+        this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get(1) + " / 10");
+        this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get(2) + " / 3");
+        if (this.turn.tank.ammunition.get(0) == Constants.AMMO_QUANTITY[0]) this.lightAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get(0) <= Constants.AMMO_QUANTITY[0] / 2) this.lightAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get(0) == 0) this.lightAmmoQuantityLight.setFill(Color.RED);
+        if (this.turn.tank.ammunition.get(1) == Constants.AMMO_QUANTITY[1]) this.mediumAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get(1) <= Constants.AMMO_QUANTITY[1] / 2) this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get(1) == 0) this.mediumAmmoQuantityLight.setFill(Color.RED);
+        if (this.turn.tank.ammunition.get(2) == Constants.AMMO_QUANTITY[2]) this.heavyAmmoQuantityLight.setFill(Color.GREEN);
+        if (this.turn.tank.ammunition.get(2) <= Constants.AMMO_QUANTITY[2] / 2) this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
+        if (this.turn.tank.ammunition.get(2) == 0) this.heavyAmmoQuantityLight.setFill(Color.RED);
     }
 
     // Encapsulation of methods responsible for initializing toggle buttons, data related

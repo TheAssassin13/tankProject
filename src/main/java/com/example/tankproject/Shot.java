@@ -12,7 +12,7 @@ public class Shot {
     public double angle;
     public ArrayList<Point> trajectory;
     public int damage;
-    public int area = 300;
+    public int area;
 
     public Shot(Point position, double initialVelocity, double angle) {
         this.initialVelocity = initialVelocity;
@@ -32,7 +32,7 @@ public class Shot {
 
     // Checks if a tank gets hit by the shot
     public boolean tankCollision(Tank tank) {
-        return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_SIZE);
+        return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_TRAJECTORY_SIZE);
     }
 
     // Checks if the shot hits the terrain
@@ -45,7 +45,7 @@ public class Shot {
 
     // Checks if a mystery box gets hit by the shot
     public boolean mysteryBoxCollision(MysteryBox box) {
-        return (Math.pow(box.position.getX() - this.position.getX(),2) + Math.pow(box.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.BOX_SIZE, 2) - Constants.SHOT_SIZE);
+        return (Math.pow(box.position.getX() - this.position.getX(),2) + Math.pow(box.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.BOX_SIZE, 2) - Constants.SHOT_TRAJECTORY_SIZE);
     }
 
     // Adds one point to the shot trajectory
@@ -63,14 +63,12 @@ public class Shot {
     }
 
     public void drawShot(GraphicsContext gc) {
-        gc.setFill(Constants.SHOT_COLOR);
-        gc.fillOval(this.position.getX() - Constants.SHOT_SIZE / 2.0,this.position.getY() - Constants.SHOT_SIZE / 2.0,Constants.SHOT_SIZE,Constants.SHOT_SIZE);
     }
 
     public void drawTrajectory(GraphicsContext gc) {
         gc.setFill(Constants.TRAJECTORY_COLOR);
         for (Point point : this.trajectory) {
-            gc.fillOval(point.getX() - Constants.SHOT_SIZE / 2.0, point.getY() - Constants.SHOT_SIZE / 2.0, Constants.SHOT_SIZE / 2.0, Constants.SHOT_SIZE / 2.0);
+            gc.fillOval(point.getX() - Constants.SHOT_TRAJECTORY_SIZE / 2.0, point.getY() - Constants.SHOT_TRAJECTORY_SIZE / 2.0, Constants.SHOT_TRAJECTORY_SIZE / 2.0, Constants.SHOT_TRAJECTORY_SIZE / 2.0);
         }
     }
 }
