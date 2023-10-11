@@ -15,6 +15,7 @@ public class Tank {
     public Double power;
     private ToggleButton ammoSelected;
     public HashMap<String,Integer> ammunition;
+    private int health;
 
     public Tank(Color color, Point position) {
         this.color = color;
@@ -23,6 +24,7 @@ public class Tank {
         this.power = null;
         this.ammoSelected = null;
         this.ammunition = reloadAmmunition();
+        this.health= Constants.TANK_HEALTH;
     }
     public void setAngle(double angle) {
         this.angle = angle;
@@ -31,6 +33,19 @@ public class Tank {
     public Double getAngle() {
         return angle;
     }
+
+    public int getHealth() {
+        return this.health;
+    }
+    
+    public void reduceHealth(int damage) {
+        this.health -= damage;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+    }
+
+    public void restoreHealth() { this.health = Constants.TANK_HEALTH; }
 
     public HashMap<String, Integer> reloadAmmunition() {
         HashMap<String, Integer> temp = new HashMap<>();
