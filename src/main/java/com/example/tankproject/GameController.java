@@ -237,13 +237,13 @@ public class GameController implements Initializable {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         if (umbrella != null) gameCanvasGraphicContext.drawImage(umbrella, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
-        if (collision) Illustrator.drawTerrain(this.gameCanvasGraphicContext, this.terrain);
-        else Illustrator.drawTerrainOptimized(this.gameCanvasGraphicContext, this.terrain);
+        if (collision) this.terrain.drawTerrain(this.gameCanvasGraphicContext);
+        else this.terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
         for (Player p : this.alivePlayers) {
-            Illustrator.drawTank(this.gameCanvasGraphicContext, p.tank);
+            p.tank.drawTank(this.gameCanvasGraphicContext);
         }
         for (MysteryBox box : this.boxes) {
-            Illustrator.drawMysteryBox(gameCanvasGraphicContext, box);
+            box.drawMysteryBox(gameCanvasGraphicContext);
         }
     }
 
@@ -312,9 +312,8 @@ public class GameController implements Initializable {
             this.turn.tank.power = Double.parseDouble(powerTextField.getText());
             this.turn.tank.setAmmoSelected((ToggleButton) this.ammunitionButtons.getSelectedToggle());
             // There's a 1/5 chance a mystery box appears
-            if (random.nextInt(5) == 4) {
-                boxes.add(new MysteryBox(new Point(random.nextInt(Constants.WINDOWS_WIDTH), 0)));
-                mysteryBoxFalling();
+            if (random.nextInt(5) == 1) {
+                mysteryBoxAppears();
             }
 
             // Creates shot from user input
@@ -322,12 +321,12 @@ public class GameController implements Initializable {
             // Sets damage from selected ammunition
             shot.setDamage((Integer) this.turn.tank.getAmmoSelected().getUserData());
 
-            gameAnimationTimer(shot);
+            gameAnimationTimer(shot, true);
         }
         this.angleTextField.requestFocus();
    }
 
-   public void gameAnimationTimer(Shot shot) {
+   public void gameAnimationTimer(Shot shot, boolean fromTank) {
        new AnimationTimer() {
            @Override
            public void handle(long now) {
@@ -335,8 +334,8 @@ public class GameController implements Initializable {
                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                    shot.shotPosition();
                    drawingMethods(false);
-                   Illustrator.drawTrajectory(gameCanvasGraphicContext, shot);
-                   Illustrator.drawShot(gameCanvasGraphicContext, shot);
+                   shot.drawTrajectory(gameCanvasGraphicContext);
+                   shot.drawShot(gameCanvasGraphicContext);
                    shootButton.setDisable(true);
                    replayButton.setDisable(true);
 
@@ -349,11 +348,11 @@ public class GameController implements Initializable {
                    if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
                         || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
                        stop();
-                       stopMethods();
+                       if (fromTank) stopMethods();
                    }
 
                    // Checks all the possible collisions
-                   if (shotCollision(shot)) stop();
+                   if (shotCollision(shot, fromTank)) stop();
 
                    // Trajectory point added
                    shot.addTrajectory();
@@ -405,7 +404,7 @@ public class GameController implements Initializable {
         }.start();
     }
 
-    public void mysteryBoxFalling() {
+    public void mysteryBoxFallAnimationTimer() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -426,6 +425,25 @@ public class GameController implements Initializable {
         }.start();
     }
 
+    public void mysteryBoxAppears() {
+        int boxPositionX;
+        boolean isOnTank = false;
+        while(true) {
+            boxPositionX = random.nextInt(Constants.WINDOWS_WIDTH);
+            for (Player p : alivePlayers) {
+                if (boxPositionX < p.tank.position.getX() + Constants.TERRAIN_MARGIN &&
+                        boxPositionX > p.tank.position.getX() - Constants.TERRAIN_MARGIN){
+                    isOnTank = true;
+                    break;
+                }
+            }
+            if (isOnTank) isOnTank = false;
+            else break;
+        }
+        boxes.add(new MysteryBox(new Point(boxPositionX, 0)));
+        mysteryBoxFallAnimationTimer();
+    }
+
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
             turn.restoreHealth();
@@ -438,7 +456,7 @@ public class GameController implements Initializable {
 
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new Shot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90, 10));
+            gameAnimationTimer(new Shot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90, 10), false);
         }
     }
 
@@ -447,7 +465,7 @@ public class GameController implements Initializable {
     }
 
     // Checks all the possible collisions with a shot
-    public boolean shotCollision(Shot shot) {
+    public boolean shotCollision(Shot shot, boolean fromTank) {
         // Checks if a tank is hit
         if (tanksCollision(shot) != null) {
             Player hitPlayer = tanksCollision(shot);
@@ -456,8 +474,9 @@ public class GameController implements Initializable {
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             healthRemainingBox(hitPlayer);
-
-            stopMethods();
+            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+            sounds.play();
+            if (fromTank) stopMethods();
             if (hitPlayer.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
             }
@@ -468,18 +487,19 @@ public class GameController implements Initializable {
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            stopMethods();
+            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+            sounds.play();
+            if (fromTank) stopMethods();
             return true;
         }
         // Checks if a box is hit
-        else {
+        else if (fromTank) {
             for (MysteryBox box : boxes) {
                 if (shot.mysteryBoxCollision(box)) {
                     boxes.remove(box);
                     terrain.destroyTerrain(shot.position, shot.area);
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
-                    sounds.stop();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
                     sounds.play();
                     mysteryBoxPower(box);
@@ -530,8 +550,6 @@ public class GameController implements Initializable {
         this.currentTankHealth.setText("Health : " + this.turn.getHealth() + " / 100");
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
-        sounds.play();
         if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(0).tank.position);
     }
 

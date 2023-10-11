@@ -1,6 +1,9 @@
 package com.example.tankproject;
 
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -126,5 +129,43 @@ public class Terrain {
             }
         }
      return change;
+    }
+
+    /* This method draws the terrain generated in the resolution matrix.
+    This matrix includes every "pixel" of the screen.
+    Because of optimization, in this method we use an array of the highest points,
+    but for the functioning code we use the resolution matrix.
+    1 means terrain, 0 means air.
+     */
+    public void drawTerrainOptimized(GraphicsContext gc) {
+        for (int i = 0; i < this.width; i++) {
+            gc.setFill(Color.DARKORANGE);
+            gc.fillRect(i, this.maxTerrainHeight[i], 1, 2);
+            gc.setFill(Constants.TERRAIN_COLOR);
+            gc.fillRect(i, this.maxTerrainHeight[i] + 2, 1, Constants.CANVAS_HEIGHT - this.maxTerrainHeight[i]);
+        }
+    }
+
+    // This method draws the terrain without the optimization
+    public void drawTerrain(GraphicsContext gc) {
+        gc.setFill(Constants.TERRAIN_COLOR);
+        for (int j = 0; j < this.width; j++) {
+            int i = this.maxTerrainHeight[j];
+            while (i < Constants.CANVAS_HEIGHT) {
+                if (this.resolutionMatrix[i][j] == 1) {
+                    if (i > 0 && this.resolutionMatrix[i-1][j] == 0) {
+                        // Border is added
+                        gc.setFill(Color.DARKORANGE);
+                        gc.fillRect(j, i, 1, 1);
+                        gc.fillRect(j, i+1, 1, 1);
+                        gc.setFill(Constants.TERRAIN_COLOR);
+                        i++;
+                    } else {
+                        gc.fillRect(j, i, 1, 1);
+                    }
+                }
+                i++;
+            }
+        }
     }
 }
