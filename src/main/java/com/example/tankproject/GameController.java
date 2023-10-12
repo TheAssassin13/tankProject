@@ -300,16 +300,21 @@ public class GameController implements Initializable {
             ToggleButton selectedAmmo = this.turn.tank.getAmmoSelected();
             Shot shot;
 
-            if (selectedAmmo == this.heavyAmmoButton){
-                shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+            if (selectedAmmo == this.lightAmmoButton){
+                shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+                int SubtractionAMMO = this.turn.tank.ammunition.get(0); 
+                this.turn.tank.ammunition.set(0, SubtractionAMMO - 1);
             }
             else if(selectedAmmo == this.mediumAmmoButton){
                 shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+                int SubtractionAMMO = this.turn.tank.ammunition.get(1); 
+                this.turn.tank.ammunition.set(1, SubtractionAMMO - 1);
             }
-            else{
-                shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+                else{
+                shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
+                int SubtractionAMMO = this.turn.tank.ammunition.get(2); 
+                this.turn.tank.ammunition.set(2, SubtractionAMMO - 1);
             }
-
             gameAnimationTimer(shot, true);
         }
         this.angleTextField.requestFocus();
