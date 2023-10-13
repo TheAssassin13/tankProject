@@ -6,12 +6,14 @@ import javafx.scene.paint.Color;
 public class Constants {
     public final static int FPS = 60;
     public final static long FRAME_TIME = 1_000_000_000L / FPS;
+    public static int[] RESOLUTION_HEIGHT = new int[]{700, 720, 768};
+    public static int[] RESOLUTION_WIDTH = new int[]{1000, 1280, 1366};
     public static int WINDOWS_HEIGHT = 720;
     public static int WINDOWS_WIDTH = 1280;
     public final static int BUTTONS_PANEL_HEIGHT = 175;
     public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
     public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
-    public final static int TANKS_QUANTITY = 2;
+    public static int TANKS_QUANTITY = 2;
     public final static double GRAVITY_FACTOR = 0.25;
     public final static double GRAVITY = 9.8 * Constants.GRAVITY_FACTOR;
     public final static int SHOT_TRAJECTORY_SIZE = 10;

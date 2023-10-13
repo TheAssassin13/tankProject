@@ -99,10 +99,12 @@ public class GameController implements Initializable {
         this.angleTextField.clear();
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
-        //for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
-            this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
-            this.alivePlayers.add(new CPU("CPU " + (1), Constants.TANK_COLORS[1], new Tank(Constants.TANK_COLORS[1], new Point(0, 0))));
-        //}
+        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+            //this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
+            //this.alivePlayers.add(new CPU("CPU " + (1), Constants.TANK_COLORS[1], new Tank(Constants.TANK_COLORS[1], new Point(0, 0))));
+            this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+
+        }
 
         for (Player p: this.alivePlayers) {
             if (p instanceof CPU) {

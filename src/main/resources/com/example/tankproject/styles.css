@@ -21,12 +21,7 @@
     -fx-font-weight: bold;
 }
 
-.button {
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
-}
-
-.startMenuButton {
+.menuButtons {
     -fx-background-color: transparent;
     -fx-text-fill: -fx-white-color;
     -fx-font-size: 36px;
@@ -34,54 +29,20 @@
     -fx-padding: 0px;
 }
 
-.startMenuButton:hover {
+.menuButtons:hover {
     -fx-background-color: -fx-lightRed-color;
+
 }
 
-.optionsMenuButton {
-    -fx-background-color: transparent;
-    -fx-text-fill: -fx-white-color;
-    -fx-font-size: 36px;
-    -fx-background-radius: 0px;
-    -fx-padding: 0px;
-}
-
-.optionsMenuButton:hover {
-    -fx-background-color: -fx-lightRed-color;
-}
-
-.exitMenuButton {
-    -fx-background-color: transparent;
-    -fx-text-fill: -fx-white-color;
-    -fx-font-size: 36px;
-    -fx-background-radius: 0px;
-    -fx-padding: 0px;
-}
-
-.exitMenuButton:hover {
-    -fx-background-color: -fx-lightRed-color;
-}
-
-.optionsMenu {
+#optionsMenu {
     -fx-background-radius: 12px;
     -fx-background-color: -fx-transparentPurple-color;
     -fx-font-size: 32px;
 }
 
-.optionsTitleMenu {
+#optionsTitleMenu {
     -fx-font-size: 48px;
     -fx-text-fill: -fx-white-color;
-}
-
-.saveOptionsButton {
-    -fx-font-size: 24px;
-    -fx-text-fill: -fx-white-color;
-    -fx-background-radius: 0px;
-    -fx-background-color: transparent;
-}
-
-.saveOptionsButton:hover {
-    -fx-background-color: -fx-lightRed-color;
 }
 
 #shootButton {
@@ -154,4 +115,47 @@
     -fx-min-height: -fx-pref-height;
     -fx-min-width: -fx-pref-width;
     -fx-alignment: center;
+}
+
+#resolutionSpinner  {
+    -fx-background-color: transparent;
+    -fx-pref-width: 300px;
+
+}
+
+#resolutionSpinner .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-pref-height: 35px;
+    -fx-padding: 5px 0 0 5px;
+    -fx-border-radius: 8px;
+
+
+}
+
+#resolutionSpinner .increment-arrow-button, .decrement-arrow-button {
+    -fx-padding: 0 8px 0 8px;
+}
+
+#tanksQuantitySpinner  {
+    -fx-pref-width: 100px;
+    -fx-background-color: transparent;
+
+}
+
+#tanksQuantitySpinner .text-field {
+    -fx-pref-height: 35px;
+    -fx-padding: 0 5px 0 5px;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#tanksQuantitySpinner .increment-arrow-button, .decrement-arrow-button {
+    -fx-padding: 8px;
+}
+
+.split-arrows-horizontal {
+
 }

@@ -6,60 +6,84 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="menu" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
+<StackPane fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="buttonsPanelContainer" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
-   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-      <children>
-         <VBox alignment="CENTER_LEFT" fillWidth="false">
-            <VBox fx:id="vbox" alignment="CENTER" spacing="25.0">
-               <VBox.margin>
-                  <Insets left="65.0" />
-               </VBox.margin>
-               <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER">
-                  <font>
-                     <Font name="Arial" size="48.0" />
-                  </font>
-                  <padding>
-                     <Insets bottom="30.0" />
-                  </padding>
-               </Label>
-               <Button fx:id="startMenuButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="startMenuButton" text="Play">
-                  <font>
-                     <Font name="Arial Bold" size="12.0" />
-                  </font>
-               </Button>
-               <Button fx:id="optionsButton" layoutX="10.0" layoutY="110.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onOptionsButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="optionsMenuButton" text="Options">
-                  <font>
-                     <Font name="Arial Bold" size="12.0" />
-                  </font>
-               </Button>
-               <Button fx:id="exitMenuButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="exitMenuButton" text="Exit game">
-                  <font>
-                     <Font name="Arial Bold" size="12.0" />
-                  </font>
-               </Button>
-            </VBox>
-         </VBox>
-         <VBox fx:id="optionsMenu" alignment="CENTER_RIGHT" maxHeight="-Infinity" prefHeight="600.0" prefWidth="500.0" styleClass="optionsMenu">
-            <children>
-               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
-                  <children>
-                     <Label alignment="TOP_CENTER" styleClass="optionsTitleMenu" text="Options" />
-                     <Label fx:id="resolutionOption" text="Label" textFill="WHITE" />
-                     <Slider maxWidth="-Infinity" prefWidth="350.0" />
-                     <Label text="Tanks Quantity" textFill="WHITE" />
-                     <TextField fx:id="tanksQuantityField" maxWidth="-Infinity" prefWidth="100.0" />
-                     <Button mnemonicParsing="false" onAction="#onSaveButtonClick" styleClass="saveOptionsButton" text="Save" />
-                  </children>
-                  <padding>
-                     <Insets bottom="100.0" />
-                  </padding>
-               </VBox>
-            </children>
-            <HBox.margin>
-               <Insets left="50.0" />
-            </HBox.margin>
-         </VBox>
-      </children>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
+         <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER">
+            <font>
+               <Font name="Arial" size="48.0" />
+            </font>
+            <padding>
+               <Insets bottom="30.0" />
+            </padding>
+         </Label>
+         <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play Local">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="playCPUButton" layoutX="52.0" layoutY="284.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayCPUButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play CPU">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="optionsButton" layoutX="10.0" layoutY="110.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onOptionsButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Options">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="exitButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Exit game">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+      </VBox>
+      <VBox id="optionsMenu" fx:id="optionsMenu" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Options">
+            <font>
+               <Font name="Arial" size="36.0" />
+            </font></Text>
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolution">
+            <font>
+               <Font name="Arial" size="24.0" />
+            </font></Text>
+         <Spinner fx:id="resolutionSpinner" styleClass="split-arrows-horizontal">
+
+         </Spinner>
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tanks Quantity">
+               <font>
+                  <Font name="Arial" size="24.0" />
+               </font></Text>
+            <Spinner id="tanksQuantitySpinner" fx:id="tanksQuantitySpinner" maxWidth="250.0" styleClass="split-arrows-horizontal">
+               <valueFactory>
+                  <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="2" max="10" min="2" />
+               </valueFactory>
+            </Spinner>
+
+         </HBox>
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Music volume">
+            <font>
+               <Font name="Arial" size="24.0" />
+            </font></Text>
+         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" />
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SFX volume">
+            <font>
+               <Font name="Arial" size="24.0" />
+            </font></Text>
+         <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" />
+         <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
+            <VBox.margin>
+               <Insets top="30.0" />
+            </VBox.margin>
+            <font>
+               <Font name="Arial" size="12.0" />
+            </font>
+         </Button>
+         <HBox.margin>
+            <Insets right="100.0" />
+         </HBox.margin>
+      </VBox>
    </HBox>
 </StackPane>
