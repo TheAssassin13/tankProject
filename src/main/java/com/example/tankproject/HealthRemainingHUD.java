@@ -14,6 +14,7 @@ public class HealthRemainingHUD {
     HBox healthRemainingHBox;
     Timeline timeLine;
     double showingSeconds = 2.5;
+
     public HealthRemainingHUD() {
         this.healthRemainingHBox = new HBox();
         this.timeLine = new Timeline();

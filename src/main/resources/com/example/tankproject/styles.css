@@ -34,6 +34,11 @@
 
 }
 
+#menuBackground {
+    -fx-background-color: -fx-purple-color;
+
+}
+
 #optionsMenu {
     -fx-background-radius: 12px;
     -fx-background-color: -fx-transparentPurple-color;

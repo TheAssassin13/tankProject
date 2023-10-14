@@ -38,6 +38,7 @@ public class MenuController implements Initializable {
     public Spinner<Integer> tanksQuantitySpinner;
     public Slider sfxVolumeSlider;
     public Slider musicVolumeSlider;
+    public static int selectedResolution = 1;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,7 +53,6 @@ public class MenuController implements Initializable {
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
         this.mediaPlayer.setVolume(0.5);
-
         resolutionSpinnerInitialize();
     }
 
@@ -79,13 +79,19 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void onSaveButtonClick(ActionEvent ignoredActionEvent) {
+    public void onSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
 
-        //TODO se ve como el hoyo
-        //Constants.WINDOWS_HEIGHT = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
-        //Constants.WINDOWS_WIDTH = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
+        // User changed screen resolution
+        if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_HEIGHT && Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_WIDTH) {
+            Constants.WINDOWS_HEIGHT = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
+            Constants.WINDOWS_WIDTH = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
+            selectedResolution = this.resolutionsHashMap.get(this.resolutionSpinner.getValue());
+            // Closes the actual windows and opens a new one with the resolution selected by user
+            App.restartWindow();
+            App.updateScreenResolutionConstants();
+        }
 
         Constants.TANKS_QUANTITY = this.tanksQuantitySpinner.getValue();
     }
@@ -103,6 +109,6 @@ public class MenuController implements Initializable {
 
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
-        this.resolutionSpinner.getValueFactory().setValue(this.resolutionsString.get(1));
+        this.resolutionSpinner.getValueFactory().setValue(this.resolutionsString.get(selectedResolution));
     }
 }

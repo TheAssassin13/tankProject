@@ -24,18 +24,31 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         App.stage = stage;
-        initializeGame();
+        initializeGame(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
     }
 
-    public void initializeGame() throws IOException {
-        Image icon = new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm());
-        scene = new Scene(loadFXML("menu"), Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
+    public static void initializeGame(int width, int height) throws IOException {
+        Image icon = new Image(Objects.requireNonNull(App.class.getResource("icons/windows_icon.png")).toExternalForm());
+        scene = new Scene(loadFXML("menu"), width, height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("styles.css")).toExternalForm());
         stage.getIcons().add(icon);
         stage.setTitle("Tank Project");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+    }
+
+    // Closes and opens a new window
+    public static void restartWindow() throws IOException {
+        stage.close();
+        App newApp = new App();
+        newApp.start(new Stage());
+    }
+
+    // Updates screen resolution constants related
+    public static void updateScreenResolutionConstants() {
+        Constants.CANVAS_HEIGHT = Constants.WINDOWS_HEIGHT - Constants.BUTTONS_PANEL_HEIGHT;
+        Constants.SEA_LEVEL = Constants.CANVAS_HEIGHT - 200;
     }
 
     // Converts a Color object to a Hexadecimal string

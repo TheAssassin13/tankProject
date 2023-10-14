@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="buttonsPanelContainer" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
+<StackPane id="menuBackground" fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.MenuController">
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
       <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
@@ -67,12 +67,12 @@
             <font>
                <Font name="Arial" size="24.0" />
             </font></Text>
-         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" />
+         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" value="50.0" />
          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SFX volume">
             <font>
                <Font name="Arial" size="24.0" />
             </font></Text>
-         <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" />
+         <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" value="50.0" />
          <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
             <VBox.margin>
                <Insets top="30.0" />

@@ -51,7 +51,7 @@ public class GameController implements Initializable {
     public long lastUpdateTime;
     public Text currentTankHealth;
     public ImageView currentTankHealthIcon;
-    public HBox replayExitButtonsHbox;
+    public VBox replayExitButtonsVbox;
     public Text lightAmmoQuantityText;
     public Text mediumAmmoQuantityText;
     public Text heavyAmmoQuantityText;
@@ -626,15 +626,15 @@ public class GameController implements Initializable {
     // Initializes the buttons panel of the interface
     public void buttonsPanelInitialize() {
         Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        this.replayExitButtonsHbox.getChildren().clear();
+        this.replayExitButtonsVbox.getChildren().clear();
         this.replayButton = ComponentsCreator.createReplayButton(25,25);
         this.exitButton = ComponentsCreator.createExitButton(25,25);
         this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
         this.currentPlayerText.setText(turn.name + " is playing");
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
-        this.replayExitButtonsHbox.getChildren().add(this.replayButton);
-        this.replayExitButtonsHbox.getChildren().add(this.menuExitButton);
-        this.replayExitButtonsHbox.getChildren().add(this.exitButton);
+        this.replayExitButtonsVbox.getChildren().add(this.replayButton);
+        this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
+        this.replayExitButtonsVbox.getChildren().add(this.exitButton);
         this.currentTankHealthIcon.setImage(heartIcon);
         this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
@@ -706,7 +706,7 @@ public class GameController implements Initializable {
         if (angle >= -75 && angle <= 75) {
             this.tankRadarPointerRotate.setAngle(angle);
         }
-            }
-        
+    }
+
 }
 
