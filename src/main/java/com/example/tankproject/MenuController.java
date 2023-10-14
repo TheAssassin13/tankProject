@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -52,7 +53,7 @@ public class MenuController implements Initializable {
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
-        this.mediaPlayer.setVolume(0.5);
+        this.mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
         resolutionSpinnerInitialize();
     }
 
@@ -61,7 +62,10 @@ public class MenuController implements Initializable {
         App.setRoot("game");
     }
 
-    public void onPlayCPUButtonClick(ActionEvent ignoredEvent) {
+    public void onPlayCPUButtonClick(ActionEvent ignoredEvent) throws IOException {
+        Constants.CPU = true;
+        this.mediaPlayer.stop();
+        App.setRoot("game");
     }
 
     public void onExitButtonClick(ActionEvent ignoredActionEvent) {
@@ -76,6 +80,10 @@ public class MenuController implements Initializable {
         } else {
             this.optionsMenu.setDisable(false);
             this.optionsMenu.setVisible(true);
+            SpinnerValueFactory<Integer> valueFactory = tanksQuantitySpinner.getValueFactory();
+            valueFactory.setValue(Constants.TANKS_QUANTITY);
+            this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
+            this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
         }
     }
 
@@ -89,6 +97,7 @@ public class MenuController implements Initializable {
             Constants.WINDOWS_WIDTH = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
             selectedResolution = this.resolutionsHashMap.get(this.resolutionSpinner.getValue());
             // Closes the actual windows and opens a new one with the resolution selected by user
+            this.mediaPlayer.stop();
             App.restartWindow();
             App.updateScreenResolutionConstants();
         }
@@ -110,5 +119,17 @@ public class MenuController implements Initializable {
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
         this.resolutionSpinner.getValueFactory().setValue(this.resolutionsString.get(selectedResolution));
+    }
+
+    public void onMusicVolumeDrag(MouseEvent mouseEvent) {
+        Constants.MUSIC_VOLUME = musicVolumeSlider.getValue()/100;
+        mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
+    }
+
+    public void onSFXVolumeDrag(MouseEvent mouseEvent) {
+        Constants.SFX_VOLUME = sfxVolumeSlider.getValue()/100;
+        MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+        sound.setVolume(Constants.SFX_VOLUME);
+        sound.play();
     }
 }

@@ -13,12 +13,24 @@ public class CPU extends Player{
     }
 
     public void shoot(Button button, TextField angle, TextField power, Point positionEnemy) {
-        /*if (this.tank.getHealth() == 0) return;
+        if (this.tank.getHealth() == 0) return;
         Random random = new Random();
-        angle.setText(String.valueOf(random.nextDouble(100, 180)));
-        power.setText(String.valueOf(random.nextDouble(30, 110)));
-        button.fire();
+        double x1 = this.tank.position.getX();
+        double y1 = Constants.CANVAS_HEIGHT - this.tank.position.getY();
+        double x2 = positionEnemy.getX();
+        double y2 = Constants.CANVAS_HEIGHT - positionEnemy.getY();
 
-         */
+        double maxHeight = random.nextInt(Constants.CANVAS_HEIGHT, Constants.CANVAS_HEIGHT*2);
+        double verticalVelocity = Math.sqrt(2.0 * Constants.GRAVITY * (maxHeight - y1));
+        double time = verticalVelocity / Constants.GRAVITY + Math.sqrt((2 / Constants.GRAVITY) * (maxHeight - y2));
+        double horizontalVelocity = (x2 - x1) / time;
+
+        double angleShoot = Math.toDegrees(Math.atan(verticalVelocity / horizontalVelocity));
+        if (angleShoot < 0.0) angleShoot += 180.0;
+        double powerShoot = Math.sqrt(Math.pow(verticalVelocity, 2) + Math.pow(horizontalVelocity, 2));
+
+        angle.setText(String.valueOf(angleShoot));
+        power.setText(String.valueOf(powerShoot));
+        button.fire();
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -99,11 +100,12 @@ public class GameController implements Initializable {
         this.angleTextField.clear();
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
-        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
-            //this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
-            //this.alivePlayers.add(new CPU("CPU " + (1), Constants.TANK_COLORS[1], new Tank(Constants.TANK_COLORS[1], new Point(0, 0))));
-            this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
-
+        this.turn = null;
+        this.umbrella = null;
+        this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
+        for (int i = 1; i < Constants.TANKS_QUANTITY; i++) {
+            if (Constants.CPU) this.alivePlayers.add(new CPU("CPU " + (i), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+            else this.alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
 
         for (Player p: this.alivePlayers) {
@@ -120,6 +122,7 @@ public class GameController implements Initializable {
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
+        this.music.setVolume(Constants.MUSIC_VOLUME);
         this.tankRadarStackPane.getChildren().clear();
         random = new Random();
         boxes = new ArrayList<>();
@@ -128,18 +131,6 @@ public class GameController implements Initializable {
         this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
 
         this.stackPane.getChildren().add(this.healthRemainingHBox);
-        // Updates the direction of the barrel when the user types an angle
-        angleTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                try {
-                    double newAngle = Double.parseDouble(newValue);
-                    this.turn.tank.setAngle(newAngle);
-                } catch (NumberFormatException e) {
-                    // Invalid element
-                }
-                drawingMethods(false);
-            }
-        });
 
         buttonsPanelInitialize();
         tankRadarInitialize();
@@ -397,6 +388,8 @@ public class GameController implements Initializable {
                             p.tank.reduceHealth(1);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
+                                flag = 0;
+                                break;
                             }
                             flag = 1;
                         }
@@ -478,7 +471,8 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             healthRemainingHUD.healthRemainingBox(hitPlayer.tank);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
-            sounds.play();
+            this.sounds.setVolume(Constants.SFX_VOLUME);
+            this.sounds.play();
             if (fromTank) stopMethods();
             if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
@@ -491,7 +485,8 @@ public class GameController implements Initializable {
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
-            sounds.play();
+            this.sounds.setVolume(Constants.SFX_VOLUME);
+            this.sounds.play();
             // Checks if a tank is nearby
             Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
@@ -513,7 +508,8 @@ public class GameController implements Initializable {
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
-                    sounds.play();
+                    this.sounds.setVolume(Constants.SFX_VOLUME);
+                    this.sounds.play();
                     mysteryBoxPower(box);
                     stopMethods();
                     return true;
@@ -562,7 +558,10 @@ public class GameController implements Initializable {
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(0).tank.position);
+        if (this.turn instanceof CPU) {
+            if (this.boxes.size() > 0) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.boxes.get(0).position);
+            else ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
+        }
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -604,9 +603,10 @@ public class GameController implements Initializable {
         this.winScreenVBox = backgroundVbox;
         this.stackPane.getChildren().add(this.winScreenVBox);
 
-        music.stop();
-        music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
-        music.play();
+        this.music.stop();
+        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        this.music.setVolume(Constants.MUSIC_VOLUME);
+        this.music.play();
     }
 
     // Disables win screen to keep playing
@@ -708,5 +708,11 @@ public class GameController implements Initializable {
         }
     }
 
+    // Updates the direction of the canon
+    public void onAngleTextFieldTyped(KeyEvent actionEvent) {
+        if (angleTextField.getText().isEmpty()) return;
+        this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
+        drawingMethods(false);
+    }
 }
 

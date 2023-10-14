@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Shot {
     public Point position;
+    private double x;
+    private double y;
     public double velocityX, velocityY;
     public double initialVelocity;
     public double angle;
@@ -18,6 +20,8 @@ public class Shot {
         this.initialVelocity = initialVelocity;
         this.angle = Math.toRadians(angle);
         this.position = position;
+        this.x = position.getX();
+        this.y = position.getY();
         this.velocityX = initialVelocity * Math.cos(this.angle);
         this.velocityY = -initialVelocity * Math.sin(this.angle);
         trajectory = new ArrayList<>();
@@ -25,9 +29,11 @@ public class Shot {
 
     // Updates the position of the shot
     public void shotPosition() {
-        this.position.setX((int) (this.position.getX() + velocityX * Constants.SHOT_VELOCITY));
-        this.position.setY((int) (this.position.getY() + velocityY * Constants.SHOT_VELOCITY));
-        this.velocityY += Constants.GRAVITY;
+        x = (x + velocityX * Constants.SHOT_VELOCITY);
+        y = (y + velocityY * Constants.SHOT_VELOCITY);
+        this.velocityY += Constants.GRAVITY * Constants.SHOT_VELOCITY;
+        this.position.setX((int) x);
+        this.position.setY((int) y);
     }
 
     // Checks if a tank gets hit by the shot
