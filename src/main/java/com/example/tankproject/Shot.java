@@ -31,8 +31,11 @@ public class Shot {
     }
 
     // Checks if a tank gets hit by the shot
-    public boolean tankCollision(Tank tank) {
-        return (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2))  <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_TRAJECTORY_SIZE);
+    public double tankCollision(Tank tank) {
+        double distance = (Math.pow(tank.position.getX() - this.position.getX(),2) + Math.pow(tank.position.getY() - this.position.getY(),2));
+        if (distance <= (Math.pow(Constants.TANK_SIZE, 2) - Constants.SHOT_TRAJECTORY_SIZE)) {
+            return 1;
+        } else return Math.exp(-0.05 * (Math.sqrt(distance) - Constants.TANK_SIZE));
     }
 
     // Checks if the shot hits the terrain

@@ -264,10 +264,17 @@ public class GameController implements Initializable {
         }
     }
 
-    // Checks if a player's tank, that is not the current player, is hit and return the hit player
-    public Player tanksCollision(Shot shot) {
+    /* Checks if a player's tank, that is not the current player, is hit and return the hit player.
+    As the method from shot tankCollision() returns a value between 0 and 1, we can use it to know
+    if the tank was hit or the shot was close. When the shot is nearby we only return the player
+    if the method returns a number greater than 0.1
+     */
+    public Player tanksCollision(Shot shot, boolean nearby) {
+        double minimumDistance;
+        if (nearby) minimumDistance = 0.1;
+        else minimumDistance = 1;
         for (Player p : this.alivePlayers) {
-            if (this.turn != p && shot.tankCollision(p.tank)) {
+            if (this.turn != p && shot.tankCollision(p.tank) >= minimumDistance) {
                 return p;
             }
         }
@@ -332,7 +339,7 @@ public class GameController implements Initializable {
                    drawingMethods(!fromTank);
                    shot.drawTrajectory(gameCanvasGraphicContext);
                    shot.drawShot(gameCanvasGraphicContext);
-                   shootButton.setDisable(true);
+                   shootButton.setDisable(fromTank); //TODO: Temporal fix
                    replayButton.setDisable(true);
 
                    // Update tank radar every frame
@@ -463,8 +470,8 @@ public class GameController implements Initializable {
     // Checks all the possible collisions with a shot
     public boolean shotCollision(Shot shot, boolean fromTank) {
         // Checks if a tank is hit
-        if (tanksCollision(shot) != null) {
-            Player hitPlayer = tanksCollision(shot);
+        Player hitPlayer = tanksCollision(shot, false);
+        if (hitPlayer != null) {
             hitPlayer.tank.reduceHealth(shot.getDamage());
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
@@ -485,6 +492,15 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             sounds.play();
+            // Checks if a tank is nearby
+            Player playerNearby = tanksCollision(shot, true);
+            if (playerNearby != null) {
+                playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
+                healthRemainingHUD.healthRemainingBox(playerNearby.tank);
+                if (playerNearby.tank.getHealth() <= 0) {
+                    deleteDeadPlayer(playerNearby);
+                }
+            }
             if (fromTank) stopMethods();
             return true;
         }
