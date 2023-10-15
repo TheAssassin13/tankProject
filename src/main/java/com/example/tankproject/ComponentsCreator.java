@@ -83,11 +83,9 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health remaining:",25, Color.WHITE);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
 
         winnerTankBackground.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        winnerTankBackground.setMaxWidth(150);
-        winnerTankBackground.setPrefWidth(150);
         winnerTankBackground.getChildren().add(winnerTankImageView);
 
         victoryText.setFont(primaryFont);
@@ -97,7 +95,7 @@ public class ComponentsCreator {
         winnerNameText.setFill(Color.WHITE);
 
         hbox.setId("winScreenButtonHBox");
-        hbox.alignmentProperty().set(Pos.CENTER_RIGHT);
+        hbox.alignmentProperty().set(Pos.CENTER);
         hbox.setSpacing(30);
         hbox.getChildren().add(replayButton);
         hbox.getChildren().add(exitButton);

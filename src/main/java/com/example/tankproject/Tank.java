@@ -40,10 +40,7 @@ public class Tank {
     }
     
     public void reduceHealth(int damage) {
-        this.health -= damage;
-        if (this.health < 0) {
-            this.health = 0;
-        }
+        this.health = Math.max(0,this.health - damage);
     }
 
     public void restoreHealth() { this.health = Constants.TANK_HEALTH; }

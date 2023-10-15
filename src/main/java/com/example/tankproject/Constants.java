@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 public class Constants {
     public final static int FPS = 60;
     public final static long FRAME_TIME = 1_000_000_000L / FPS;
-    public final static int[] RESOLUTION_HEIGHT = {700, 720, 768};
-    public final static int[] RESOLUTION_WIDTH = {1000, 1280, 1366};
+    public final static int[] RESOLUTION_HEIGHT = {700, 720, 768, 900, 992};
+    public final static int[] RESOLUTION_WIDTH = {1060, 1280, 1366, 1440, 1768};
     public static int WINDOWS_HEIGHT = RESOLUTION_HEIGHT[1];
     public static int WINDOWS_WIDTH = RESOLUTION_WIDTH[1];
     public final static int BUTTONS_PANEL_HEIGHT = 175;

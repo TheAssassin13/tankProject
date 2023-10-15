@@ -124,12 +124,11 @@ public class GameController implements Initializable {
         this.music.play();
         this.music.setVolume(Constants.MUSIC_VOLUME);
         this.tankRadarStackPane.getChildren().clear();
-        random = new Random();
-        boxes = new ArrayList<>();
+        this.random = new Random();
+        this.boxes = new ArrayList<>();
         this.stackPane.getChildren().remove(this.healthRemainingHBox);
         this.healthRemainingHUD = new HealthRemainingHUD();
         this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
-
         this.stackPane.getChildren().add(this.healthRemainingHBox);
 
         buttonsPanelInitialize();
@@ -140,7 +139,7 @@ public class GameController implements Initializable {
         drawingMethods(false);
         buttonsActionInitialize();
         ammunitionPanelControl();
-        this.healthRemainingHUD.healthRemainingBoxMouseEvents(this.alivePlayers);
+        this.healthRemainingHUD.HUDMouseEvents(this.alivePlayers);
     }
 
     // Encapsulation of all methods responsible for initializing buttons of the interface game actions
@@ -317,6 +316,7 @@ public class GameController implements Initializable {
             }
             gameAnimationTimer(shot, true);
         }
+        ammunitionPanelControl();
         this.angleTextField.requestFocus();
    }
 
@@ -394,6 +394,7 @@ public class GameController implements Initializable {
                             flag = 1;
                         }
                     }
+                    ammunitionPanelControl();
                     if (flag == 0) stop();
                 }
             }
@@ -415,6 +416,7 @@ public class GameController implements Initializable {
                             flag = 1;
                         }
                     }
+                    ammunitionPanelControl();
                     if (flag == 0) stop();
                 }
             }
@@ -442,7 +444,8 @@ public class GameController implements Initializable {
 
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
-            turn.tank.restoreHealth();
+            this.turn.tank.restoreHealth();
+            this.healthRemainingHUD.showHUD(this.turn.tank);
             turn.tank.reloadAmmunition();
         } else if (box.powerUp == 1) {
             this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
@@ -470,7 +473,7 @@ public class GameController implements Initializable {
             terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            healthRemainingHUD.healthRemainingBox(hitPlayer.tank);
+            healthRemainingHUD.showHUD(hitPlayer.tank);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
@@ -492,7 +495,7 @@ public class GameController implements Initializable {
             Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
-                healthRemainingHUD.healthRemainingBox(playerNearby.tank);
+                healthRemainingHUD.showHUD(playerNearby.tank);
                 if (playerNearby.tank.getHealth() <= 0) {
                     deleteDeadPlayer(playerNearby);
                 }
@@ -647,29 +650,56 @@ public class GameController implements Initializable {
         this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get(0) + " / 3");
         this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get(1) + " / 10");
         this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get(2) + " / 3");
-        if (this.turn.tank.ammunition.get(0) == Constants.AMMO_QUANTITY[0]) this.lightAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get(0) <= Constants.AMMO_QUANTITY[0] / 2) this.lightAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get(0) == 0) this.lightAmmoQuantityLight.setFill(Color.RED);
-        if (this.turn.tank.ammunition.get(1) == Constants.AMMO_QUANTITY[1]) this.mediumAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get(1) <= Constants.AMMO_QUANTITY[1] / 2) this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get(1) == 0) this.mediumAmmoQuantityLight.setFill(Color.RED);
-        if (this.turn.tank.ammunition.get(2) == Constants.AMMO_QUANTITY[2]) this.heavyAmmoQuantityLight.setFill(Color.GREEN);
-        if (this.turn.tank.ammunition.get(2) <= Constants.AMMO_QUANTITY[2] / 2) this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
-        if (this.turn.tank.ammunition.get(2) == 0) this.heavyAmmoQuantityLight.setFill(Color.RED);
+        this.lightAmmoButton.setUserData(this.turn.tank.ammunition.get(0));
+        this.mediumAmmoButton.setUserData(this.turn.tank.ammunition.get(1));
+        this.heavyAmmoButton.setUserData(this.turn.tank.ammunition.get(2));
+
+        if ((int) this.ammunitionButtons.getSelectedToggle().getUserData() <= 0) {
+            this.shootButton.setDisable(true);
+        }
+
+        if (this.turn.tank.ammunition.get(0) > Constants.AMMO_QUANTITY[0] / 2) {
+            this.lightAmmoQuantityLight.setFill(Color.GREEN);
+        } else if (this.turn.tank.ammunition.get(0) >= 1) {
+            this.lightAmmoQuantityLight.setFill(Color.YELLOW);
+        } else {
+            this.lightAmmoQuantityLight.setFill(Color.RED);
+        }
+
+        if (this.turn.tank.ammunition.get(1) > Constants.AMMO_QUANTITY[1] / 2) {
+            this.mediumAmmoQuantityLight.setFill(Color.GREEN);
+        } else if (this.turn.tank.ammunition.get(1) >= 1) {
+            this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
+        } else {
+            this.mediumAmmoQuantityLight.setFill(Color.RED);
+        }
+        if (this.turn.tank.ammunition.get(2) > Constants.AMMO_QUANTITY[2] / 2) {
+            this.heavyAmmoQuantityLight.setFill(Color.GREEN);
+        } else if (this.turn.tank.ammunition.get(2) >= 1) {
+            this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
+        } else {
+            this.heavyAmmoQuantityLight.setFill(Color.RED);
+        }
+
     }
 
     // Encapsulation of methods responsible for initializing toggle buttons, data related
     public void ammunitionPanelControlInitialize() {
-        this.lightAmmoButton.setUserData(Constants.AMMO_DAMAGE[0]);
-        this.mediumAmmoButton.setUserData(Constants.AMMO_DAMAGE[1]);
-        this.heavyAmmoButton.setUserData(Constants.AMMO_DAMAGE[2]);
         // Verifies that is always a button selected
         this.ammunitionButtons.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            this.shootButton.setDisable(false);
             if (newToggle == null) {
                 // If no button is selected, selects the last one
                 this.ammunitionButtons.selectToggle(oldToggle);
             }
+            if (newToggle != null) {
+                // If selected button has no left ammo
+                if ((int) newToggle.getUserData() <= 0) {
+                    this.shootButton.setDisable(true);
+                }
+            }
         });
+
     }
 
     // Initializes the tank radar of the interface

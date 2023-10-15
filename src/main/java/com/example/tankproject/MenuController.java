@@ -39,11 +39,9 @@ public class MenuController implements Initializable {
     public Spinner<Integer> tanksQuantitySpinner;
     public Slider sfxVolumeSlider;
     public Slider musicVolumeSlider;
-    public static int selectedResolution = 1;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/menu_background_image.png")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
@@ -84,6 +82,7 @@ public class MenuController implements Initializable {
             valueFactory.setValue(Constants.TANKS_QUANTITY);
             this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
             this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
+            this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
         }
     }
 
@@ -95,7 +94,6 @@ public class MenuController implements Initializable {
         if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_HEIGHT && Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_WIDTH) {
             Constants.WINDOWS_HEIGHT = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
             Constants.WINDOWS_WIDTH = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
-            selectedResolution = this.resolutionsHashMap.get(this.resolutionSpinner.getValue());
             // Closes the actual windows and opens a new one with the resolution selected by user
             this.mediaPlayer.stop();
             App.restartWindow();
@@ -109,24 +107,22 @@ public class MenuController implements Initializable {
     public void resolutionSpinnerInitialize() {
         this.resolutionsHashMap = new HashMap<>();
         this.resolutionsString = new ArrayList<>();
-        this.resolutionsHashMap.put("1000 x 700",0);
-        this.resolutionsHashMap.put("1280 x 720",1);
-        this.resolutionsHashMap.put("1366 x 768",2);
-        this.resolutionsString.add("1000 x 700");
-        this.resolutionsString.add("1280 x 720");
-        this.resolutionsString.add("1366 x 768");
+
+        for (int i = 0; i < Constants.RESOLUTION_WIDTH.length; i++) {
+            this.resolutionsString.add(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i]);
+            this.resolutionsHashMap.put(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i],i);
+        }
 
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
-        this.resolutionSpinner.getValueFactory().setValue(this.resolutionsString.get(selectedResolution));
     }
 
-    public void onMusicVolumeDrag(MouseEvent mouseEvent) {
+    public void onMusicVolumeDrag(MouseEvent ignoredMouseEvent) {
         Constants.MUSIC_VOLUME = musicVolumeSlider.getValue()/100;
         mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
     }
 
-    public void onSFXVolumeDrag(MouseEvent mouseEvent) {
+    public void onSFXVolumeDrag(MouseEvent ignoredMouseEvent) {
         Constants.SFX_VOLUME = sfxVolumeSlider.getValue()/100;
         MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
         sound.setVolume(Constants.SFX_VOLUME);
