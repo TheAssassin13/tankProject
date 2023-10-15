@@ -53,6 +53,7 @@ public class MenuController implements Initializable {
         this.mediaPlayer.play();
         this.mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
         resolutionSpinnerInitialize();
+        musicVolumeDragInitialize();
     }
 
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
@@ -117,15 +118,17 @@ public class MenuController implements Initializable {
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
     }
 
-    public void onMusicVolumeDrag(MouseEvent ignoredMouseEvent) {
-        Constants.MUSIC_VOLUME = musicVolumeSlider.getValue()/100;
-        mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
-    }
-
     public void onSFXVolumeDrag(MouseEvent ignoredMouseEvent) {
         Constants.SFX_VOLUME = sfxVolumeSlider.getValue()/100;
         MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
         sound.setVolume(Constants.SFX_VOLUME);
         sound.play();
+    }
+
+    public void musicVolumeDragInitialize() {
+        this.musicVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Constants.MUSIC_VOLUME = newValue.doubleValue() / 100;
+            mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
+        });
     }
 }

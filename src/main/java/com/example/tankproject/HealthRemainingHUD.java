@@ -30,7 +30,7 @@ public class HealthRemainingHUD {
         this.healthRemainingHBox.getChildren().clear();
         this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20, "Health:",5, Color.BLACK));
         this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
-        this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 50);
+        this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
 
         this.timeLine.play();
     }

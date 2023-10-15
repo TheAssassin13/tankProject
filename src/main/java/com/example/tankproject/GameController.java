@@ -82,6 +82,8 @@ public class GameController implements Initializable {
     public Point umbrellaPosition;
     public HBox healthRemainingHBox;
     public HealthRemainingHUD healthRemainingHUD;
+    public ImageView explosionAnimation;
+    public AnimationCreator animationCreator;
 
     // Initializes JavaFX windows
     @Override
@@ -130,6 +132,9 @@ public class GameController implements Initializable {
         this.healthRemainingHUD = new HealthRemainingHUD();
         this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
         this.stackPane.getChildren().add(this.healthRemainingHBox);
+        this.animationCreator = new AnimationCreator();
+        this.explosionAnimation = this.animationCreator.explosionImageView;
+        this.stackPane.getChildren().add(this.explosionAnimation);
 
         buttonsPanelInitialize();
         tankRadarInitialize();
@@ -470,10 +475,11 @@ public class GameController implements Initializable {
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer != null) {
             hitPlayer.tank.reduceHealth(shot.getDamage());
-            terrain.destroyTerrain(shot.position, shot.area);
+            this.terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            healthRemainingHUD.showHUD(hitPlayer.tank);
+            this.healthRemainingHUD.showHUD(hitPlayer.tank);
+            this.animationCreator.startExplosionAnimation(hitPlayer.tank.position);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
@@ -485,7 +491,7 @@ public class GameController implements Initializable {
         }
         // Checks if terrain is hit
         else if (shot.terrainCollision(terrain)) {
-            terrain.destroyTerrain(shot.position, shot.area);
+            this.terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
@@ -495,7 +501,7 @@ public class GameController implements Initializable {
             Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
-                healthRemainingHUD.showHUD(playerNearby.tank);
+                this.healthRemainingHUD.showHUD(playerNearby.tank);
                 if (playerNearby.tank.getHealth() <= 0) {
                     deleteDeadPlayer(playerNearby);
                 }
@@ -585,6 +591,7 @@ public class GameController implements Initializable {
     // Creates the game win screen
     public void winScreen() {
         if (this.healthRemainingHBox != null) this.stackPane.getChildren().remove(this.healthRemainingHBox);
+        if (this.explosionAnimation != null) this.stackPane.getChildren().remove(this.explosionAnimation);
         if (this.stackPane.getChildren().size() != 1) return;
         Button replayButton = ComponentsCreator.createReplayButton(40,40);
         Button exitButton = ComponentsCreator.createExitButton(40,40);
@@ -740,7 +747,7 @@ public class GameController implements Initializable {
     }
 
     // Updates the direction of the canon
-    public void onAngleTextFieldTyped(KeyEvent actionEvent) {
+    public void onAngleTextFieldTyped(KeyEvent ignoredActionEvent) {
         if (angleTextField.getText().isEmpty()) return;
         this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
         drawingMethods(false);

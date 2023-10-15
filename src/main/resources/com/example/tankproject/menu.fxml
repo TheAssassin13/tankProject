@@ -67,7 +67,7 @@
             <font>
                <Font name="Arial" size="24.0" />
             </font></Text>
-         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseReleased="#onMusicVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
+         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" value="50.0" />
          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SFX volume">
             <font>
                <Font name="Arial" size="24.0" />
