@@ -2,6 +2,7 @@ package com.example.tankproject;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
@@ -12,7 +13,7 @@ public class CPU extends Player{
         super(name, color, tank);
     }
 
-    public void shoot(Button button, TextField angle, TextField power, Point positionEnemy) {
+    public void shoot(Button shootButton, ToggleButton lightShot, ToggleButton mediumShot, ToggleButton heavyShot, TextField angle, TextField power, Point positionEnemy) {
         if (this.tank.getHealth() == 0) return;
         Random random = new Random();
         double x1 = this.tank.position.getX();
@@ -29,8 +30,13 @@ public class CPU extends Player{
         if (angleShoot < 0.0) angleShoot += 180.0;
         double powerShoot = Math.sqrt(Math.pow(verticalVelocity, 2) + Math.pow(horizontalVelocity, 2));
 
+        int shotType = random.nextInt(3);
+        if (shotType == 0 && !lightShot.isDisable()) lightShot.fire();
+        else if (shotType == 1 && !mediumShot.isDisable()) mediumShot.fire();
+        else if (!heavyShot.isDisable()) heavyShot.fire();
+
         angle.setText(String.valueOf(angleShoot));
         power.setText(String.valueOf(powerShoot));
-        button.fire();
+        shootButton.fire();
     }
 }

@@ -1,7 +1,9 @@
 package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class MysteryBox {
@@ -13,7 +15,6 @@ public class MysteryBox {
     }
 
     public void drawMysteryBox(GraphicsContext gc) {
-        gc.setFill(Constants.BOX_COLOR);
-        gc.fillRect(this.position.getX() - Constants.BOX_SIZE/2, this.position.getY() - Constants.BOX_SIZE/2, Constants.BOX_SIZE, Constants.BOX_SIZE);
+        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/mystery_box.png")).toExternalForm()), this.position.getX() - Constants.BOX_SIZE/2.0, this.position.getY() - Constants.BOX_SIZE/2.0, Constants.BOX_SIZE, Constants.BOX_SIZE);
     }
 }

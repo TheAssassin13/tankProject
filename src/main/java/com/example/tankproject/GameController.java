@@ -321,6 +321,7 @@ public class GameController implements Initializable {
    }
 
     public void gameAnimationTimer(Shot shot, boolean fromTank) {
+        shootButton.setDisable(true); //TODO: Temporal fix
        new AnimationTimer() {
            @Override
            public void handle(long now) {
@@ -330,7 +331,6 @@ public class GameController implements Initializable {
                    drawingMethods(!fromTank);
                    shot.drawTrajectory(gameCanvasGraphicContext);
                    shot.drawShot(gameCanvasGraphicContext);
-                   shootButton.setDisable(fromTank); //TODO: Temporal fix
                    replayButton.setDisable(true);
 
                    // Update tank radar every frame
@@ -443,6 +443,7 @@ public class GameController implements Initializable {
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
             turn.tank.restoreHealth();
+            turn.tank.reloadAmmunition();
         } else if (box.powerUp == 1) {
             this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
@@ -559,8 +560,8 @@ public class GameController implements Initializable {
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
-            if (this.boxes.size() > 0) ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.boxes.get(0).position);
-            else ((CPU) this.turn).shoot(shootButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
+            if (this.boxes.size() > 0) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
+            else ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
         }
     }
 

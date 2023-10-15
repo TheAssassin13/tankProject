@@ -67,12 +67,12 @@
             <font>
                <Font name="Arial" size="24.0" />
             </font></Text>
-         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMusicVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
+         <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseReleased="#onMusicVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SFX volume">
             <font>
                <Font name="Arial" size="24.0" />
             </font></Text>
-         <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onSFXVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
+         <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseReleased="#onSFXVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
          <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
             <VBox.margin>
                <Insets top="30.0" />
