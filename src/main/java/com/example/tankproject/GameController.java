@@ -461,7 +461,7 @@ public class GameController implements Initializable {
 
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new LightShot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90), false);
+            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90), false);
         }
     }
 
@@ -489,8 +489,25 @@ public class GameController implements Initializable {
             }
             return true;
         }
+        // Checks if a box is hit
+        else if (fromTank) {
+            for (MysteryBox box : boxes) {
+                if (shot.mysteryBoxCollision(box)) {
+                    boxes.remove(box);
+                    terrain.destroyTerrain(shot.position, shot.area);
+                    terrainFallAnimationTimer();
+                    tankFallAnimationTimer();
+                    sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+                    this.sounds.setVolume(Constants.SFX_VOLUME);
+                    this.sounds.play();
+                    mysteryBoxPower(box);
+                    stopMethods();
+                    return true;
+                }
+            }
+        }
         // Checks if terrain is hit
-        else if (shot.terrainCollision(terrain)) {
+        if (shot.terrainCollision(terrain)) {
             this.terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
@@ -508,23 +525,6 @@ public class GameController implements Initializable {
             }
             if (fromTank) stopMethods();
             return true;
-        }
-        // Checks if a box is hit
-        else if (fromTank) {
-            for (MysteryBox box : boxes) {
-                if (shot.mysteryBoxCollision(box)) {
-                    boxes.remove(box);
-                    terrain.destroyTerrain(shot.position, shot.area);
-                    terrainFallAnimationTimer();
-                    tankFallAnimationTimer();
-                    sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
-                    this.sounds.setVolume(Constants.SFX_VOLUME);
-                    this.sounds.play();
-                    mysteryBoxPower(box);
-                    stopMethods();
-                    return true;
-                }
-            }
         }
         return false;
     }

@@ -31,9 +31,9 @@ public class CPU extends Player{
         double powerShoot = Math.sqrt(Math.pow(verticalVelocity, 2) + Math.pow(horizontalVelocity, 2));
 
         int shotType = random.nextInt(3);
-        if (shotType == 0 && !lightShot.isDisable()) lightShot.fire();
-        else if (shotType == 1 && !mediumShot.isDisable()) mediumShot.fire();
-        else if (!heavyShot.isDisable()) heavyShot.fire();
+        if (shotType == 0 && this.tank.ammunition.get(0) > 0) lightShot.fire();
+        else if (shotType == 1 && this.tank.ammunition.get(1) > 0) mediumShot.fire();
+        else if (this.tank.ammunition.get(2) > 0) heavyShot.fire();
 
         angle.setText(String.valueOf(angleShoot));
         power.setText(String.valueOf(powerShoot));
