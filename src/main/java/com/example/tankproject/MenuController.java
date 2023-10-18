@@ -47,7 +47,7 @@ public class MenuController implements Initializable {
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
-        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm());
+        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusicHalloween.mp3")).toExternalForm());
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();

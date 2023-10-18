@@ -480,7 +480,7 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
             this.animationCreator.startExplosionAnimation(hitPlayer.tank.position);
-            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
             if (fromTank) stopMethods();
