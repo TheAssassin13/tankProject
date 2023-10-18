@@ -73,6 +73,21 @@
                <Font name="Arial" size="24.0" />
             </font></Text>
          <Slider fx:id="sfxVolumeSlider" layoutX="10.0" layoutY="509.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseReleased="#onSFXVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
+         <Text fill="WHITE" layoutX="100.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CPU difficulty">
+            <font>
+               <Font name="Arial" size="24.0" />
+            </font>
+         </Text>
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <ToggleButton fx:id="easyButton" mnemonicParsing="false" text="Easy">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="CPUDifficultyButtons" />
+                  </toggleGroup></ToggleButton>
+               <ToggleButton fx:id="mediumButton" mnemonicParsing="false" text="Medium" toggleGroup="$CPUDifficultyButtons" />
+               <ToggleButton fx:id="hardButton" mnemonicParsing="false" text="Hard" toggleGroup="$CPUDifficultyButtons" />
+            </children>
+         </HBox>
          <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
             <VBox.margin>
                <Insets top="30.0" />
