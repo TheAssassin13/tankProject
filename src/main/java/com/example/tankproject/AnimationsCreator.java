@@ -9,7 +9,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class AnimationCreator {
+public class AnimationsCreator {
 
     public ImageView explosionImageView;
     private final ArrayList<Image> explosionImages;
@@ -17,12 +17,12 @@ public class AnimationCreator {
     private final double explosionSize = 80;
     private final Timeline explosionTimeLine;
 
-    public AnimationCreator() {
+    public AnimationsCreator() {
         this.explosionImageView = new ImageView();
         this.explosionImages = preloadImages(this.explosionNumImages,"images/explosion/");
         this.explosionImageView.setFitWidth(this.explosionSize);
         this.explosionImageView.setPreserveRatio(true);
-        this.explosionTimeLine = explosionTimeLineInitialize();
+        this.explosionTimeLine = explosionTimelineInitialize();
     }
 
     // Starts explosion animation from a position
@@ -33,7 +33,7 @@ public class AnimationCreator {
     }
 
     // Timeline explosion animation initialize
-    private Timeline explosionTimeLineInitialize() {
+    private Timeline explosionTimelineInitialize() {
         Timeline timeline = new Timeline();
         int frameDuration = 100;
         for (int i = 0; i < this.explosionNumImages; i++) {

@@ -83,7 +83,7 @@ public class GameController implements Initializable {
     public HBox healthRemainingHBox;
     public HealthRemainingHUD healthRemainingHUD;
     public ImageView explosionAnimation;
-    public AnimationCreator animationCreator;
+    public AnimationsCreator animationsCreator;
 
     // Initializes JavaFX windows
     @Override
@@ -132,8 +132,9 @@ public class GameController implements Initializable {
         this.healthRemainingHUD = new HealthRemainingHUD();
         this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
         this.stackPane.getChildren().add(this.healthRemainingHBox);
-        this.animationCreator = new AnimationCreator();
-        this.explosionAnimation = this.animationCreator.explosionImageView;
+        this.stackPane.getChildren().remove(this.explosionAnimation);
+        this.animationsCreator = new AnimationsCreator();
+        this.explosionAnimation = this.animationsCreator.explosionImageView;
         this.stackPane.getChildren().add(this.explosionAnimation);
 
         buttonsPanelInitialize();
@@ -479,7 +480,7 @@ public class GameController implements Initializable {
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
-            this.animationCreator.startExplosionAnimation(hitPlayer.tank.position);
+            this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
@@ -569,7 +570,7 @@ public class GameController implements Initializable {
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
-            if (this.boxes.size() > 0) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
+            if (!this.boxes.isEmpty()) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
             else ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
         }
     }
@@ -661,10 +662,12 @@ public class GameController implements Initializable {
         this.mediumAmmoButton.setUserData(this.turn.tank.ammunition.get(1));
         this.heavyAmmoButton.setUserData(this.turn.tank.ammunition.get(2));
 
+        // If selected button has no ammo, shoot button is disabled
         if ((int) this.ammunitionButtons.getSelectedToggle().getUserData() <= 0) {
             this.shootButton.setDisable(true);
         }
 
+        // Changes ammo light color based on ammo left
         if (this.turn.tank.ammunition.get(0) > Constants.AMMO_QUANTITY[0] / 2) {
             this.lightAmmoQuantityLight.setFill(Color.GREEN);
         } else if (this.turn.tank.ammunition.get(0) >= 1) {

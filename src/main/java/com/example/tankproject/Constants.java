@@ -10,7 +10,7 @@ public class Constants {
     public final static int[] RESOLUTION_WIDTH = {1060, 1280, 1366, 1440, 1768};
     public static int WINDOWS_HEIGHT = RESOLUTION_HEIGHT[1];
     public static int WINDOWS_WIDTH = RESOLUTION_WIDTH[1];
-    public final static int BUTTONS_PANEL_HEIGHT = 175;
+    public final static int BUTTONS_PANEL_HEIGHT = 185;
     public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
     public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
     public static int TANKS_QUANTITY = 2;
@@ -22,7 +22,7 @@ public class Constants {
     public final static double SHOT_VELOCITY = 0.2;
     public final static Color TERRAIN_COLOR = Color.BLACK;
     public final static Color TRAJECTORY_COLOR = Color.LIGHTGRAY;
-    public final static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.GRAY, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};
+    public final static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.DARKCYAN, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};
     public final static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
     public final static int[] AMMO_QUANTITY = {3,10,3}; // Light, medium and heavy
     public final static int[] AMMO_DAMAGE= {30,40,50}; // Light, medium and heavy

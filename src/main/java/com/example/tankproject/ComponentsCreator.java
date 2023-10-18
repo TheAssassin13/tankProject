@@ -74,7 +74,7 @@ public class ComponentsCreator {
     // Creates win screen
     public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
         Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
-        StackPane winnerTankBackground = new StackPane();
+        StackPane winnerTankBackgroundStackPane = new StackPane();
         Image winnerTankImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("images/winner_tank_image.png")).toExternalForm());
         ImageView winnerTankImageView = new ImageView(winnerTankImage);
 
@@ -85,8 +85,11 @@ public class ComponentsCreator {
         Text winnerNameText = new Text(winnerPlayer.name);
         HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
 
-        winnerTankBackground.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        winnerTankBackground.getChildren().add(winnerTankImageView);
+        winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
+        winnerTankBackgroundStackPane.setAlignment(Pos.CENTER);
+        winnerTankImageView.fitWidthProperty().bind(winnerTankBackgroundStackPane.widthProperty());
+        winnerTankImageView.setPreserveRatio(true);
+        winnerTankBackgroundStackPane.getChildren().add(winnerTankImageView);
 
         victoryText.setFont(primaryFont);
         victoryText.setFill(Color.WHITE);
@@ -103,8 +106,8 @@ public class ComponentsCreator {
         vbox.setId("winnerTankBackground");
         vbox.alignmentProperty().set(Pos.CENTER);
         vbox.setSpacing(15);
-        vbox.maxWidthProperty().bind(winnerTankBackground.widthProperty());
-        vbox.getChildren().add(winnerTankBackground);
+        vbox.maxWidthProperty().bind(winnerTankBackgroundStackPane.widthProperty());
+        vbox.getChildren().add(winnerTankBackgroundStackPane);
         vbox.getChildren().add(victoryText);
         vbox.getChildren().add(winnerNameText);
         vbox.getChildren().add(healthRemainingHBox);

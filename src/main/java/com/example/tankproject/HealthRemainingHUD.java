@@ -12,16 +12,16 @@ import static com.example.tankproject.App.scene;
 
 public class HealthRemainingHUD {
     HBox healthRemainingHBox;
-    Timeline timeLine;
+    Timeline timeline;
     double showingSeconds = 2.5;
 
     public HealthRemainingHUD() {
         this.healthRemainingHBox = new HBox();
-        this.timeLine = new Timeline();
+        this.timeline = new Timeline();
 
         this.healthRemainingHBox.setId("healthRemainingHBox");
         this.healthRemainingHBox.setVisible(false);
-        timeLineAnimationInitialize();
+        timelineAnimationInitialize();
     }
 
     // Makes HUD visible showing the tank remaining health
@@ -32,7 +32,7 @@ public class HealthRemainingHUD {
         this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
         this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
 
-        this.timeLine.play();
+        this.timeline.play();
     }
     // Makes HUD visible when the mouse hovers over a tank
     public void HUDMouseEvents(ArrayList<Player> players) {
@@ -48,14 +48,14 @@ public class HealthRemainingHUD {
     }
 
     // TimeLine animation initialize
-    public void timeLineAnimationInitialize() {
+    public void timelineAnimationInitialize() {
         // Makes HUD invisible after some time
-        this.timeLine.getKeyFrames().addAll(
+        this.timeline.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, e -> healthRemainingHBox.setOpacity(1)),
                 new KeyFrame(Duration.seconds(this.showingSeconds), e -> healthRemainingHBox.setOpacity(0))
         );
 
-        this.timeLine.setOnFinished(event -> this.timeLine.stop());
+        this.timeline.setOnFinished(event -> this.timeline.stop());
     }
 
 }
