@@ -39,6 +39,10 @@ public class MenuController implements Initializable {
     public Spinner<Integer> tanksQuantitySpinner;
     public Slider sfxVolumeSlider;
     public Slider musicVolumeSlider;
+    public ToggleButton easyButton;
+    public ToggleButton mediumButton;
+    public ToggleButton hardButton;
+    public ToggleGroup CPUDifficultyButtons;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,7 +51,7 @@ public class MenuController implements Initializable {
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
-        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm());
+        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusicHalloween.mp3")).toExternalForm());
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
@@ -76,14 +80,21 @@ public class MenuController implements Initializable {
         if (this.optionsMenu.isVisible()) {
             this.optionsMenu.setDisable(true);
             this.optionsMenu.setVisible(false);
-        } else {
-            this.optionsMenu.setDisable(false);
-            this.optionsMenu.setVisible(true);
-            SpinnerValueFactory<Integer> valueFactory = tanksQuantitySpinner.getValueFactory();
-            valueFactory.setValue(Constants.TANKS_QUANTITY);
-            this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
-            this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
-            this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
+            return;
+        }
+        this.optionsMenu.setDisable(false);
+        this.optionsMenu.setVisible(true);
+        SpinnerValueFactory<Integer> valueFactory = tanksQuantitySpinner.getValueFactory();
+        valueFactory.setValue(Constants.TANKS_QUANTITY);
+        this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
+        this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
+        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
+        if (Constants.CPU_DIFFICULTY == 1) {
+            this.CPUDifficultyButtons.selectToggle(easyButton);
+        } else if (Constants.CPU_DIFFICULTY == 2) {
+            this.CPUDifficultyButtons.selectToggle(mediumButton);
+        } else if (Constants.CPU_DIFFICULTY == 3) {
+            this.CPUDifficultyButtons.selectToggle(hardButton);
         }
     }
 
@@ -100,8 +111,10 @@ public class MenuController implements Initializable {
             App.restartWindow();
             App.updateScreenResolutionConstants();
         }
-
         Constants.TANKS_QUANTITY = this.tanksQuantitySpinner.getValue();
+        if (easyButton.isSelected()) Constants.CPU_DIFFICULTY = 1;
+        else if (mediumButton.isSelected()) Constants.CPU_DIFFICULTY = 2;
+        else if (hardButton.isSelected()) Constants.CPU_DIFFICULTY = 3;
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap

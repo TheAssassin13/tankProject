@@ -120,7 +120,7 @@ public class GameController implements Initializable {
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background_image.jpg")).toExternalForm()));
-        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
+        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicHalloween.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
@@ -481,7 +481,7 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
-            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
             if (fromTank) stopMethods();
@@ -570,7 +570,8 @@ public class GameController implements Initializable {
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
-            if (!this.boxes.isEmpty()) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
+            // There's a 1/3 chance that the CPU will go for a box
+            if (this.boxes.size() > 0 && random.nextInt(3) == 1) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
             else ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
         }
     }

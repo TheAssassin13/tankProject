@@ -29,6 +29,7 @@ public class Constants {
     public final static int TANK_HEALTH = 100;
     public final static int TERRAIN_MARGIN = 50;
     public static boolean CPU;
+    public static int CPU_DIFFICULTY = 2;
     public static double MUSIC_VOLUME = 1;
     public static double SFX_VOLUME = 1;
 }
