@@ -119,7 +119,7 @@ public class GameController implements Initializable {
         if (this.turn == null) this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/background_image.jpg")).toExternalForm()));
+        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/background_halloween.jpg")).toExternalForm()));
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicHalloween.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
@@ -481,7 +481,7 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
-            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
+            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
             if (fromTank) stopMethods();
@@ -617,7 +617,7 @@ public class GameController implements Initializable {
         this.stackPane.getChildren().add(this.winScreenVBox);
 
         this.music.stop();
-        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/victory_laugh.mp3")).toExternalForm()));
         this.music.setVolume(Constants.MUSIC_VOLUME);
         this.music.play();
     }

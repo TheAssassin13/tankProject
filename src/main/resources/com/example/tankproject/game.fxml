@@ -107,7 +107,7 @@
                         </toggleGroup>
                   <graphic>
                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                          <Image url="@images/light_shot.png"/>
+                          <Image url="@images/halloween aditions/light_shot(halloween).png"/>
                       </ImageView>
                   </graphic>
                     </ToggleButton>
@@ -123,7 +123,7 @@
                     <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                          <Image url="@images/medium_shot.png"/>
+                          <Image url="@images/halloween aditions/medium_shot(halloween).png"/>
                       </ImageView>
                   </graphic></ToggleButton>
                     <Text fill="WHITE" layoutX="30.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="80mm" />
@@ -138,7 +138,7 @@
                     <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                          <Image url="@images/heavy_shot.png"/>
+                          <Image url="@images/halloween aditions/other_heavy_shot(halloween).png"/>
                       </ImageView>
                   </graphic></ToggleButton>
                     <Text fill="WHITE" layoutX="30.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="105mm" />

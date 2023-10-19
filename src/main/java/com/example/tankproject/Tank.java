@@ -2,12 +2,14 @@ package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Tank {
     public Color color;
@@ -81,5 +83,7 @@ public class Tank {
         gc.fillRect(this.position.getX(), this.position.getY() - wheelSize * 1.8, Constants.TANK_SIZE, wheelSize / 2.0);
         gc.setTransform(new Affine());
 
+        //hat
+        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/hat.png")).toExternalForm()), this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);
     }
 }

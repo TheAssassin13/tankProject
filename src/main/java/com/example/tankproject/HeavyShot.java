@@ -14,6 +14,6 @@ public class HeavyShot extends Shot {
 
     @Override
     public void drawShot(GraphicsContext gc) {
-        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/heavy_shot.png")).toExternalForm()), this.position.getX() - Constants.SHOT_SIZE[2]/2.0, this.position.getY() - Constants.SHOT_SIZE[2]/2.0, Constants.SHOT_SIZE[2], Constants.SHOT_SIZE[2]);
+        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/other_heavy_shot(halloween).png")).toExternalForm()), this.position.getX() - Constants.SHOT_SIZE[2]/2.0, this.position.getY() - Constants.SHOT_SIZE[2]/2.0, Constants.SHOT_SIZE[2], Constants.SHOT_SIZE[2]);
     }
 }
