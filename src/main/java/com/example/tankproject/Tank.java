@@ -62,7 +62,7 @@ public class Tank {
         return this.ammoSelected;
     }
 
-    public void drawTank(GraphicsContext gc) {
+    public void drawTank(GraphicsContext gc, ImagesLoader images) {
         Double angle = this.getAngle();
         int wheelSize = Constants.TANK_SIZE/3;
 
@@ -84,6 +84,6 @@ public class Tank {
         gc.setTransform(new Affine());
 
         //hat
-        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/hat.png")).toExternalForm()), this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);
+        gc.drawImage(images.witchHatImage, this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);
     }
 }

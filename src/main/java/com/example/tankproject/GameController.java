@@ -78,12 +78,12 @@ public class GameController implements Initializable {
     public Media backgroundMusic;
     public MediaPlayer music;
     public MediaPlayer sounds;
-    public Image umbrella;
     public Point umbrellaPosition;
     public HBox healthRemainingHBox;
     public HealthRemainingHUD healthRemainingHUD;
     public ImageView explosionAnimation;
     public AnimationsCreator animationsCreator;
+    public ImagesLoader imagesLoader;
 
     // Initializes JavaFX windows
     @Override
@@ -94,6 +94,7 @@ public class GameController implements Initializable {
     // Encapsulation of all methods responsible for initializing the game
     public void gameInitialize() {
         this.gameCanvasGraphicContext = gameCanvas.getGraphicsContext2D();
+        this.imagesLoader = new ImagesLoader();
         this.maxHeight = 0;
         this.maxDistance = 0;
         this.lastUpdateTime = 0;
@@ -103,7 +104,7 @@ public class GameController implements Initializable {
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
         this.turn = null;
-        this.umbrella = null;
+        this.umbrellaPosition = null;
         this.alivePlayers.add(new Player("Player " + (1), Constants.TANK_COLORS[0], new Tank(Constants.TANK_COLORS[0], new Point(0, 0))));
         for (int i = 1; i < Constants.TANKS_QUANTITY; i++) {
             if (Constants.CPU) this.alivePlayers.add(new CPU("CPU " + (i), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
@@ -119,7 +120,7 @@ public class GameController implements Initializable {
         if (this.turn == null) this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/background_halloween.jpg")).toExternalForm()));
+        this.backgroundImage.setImage(imagesLoader.backgroundImages.get(2));
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicHalloween.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
@@ -145,7 +146,7 @@ public class GameController implements Initializable {
         drawingMethods(false);
         buttonsActionInitialize();
         ammunitionPanelControl();
-        this.healthRemainingHUD.HUDMouseEvents(this.alivePlayers);
+        this.healthRemainingHUD.HUDMouseEvents(this.alivePlayers, this.imagesLoader);
     }
 
     // Encapsulation of all methods responsible for initializing buttons of the interface game actions
@@ -214,15 +215,15 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
-        if (umbrella != null) gameCanvasGraphicContext.drawImage(umbrella, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
+        if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(imagesLoader.umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
         if (collision) this.terrain.drawTerrain(this.gameCanvasGraphicContext);
         else this.terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
         for (Player p : this.alivePlayers) {
-            p.tank.drawTank(this.gameCanvasGraphicContext);
+            p.tank.drawTank(this.gameCanvasGraphicContext, imagesLoader);
         }
         for (MysteryBox box : this.boxes) {
-            box.drawMysteryBox(gameCanvasGraphicContext);
+            box.drawMysteryBox(gameCanvasGraphicContext, this.imagesLoader);
         }
     }
 
@@ -289,7 +290,7 @@ public class GameController implements Initializable {
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
     public void onShootButtonClick(ActionEvent ignoredActionEvent) {
-        this.umbrella = null;
+        this.umbrellaPosition = null;
         this.maxHeight = 0;
         this.maxDistance = 0;
         // Checks if the input is not empty
@@ -336,7 +337,7 @@ public class GameController implements Initializable {
                    shot.shotPosition();
                    drawingMethods(!fromTank);
                    shot.drawTrajectory(gameCanvasGraphicContext);
-                   shot.drawShot(gameCanvasGraphicContext);
+                   shot.drawShot(gameCanvasGraphicContext, imagesLoader);
                    replayButton.setDisable(true);
 
                    // Update tank radar every frame
@@ -451,10 +452,9 @@ public class GameController implements Initializable {
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
-            this.healthRemainingHUD.showHUD(this.turn.tank);
+            this.healthRemainingHUD.showHUD(this.turn.tank, this.imagesLoader);
             turn.tank.reloadAmmunition();
         } else if (box.powerUp == 1) {
-            this.umbrella = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
         }
@@ -479,7 +479,7 @@ public class GameController implements Initializable {
             this.terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            this.healthRemainingHUD.showHUD(hitPlayer.tank);
+            this.healthRemainingHUD.showHUD(hitPlayer.tank, this.imagesLoader);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
@@ -519,7 +519,7 @@ public class GameController implements Initializable {
             Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
-                this.healthRemainingHUD.showHUD(playerNearby.tank);
+                this.healthRemainingHUD.showHUD(playerNearby.tank, this.imagesLoader);
                 if (playerNearby.tank.getHealth() <= 0) {
                     deleteDeadPlayer(playerNearby);
                 }
@@ -567,7 +567,7 @@ public class GameController implements Initializable {
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
-        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
+        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank, this.imagesLoader));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
             // There's a 1/3 chance that the CPU will go for a box
@@ -595,9 +595,9 @@ public class GameController implements Initializable {
         if (this.healthRemainingHBox != null) this.stackPane.getChildren().remove(this.healthRemainingHBox);
         if (this.explosionAnimation != null) this.stackPane.getChildren().remove(this.explosionAnimation);
         if (this.stackPane.getChildren().size() != 1) return;
-        Button replayButton = ComponentsCreator.createReplayButton(40,40);
-        Button exitButton = ComponentsCreator.createExitButton(40,40);
-        VBox backgroundVbox = ComponentsCreator.createWinScreenVBox(this.alivePlayers.get(0),replayButton,exitButton);
+        Button replayButton = ComponentsCreator.createReplayButton(40,40, this.imagesLoader);
+        Button exitButton = ComponentsCreator.createExitButton(40,40, this.imagesLoader);
+        VBox backgroundVbox = ComponentsCreator.createWinScreenVBox(this.alivePlayers.get(0),replayButton,exitButton, this.imagesLoader);
 
         setReplayButtonAction(replayButton);
         setExitButtonAction(exitButton);
@@ -638,18 +638,18 @@ public class GameController implements Initializable {
 
     // Initializes the buttons panel of the interface
     public void buttonsPanelInitialize() {
-        Image heartIcon = new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+        Image heartIcon = this.imagesLoader.heartIconImages.get(2);
         this.replayExitButtonsVbox.getChildren().clear();
-        this.replayButton = ComponentsCreator.createReplayButton(25,25);
-        this.exitButton = ComponentsCreator.createExitButton(25,25);
-        this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
+        this.replayButton = ComponentsCreator.createReplayButton(25,25, this.imagesLoader);
+        this.exitButton = ComponentsCreator.createExitButton(25,25, this.imagesLoader);
+        this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25, this.imagesLoader);
         this.currentPlayerText.setText(turn.name + " is playing");
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
         this.replayExitButtonsVbox.getChildren().add(this.replayButton);
         this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);
         this.currentTankHealthIcon.setImage(heartIcon);
-        this.currentPlayerTankImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm()));
+        this.currentPlayerTankImage.setImage(this.imagesLoader.currentTankImage);
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         ammunitionPanelControlInitialize();
     }

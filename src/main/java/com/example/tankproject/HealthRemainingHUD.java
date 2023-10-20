@@ -25,23 +25,23 @@ public class HealthRemainingHUD {
     }
 
     // Makes HUD visible showing the tank remaining health
-    public void showHUD(Tank tank) {
+    public void showHUD(Tank tank, ImagesLoader images) {
         this.healthRemainingHBox.setVisible(true);
         this.healthRemainingHBox.getChildren().clear();
-        this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20, "Health:",5, Color.BLACK));
+        this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20, "Health:",5, Color.BLACK, images));
         this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
         this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
 
         this.timeline.play();
     }
     // Makes HUD visible when the mouse hovers over a tank
-    public void HUDMouseEvents(ArrayList<Player> players) {
+    public void HUDMouseEvents(ArrayList<Player> players, ImagesLoader images) {
         scene.setOnMouseMoved(event -> {
             double mouseX = event.getSceneX();
             double mouseY = event.getSceneY();
             for (Player p : players) {
                 if ((Math.pow(p.tank.position.getX() - mouseX,2) + Math.pow(p.tank.position.getY() - mouseY,2))  <= (Math.pow(Constants.TANK_SIZE, 2))) {
-                    showHUD(p.tank);
+                    showHUD(p.tank, images);
                 }
             }
         });

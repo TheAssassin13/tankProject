@@ -13,7 +13,7 @@ public class MediumShot extends Shot {
     }
 
     @Override
-    public void drawShot(GraphicsContext gc) {
-        gc.drawImage(new Image(Objects.requireNonNull(getClass().getResource("images/halloween aditions/medium_shot(halloween).png")).toExternalForm()), this.position.getX() - Constants.SHOT_SIZE[1]/2.0, this.position.getY() - Constants.SHOT_SIZE[1]/2.0, Constants.SHOT_SIZE[1], Constants.SHOT_SIZE[1]);
+    public void drawShot(GraphicsContext gc, ImagesLoader images) {
+        gc.drawImage(images.shotImages.get(1), this.position.getX() - Constants.SHOT_SIZE[1]/2.0, this.position.getY() - Constants.SHOT_SIZE[1]/2.0, Constants.SHOT_SIZE[1], Constants.SHOT_SIZE[1]);
     }
 }

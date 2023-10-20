@@ -2,6 +2,7 @@ package com.example.tankproject;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 
@@ -67,7 +68,7 @@ public class Shot {
         return damage;
     }
 
-    public void drawShot(GraphicsContext gc) {
+    public void drawShot(GraphicsContext gc, ImagesLoader images) {
     }
 
     public void drawTrajectory(GraphicsContext gc) {

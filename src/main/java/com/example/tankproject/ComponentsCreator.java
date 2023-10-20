@@ -21,8 +21,8 @@ public class ComponentsCreator {
 
 
     // Creates replay button
-    public static Button createReplayButton(int height, int width) {
-        Image replayIcon = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/replay_icon_white.png")).toExternalForm());
+    public static Button createReplayButton(int height, int width, ImagesLoader images) {
+        Image replayIcon = images.iconImages.get(0);
         ImageView replayIconView = new ImageView(replayIcon);
         Button replayButton = new Button("",replayIconView);
 
@@ -38,8 +38,8 @@ public class ComponentsCreator {
     }
 
     // Creates exit button
-    public static Button createExitButton(int height, int width) {
-        Image exitIcon = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/exit_icon_white.png")).toExternalForm());
+    public static Button createExitButton(int height, int width, ImagesLoader images) {
+        Image exitIcon = images.iconImages.get(2);
         ImageView exitIconView = new ImageView(exitIcon);
         Button exitButton = new Button("",exitIconView);
 
@@ -55,8 +55,8 @@ public class ComponentsCreator {
     }
 
     // Creates menu exit button
-    public static Button createMenuExitButton(int height, int width) {
-        Image menuExitIcon = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/menu_exit_icon_white.png")).toExternalForm());
+    public static Button createMenuExitButton(int height, int width, ImagesLoader images) {
+        Image menuExitIcon = images.iconImages.get(1);
         ImageView menuExitIconView = new ImageView(menuExitIcon);
         Button menuExitButton = new Button("",menuExitIconView);
 
@@ -72,10 +72,10 @@ public class ComponentsCreator {
     }
 
     // Creates win screen
-    public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
+    public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton, ImagesLoader images) {
         Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
         StackPane winnerTankBackgroundStackPane = new StackPane();
-        Image winnerTankImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("images/winner_tank_image.png")).toExternalForm());
+        Image winnerTankImage = images.winnerTankImage;
         ImageView winnerTankImageView = new ImageView(winnerTankImage);
 
         VBox backgroundVbox = new VBox();
@@ -83,7 +83,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE, images);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
         winnerTankBackgroundStackPane.setAlignment(Pos.CENTER);
@@ -146,10 +146,10 @@ public class ComponentsCreator {
     }
 
     // Creates tank health remaining HBox
-    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
+    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor, ImagesLoader images) {
         HBox healthRemainingHbox = new HBox();
         Text healthRemainingText = new Text(text + " " + tank.getHealth() + " / " + Constants.TANK_HEALTH);
-        Image healthIconImage = healthIcon(tank);
+        Image healthIconImage = healthIcon(tank, images);
         ImageView healthIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
 
@@ -169,12 +169,12 @@ public class ComponentsCreator {
     }
 
     // Choose the health icon image according to tank health
-    public static Image healthIcon(Tank tank) {
-        Image healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
+    public static Image healthIcon(Tank tank, ImagesLoader images) {
+        Image healthIconImage = images.heartIconImages.get(2);
 
-        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm());
-        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm());
-        if (tank.getHealth() == 0) healthIconImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm());
+        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = images.heartIconImages.get(2);
+        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = images.heartIconImages.get(1);
+        if (tank.getHealth() == 0) healthIconImage = images.heartIconImages.get(0);
 
         return healthIconImage;
     }
