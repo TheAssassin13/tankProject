@@ -389,10 +389,11 @@ public class GameController implements Initializable {
                     drawingMethods(false);
                     int flag = 0;
                     for (Player p : alivePlayers) {
-                        if (p.tank.position.getY() + Constants.TANK_SIZE/3 < Constants.CANVAS_HEIGHT &&
+                        if (p.tank.position.getY() + Constants.TANK_SIZE / 3 < Constants.CANVAS_HEIGHT &&
                                 terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(1);
+                            healthRemainingHUD.showHUD(p.tank,imagesLoader);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
                                 flag = 0;
@@ -572,7 +573,7 @@ public class GameController implements Initializable {
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
             // There's a 1/3 chance that the CPU will go for a box
-            if (this.boxes.size() > 0 && random.nextInt(3) == 1) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
+            if (!this.boxes.isEmpty() && random.nextInt(3) == 1) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.boxes.get(0).position);
             else ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField, this.alivePlayers.get(random.nextInt(this.alivePlayers.size()-1)).tank.position);
         }
     }

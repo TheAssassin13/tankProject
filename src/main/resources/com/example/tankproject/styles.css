@@ -93,7 +93,7 @@
 }
 
 .ammoButtons:selected {
-    -fx-background-color: derive(-fx-winExitButtons-color,-40%);
+    -fx-background-color: derive(-fx-purple-color,25%);
 }
 
 #currentPlayerPanel {
@@ -187,4 +187,23 @@
 
 .split-arrows-horizontal {
 
+}
+
+.difficultyButtons {
+    -fx-max-width: 100px;
+    -fx-pref-height: 30px;
+    -fx-max-height: -fx-pref-height;
+    -fx-font-size: 20px;
+    -fx-padding: 4px 8px 4px 8px;
+    -fx-background-color: -fx-buttonsPanelBorder-color;
+    -fx-background-radius: 4px;
+}
+
+.difficultyButtons:hover {
+    -fx-background-color: -fx-white-color;
+}
+
+.difficultyButtons:selected {
+    -fx-background-color: -fx-lightRed-color;
+    -fx-text-fill: -fx-buttonsPanelBorder-color;
 }
