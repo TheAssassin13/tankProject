@@ -117,7 +117,7 @@ public class GameController implements Initializable {
                 break;
             }
         }
-        if (this.turn == null) this.turn = this.alivePlayers.get((int) Math.round(Math.random()));
+        if (this.turn == null) this.turn = this.alivePlayers.get(random.nextInt(Constants.TANKS_QUANTITY));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(imagesLoader.backgroundImages.get(2));
@@ -474,7 +474,8 @@ public class GameController implements Initializable {
     public boolean shotCollision(Shot shot, boolean fromTank) {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
-        if (hitPlayer != null) {
+        if (hitPlayer == this.turn) return true;
+        else if (hitPlayer != null) {
             hitPlayer.tank.reduceHealth(shot.getDamage());
             this.terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
@@ -484,10 +485,10 @@ public class GameController implements Initializable {
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
             this.sounds.setVolume(Constants.SFX_VOLUME);
             this.sounds.play();
-            if (fromTank) stopMethods();
             if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
             }
+            if (fromTank) stopMethods();
             return true;
         }
         // Checks if a box is hit
