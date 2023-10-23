@@ -58,19 +58,23 @@ public class MenuController implements Initializable {
         this.mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
+        difficultyButtonsAlwaysSelected();
     }
 
+    // Opens game windows
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.mediaPlayer.stop();
         App.setRoot("game");
     }
 
+    // Opens game windows with CPU option enabled
     public void onPlayCPUButtonClick(ActionEvent ignoredEvent) throws IOException {
         Constants.CPU = true;
         this.mediaPlayer.stop();
         App.setRoot("game");
     }
 
+    // Close windows
     public void onExitButtonClick(ActionEvent ignoredActionEvent) {
         Platform.exit();
     }
@@ -98,6 +102,7 @@ public class MenuController implements Initializable {
         }
     }
 
+    // Saves user changes in the options menu and applies them
     public void onSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.optionsMenu.setDisable(true);
         this.optionsMenu.setVisible(false);
@@ -131,6 +136,7 @@ public class MenuController implements Initializable {
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
     }
 
+    // Sets the sfx game volume and play a sound for reference
     public void onSFXVolumeDrag(MouseEvent ignoredMouseEvent) {
         Constants.SFX_VOLUME = sfxVolumeSlider.getValue()/100;
         MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
@@ -138,10 +144,21 @@ public class MenuController implements Initializable {
         sound.play();
     }
 
+    // Sets the music game volume
     public void musicVolumeDragInitialize() {
         this.musicVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             Constants.MUSIC_VOLUME = newValue.doubleValue() / 100;
             mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
+        });
+    }
+
+    // Verifies that is always a difficulty button selected in the options menu
+    public void difficultyButtonsAlwaysSelected() {
+        this.CPUDifficultyButtons.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                // If no button is selected, selects the last one
+                this.CPUDifficultyButtons.selectToggle(oldToggle);
+            }
         });
     }
 }

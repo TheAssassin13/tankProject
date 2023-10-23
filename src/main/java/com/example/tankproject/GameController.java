@@ -327,6 +327,7 @@ public class GameController implements Initializable {
         this.angleTextField.requestFocus();
    }
 
+   // AnimationTimer responsible for the entire game
     public void gameAnimationTimer(Shot shot, boolean fromTank) {
         shootButton.setDisable(true); //TODO: Temporal fix
        new AnimationTimer() {
@@ -365,6 +366,7 @@ public class GameController implements Initializable {
 
    }
 
+    // AnimationTimer responsible for the terrain falling after being destroyed
     public void terrainFallAnimationTimer() {
         new AnimationTimer() {
             @Override
@@ -380,6 +382,7 @@ public class GameController implements Initializable {
         }.start();
     }
 
+    // AnimationTimer responsible for tank falling after terrain being destroyed below it
     public void tankFallAnimationTimer() {
         new AnimationTimer() {
             @Override
@@ -409,6 +412,7 @@ public class GameController implements Initializable {
         }.start();
     }
 
+    // AnimationTimer responsible for mystery boxes falling from the sky
     public void mysteryBoxFallAnimationTimer() {
         new AnimationTimer() {
             @Override
@@ -418,6 +422,7 @@ public class GameController implements Initializable {
                     drawingMethods(false);
                     int flag = 0;
                     for (MysteryBox box : boxes) {
+                        // Drags down the box 1 pixel per frame
                         if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Constants.CANVAS_HEIGHT &&
                                 terrain.resolutionMatrix[box.position.getY() + Constants.BOX_SIZE/2 + 1][box.position.getX()] == 0) {
                             box.position.setY(box.position.getY()+1);
@@ -434,6 +439,7 @@ public class GameController implements Initializable {
     public void mysteryBoxAppears() {
         int boxPositionX;
         boolean isOnTank = false;
+        // Makes sure the box created is not above a tank
         while(true) {
             boxPositionX = random.nextInt(Constants.WINDOWS_WIDTH);
             for (Player p : alivePlayers) {
@@ -450,6 +456,7 @@ public class GameController implements Initializable {
         mysteryBoxFallAnimationTimer();
     }
 
+    // Gives the power up to the tank
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
@@ -461,12 +468,14 @@ public class GameController implements Initializable {
         }
     }
 
+    // Power up that creates a bombardment of shots from the sky
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
             gameAnimationTimer(new MediumShot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90), false);
         }
     }
 
+    // Shakes the windows screen
     public void vibration() {
         gameCanvasGraphicContext.translate(random.nextInt(-2,2), random.nextInt(-2,2));
     }
