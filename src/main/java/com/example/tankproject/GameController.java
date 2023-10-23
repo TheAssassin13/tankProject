@@ -117,6 +117,7 @@ public class GameController implements Initializable {
                 break;
             }
         }
+        this.random = new Random();
         if (this.turn == null) this.turn = this.alivePlayers.get(random.nextInt(Constants.TANKS_QUANTITY));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
@@ -127,7 +128,6 @@ public class GameController implements Initializable {
         this.music.play();
         this.music.setVolume(Constants.MUSIC_VOLUME);
         this.tankRadarStackPane.getChildren().clear();
-        this.random = new Random();
         this.boxes = new ArrayList<>();
         this.stackPane.getChildren().remove(this.healthRemainingHBox);
         this.healthRemainingHUD = new HealthRemainingHUD();
