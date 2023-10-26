@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 public class Constants {
     public final static int FPS = 60;
     public final static long FRAME_TIME = 1_000_000_000L / FPS;
-    public final static int[] RESOLUTION_HEIGHT = {700, 720, 768, 900, 992};
-    public final static int[] RESOLUTION_WIDTH = {1060, 1280, 1366, 1440, 1768};
+    public final static int[] RESOLUTION_HEIGHT = {800, 720, 768, 900, 992, 1080};
+    public final static int[] RESOLUTION_WIDTH = {800, 1280, 1366, 1440, 1768, 1920};
     public static int WINDOWS_HEIGHT = RESOLUTION_HEIGHT[1];
     public static int WINDOWS_WIDTH = RESOLUTION_WIDTH[1];
     public final static int BUTTONS_PANEL_HEIGHT = 185;
@@ -16,7 +16,7 @@ public class Constants {
     public static int TANKS_QUANTITY = 2;
     public final static double GRAVITY = 9.8;
     public final static int SHOT_TRAJECTORY_SIZE = 10;
-    public final static double[] SHOT_SIZE = {20.48, 40.96, 61.44};
+    public final static double[] SHOT_SIZE = {22, 40, 62};
     public final static int TANK_SIZE = 30;
     public final static int BOX_SIZE = 20;
     public final static double SHOT_VELOCITY = 0.2;

@@ -10,7 +10,7 @@
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
       <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
-         <Label fx:id="titleMenu" alignment="TOP_LEFT" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER">
+         <Label fx:id="titleMenu" alignment="CENTER" contentDisplay="CENTER" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER" wrapText="true">
             <font>
                <Font name="Arial" size="48.0" />
             </font>
@@ -65,7 +65,7 @@
                </HBox.margin></Text>
             <Spinner id="tanksQuantitySpinner" fx:id="tanksQuantitySpinner" maxWidth="250.0" styleClass="split-arrows-horizontal">
                <valueFactory>
-                  <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="2" max="10" min="2" />
+                  <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="2" max="6" min="2" />
                </valueFactory>
             </Spinner>
             <VBox.margin>
@@ -96,17 +96,15 @@
          </Text>
          <HBox alignment="CENTER" spacing="15.0">
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <ToggleButton fx:id="easyButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Easy">
                <toggleGroup>
-                  <ToggleGroup fx:id="CPUDifficultyButtons"/>
+                  <ToggleGroup fx:id="CPUDifficultyButtons" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="mediumButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Medium"
-                          toggleGroup="$CPUDifficultyButtons"/>
-            <ToggleButton fx:id="hardButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Hard"
-                          toggleGroup="$CPUDifficultyButtons"/>
+            <ToggleButton fx:id="mediumButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Medium" toggleGroup="$CPUDifficultyButtons" />
+            <ToggleButton fx:id="hardButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Hard" toggleGroup="$CPUDifficultyButtons" />
          </HBox>
          <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
             <VBox.margin>

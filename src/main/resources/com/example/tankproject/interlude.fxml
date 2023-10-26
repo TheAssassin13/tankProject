@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane id="menuBackground" fx:id="stackpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tankproject.InterludeController">
+   <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
+         <Label fx:id="titleMenu" alignment="CENTER" contentDisplay="CENTER" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER" wrapText="true">
+            <font>
+               <Font name="Arial" size="48.0" />
+            </font>
+            <padding>
+               <Insets bottom="30.0" />
+            </padding>
+         </Label>
+         <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play Local">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="shopButton" layoutX="10.0" layoutY="110.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onShopButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Shop">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="scoreboardButton" layoutX="84.0" layoutY="291.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onScoreboardButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Scoreboard">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+         <Button fx:id="menuButton" layoutX="75.0" layoutY="355.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Menu">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+         </Button>
+      </VBox>
+      <VBox id="optionsMenu" fx:id="shopVBox" alignment="CENTER" spacing="15.0" HBox.hgrow="ALWAYS">
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop">
+            <font>
+               <Font name="Arial" size="36.0" />
+            </font>
+            <VBox.margin>
+               <Insets bottom="15.0" />
+            </VBox.margin></Text>
+         <Spinner fx:id="resolutionSpinner" styleClass="split-arrows-horizontal">
+            <VBox.margin>
+               <Insets bottom="20.0" />
+            </VBox.margin></Spinner>
+         <HBox.margin>
+            <Insets right="35.0" />
+         </HBox.margin>
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+      </VBox>
+   </HBox>
+</StackPane>

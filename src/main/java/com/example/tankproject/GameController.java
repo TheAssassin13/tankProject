@@ -118,7 +118,7 @@ public class GameController implements Initializable {
             }
         }
         this.random = new Random();
-        if (this.turn == null) this.turn = this.alivePlayers.get(random.nextInt(Constants.TANKS_QUANTITY));
+        if (this.turn == null) this.turn = this.alivePlayers.get(this.random.nextInt(Constants.TANKS_QUANTITY));
         this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
         this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
         this.backgroundImage.setImage(imagesLoader.backgroundImages.get(2));
@@ -577,7 +577,7 @@ public class GameController implements Initializable {
 
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
+        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / "  + Constants.TANK_HEALTH);
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank, this.imagesLoader));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
@@ -654,8 +654,8 @@ public class GameController implements Initializable {
         this.replayButton = ComponentsCreator.createReplayButton(25,25, this.imagesLoader);
         this.exitButton = ComponentsCreator.createExitButton(25,25, this.imagesLoader);
         this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25, this.imagesLoader);
-        this.currentPlayerText.setText(turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / 100");
+        this.currentPlayerText.setText(this.turn.name + " is playing");
+        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / " + Constants.TANK_HEALTH);
         this.replayExitButtonsVbox.getChildren().add(this.replayButton);
         this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);

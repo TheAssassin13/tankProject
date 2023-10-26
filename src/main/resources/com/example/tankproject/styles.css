@@ -140,7 +140,7 @@
 
 #resolutionSpinner  {
     -fx-background-color: transparent;
-    -fx-pref-width: 300px;
+    -fx-pref-width: 250px;
 }
 
 #resolutionSpinner .text-field {
@@ -154,12 +154,40 @@
 
 #resolutionSpinner .increment-arrow-button, .decrement-arrow-button {
     -fx-padding: 0 8px 0 8px;
-    -fx-background-color: -fx-buttonsPanelBorder-color;
     -fx-background-radius: 4px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px 35px;
+    -fx-background-position: center;
 }
 
-#resolutionSpinner .increment-arrow-button:hover, .decrement-arrow-button:hover {
-    -fx-background-color: -fx-white-color;
+
+
+#resolutionSpinner .increment-arrow-button {
+    -fx-background-image: url("icons/arrow_right_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#resolutionSpinner .decrement-arrow-button {
+    -fx-background-image: url("icons/arrow_left_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#resolutionSpinner .increment-arrow {
+    -fx-background-color: transparent;
+}
+
+#resolutionSpinner .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+#resolutionSpinner .increment-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
+#resolutionSpinner .decrement-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
 }
 
 #tanksQuantitySpinner  {
@@ -177,12 +205,38 @@
 
 #tanksQuantitySpinner .increment-arrow-button, .decrement-arrow-button {
     -fx-padding: 0 8px 0 8px;
-    -fx-background-color: -fx-buttonsPanelBorder-color;
     -fx-background-radius: 4px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px 35px;
+    -fx-background-position: center;
 }
 
-#tanksQuantitySpinner .increment-arrow-button:hover, .decrement-arrow-button:hover {
-    -fx-background-color: -fx-white-color;
+#tanksQuantitySpinner .increment-arrow-button {
+    -fx-background-image: url("icons/arrow_right_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#tanksQuantitySpinner .decrement-arrow-button {
+    -fx-background-image: url("icons/arrow_left_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#tanksQuantitySpinner .increment-arrow {
+    -fx-background-color: transparent;
+}
+
+#tanksQuantitySpinner .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+#tanksQuantitySpinner .increment-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
+#tanksQuantitySpinner .decrement-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
 }
 
 .split-arrows-horizontal {

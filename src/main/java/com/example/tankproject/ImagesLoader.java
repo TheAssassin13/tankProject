@@ -52,9 +52,9 @@ public class ImagesLoader {
     // This method loads and saves the icon images in an ArrayList
     public void iconImagesLoader() {
         this.iconImages = new ArrayList<>();
-        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon_white.png")).toExternalForm()));
-        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/menu_exit_icon_white.png")).toExternalForm()));
-        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon_white.png")).toExternalForm()));
+        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/replay_icon.png")).toExternalForm()));
+        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/menu_exit_icon.png")).toExternalForm()));
+        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm()));
         this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm()));
     }
 
