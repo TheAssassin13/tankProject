@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,21 +25,24 @@ public class InterludeController implements Initializable {
     public StackPane stackpane;
     public ImageView backgroundImage;
     public Button shopButton;
-    public VBox shopVBox;
+    public VBox containerVBox;
     public HashMap<String, Integer> resolutionsHashMap;
     public ArrayList<String> resolutionsString;
     public Spinner<String> resolutionSpinner;
     public Button scoreboardButton;
     public Button menuButton;
+    public ImagesLoader imagesLoader;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.imagesLoader = new ImagesLoader();
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.shopVBox.setDisable(true);
-        this.shopVBox.setVisible(false);
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(this.imagesLoader,new Tank(Color.WHITE,null)));
+        this.containerVBox.setDisable(true);
+        this.containerVBox.setVisible(false);
     }
 
     // Opens game windows
@@ -49,34 +53,23 @@ public class InterludeController implements Initializable {
     // Opens menu screen
     public void onMenuButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         App.setRoot("menu");
-
     }
 
-    // When the options button is clicked, the options menu appears or disappears
+    // When the options button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
-        if (this.shopVBox.isVisible()) {
-            this.shopVBox.setDisable(true);
-            this.shopVBox.setVisible(false);
+        if (this.containerVBox.isVisible()) {
+
+            this.containerVBox.setDisable(true);
+            this.containerVBox.setVisible(false);
             return;
         }
-        this.shopVBox.setDisable(false);
-        this.shopVBox.setVisible(true);
+        this.containerVBox.getChildren().clear();
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(this.imagesLoader,new Tank(null,null)));
+        this.containerVBox.setDisable(false);
+        this.containerVBox.setVisible(true);
 
     }
 
-    // Initializes the resolution spinner, ArrayList and HashMap
-    public void resolutionSpinnerInitialize() {
-        this.resolutionsHashMap = new HashMap<>();
-        this.resolutionsString = new ArrayList<>();
-
-        for (int i = 0; i < Constants.RESOLUTION_WIDTH.length; i++) {
-            this.resolutionsString.add(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i]);
-            this.resolutionsHashMap.put(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i],i);
-        }
-
-        ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
-        this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
-    }
 
     public void onScoreboardButtonClick(ActionEvent ignoredEvent) {
     }

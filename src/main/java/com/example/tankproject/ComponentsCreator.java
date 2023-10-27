@@ -2,6 +2,7 @@ package com.example.tankproject;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -17,7 +18,9 @@ import java.util.Objects;
 public class ComponentsCreator {
 
     static Font primaryFont = Font.font("Arial", FontWeight.BOLD,50);
-    static Font secondaryFont = Font.font("Arial",FontWeight.NORMAL,30);
+    static Font subHeaderFont = Font.font("Arial", FontWeight.NORMAL,36);
+    static Font secondaryFont = Font.font("Arial", FontWeight.NORMAL,30);
+    static Font shopButtonFont = Font.font("Arial", FontWeight.NORMAL,24);
 
 
     // Creates replay button
@@ -187,5 +190,91 @@ public class ComponentsCreator {
     // Transforms y-coordinates to a translation y-distance from the center of the screen, used in StackPane translations
     public static double transformY(double posY) {
         return posY - Constants.WINDOWS_HEIGHT / 2.0;
+    }
+
+    public static VBox createShopVBox(ImagesLoader images, Tank currentTank) {
+        VBox shopVBox = new VBox();
+        HBox currentTankHBox = new HBox();
+        HBox lightShotButton = createShotShopButton(images.shotImages.get(0),"60mm", Constants.AMMO_PRICE[0], currentTank.ammunition.get(0), Constants.AMMO_QUANTITY[0]);
+        HBox mediumShotButton = createShotShopButton(images.shotImages.get(1),"80mm", Constants.AMMO_PRICE[1], currentTank.ammunition.get(1), Constants.AMMO_QUANTITY[1]);
+        HBox heavyShotButton = createShotShopButton(images.shotImages.get(2),"105mm", Constants.AMMO_PRICE[2], currentTank.ammunition.get(2), Constants.AMMO_QUANTITY[2]);
+        Text shopText = new Text("Shop");
+        Spinner<Tank> tankSpinner = new Spinner<>();
+        Text currentTankNameText = new Text();
+        Button buyAllButton = new Button("Buy all");
+        Text currentTankCreditsText = new Text(String.valueOf(currentTank.credits));
+
+
+        shopText.setFont(subHeaderFont);
+        shopText.setFill(Color.WHITE);
+        currentTankCreditsText.setFont(subHeaderFont);
+        currentTankCreditsText.setFill(Color.WHITE);
+
+        tankSpinner.getStyleClass().add("split-arrows-horizontal");
+        tankSpinner.setId("currentTankSpinnerShop");
+
+        currentTankHBox.setAlignment(Pos.CENTER);
+
+        lightShotButton.getStyleClass().add("buyShotShopButton");
+        mediumShotButton.getStyleClass().add("buyShotShopButton");
+        heavyShotButton.getStyleClass().add("buyShotShopButton");
+
+        currentTankHBox.getChildren().add(tankSpinner);
+        currentTankHBox.getChildren().add(currentTankCreditsText);
+
+        shopVBox.setAlignment(Pos.CENTER);
+        shopVBox.setSpacing(15);
+
+        shopVBox.getChildren().add(shopText);
+        shopVBox.getChildren().add(currentTankHBox);
+        shopVBox.getChildren().add(lightShotButton);
+        shopVBox.getChildren().add(mediumShotButton);
+        shopVBox.getChildren().add(heavyShotButton);
+        shopVBox.getChildren().add(buyAllButton);
+
+        return shopVBox;
+    }
+
+    public static HBox createShotShopButton(Image image, String shotType, int priceCredits, int currentAmount, int maxAmount) {
+        HBox shotButtonHBox = new HBox();
+        Image shotImage;
+        Image creditImage;
+        ImageView shotImageView;
+        ImageView creditImageView;
+        Text shotTypeText;
+        Text priceCreditsText;
+        Text amountText;
+
+        shotImage = image;
+        creditImage = new Image(Objects.requireNonNull(ComponentsCreator.class.getResource("icons/shot_money.png")).toExternalForm());
+        shotImageView = new ImageView(shotImage);
+        creditImageView = new ImageView(creditImage);
+
+        shotTypeText = new Text(shotType);
+        priceCreditsText = new Text(String.valueOf(priceCredits));
+        amountText = new Text(currentAmount + " / " + maxAmount);
+
+
+        shotImageView.setPreserveRatio(true);
+        creditImageView.setPreserveRatio(true);
+        shotImageView.setFitWidth(65);
+        creditImageView.setFitWidth(50);
+        shotTypeText.setFont(shopButtonFont);
+        shotTypeText.setFill(Color.WHITE);
+        priceCreditsText.setFont(shopButtonFont);
+        priceCreditsText.setFill(Color.WHITE);
+        amountText.setFont(shopButtonFont);
+        amountText.setFill(Color.WHITE);
+
+        shotButtonHBox.setAlignment(Pos.CENTER_LEFT);
+        shotButtonHBox.setSpacing(25);
+
+        shotButtonHBox.getChildren().add(shotImageView);
+        shotButtonHBox.getChildren().add(shotTypeText);
+        shotButtonHBox.getChildren().add(creditImageView);
+        shotButtonHBox.getChildren().add(priceCreditsText);
+        shotButtonHBox.getChildren().add(amountText);
+
+        return shotButtonHBox;
     }
 }
