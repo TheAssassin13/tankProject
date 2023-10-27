@@ -19,6 +19,7 @@ public class Tank {
     private ToggleButton ammoSelected;
     public ArrayList<Integer> ammunition;
     private int health;
+    public int credits;
 
     public Tank(Color color, Point position) {
         this.color = color;
@@ -28,7 +29,9 @@ public class Tank {
         this.ammoSelected = null;
         reloadAmmunition();
         this.health= Constants.TANK_HEALTH;
+        this.credits = 10000;
     }
+
     public void setAngle(double angle) {
         this.angle = angle;
     }
@@ -40,6 +43,15 @@ public class Tank {
     public int getHealth() {
         return this.health;
     }
+
+    public void setCredits(int credits){
+        this.credits = credits;
+    }
+    
+    public int getCredits() {
+        return this.credits;
+    }
+
     
     public void reduceHealth(int damage) {
         this.health = Math.max(0,this.health - damage);
