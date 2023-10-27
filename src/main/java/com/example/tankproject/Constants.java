@@ -24,8 +24,9 @@ public class Constants {
     public final static Color TRAJECTORY_COLOR = Color.LIGHTGRAY;
     public final static Color[] TANK_COLORS = {Color.GREENYELLOW, Color.BLUE, Color.RED, Color.DARKCYAN, Color.ORANGE, Color.BEIGE, Color.BROWN, Color.GREEN, Color.VIOLET, Color.PINK};
     public final static Color WIN_SCREEN_BACKGROUND_COLOR = Color.GRAY;
-    public final static int[] AMMO_QUANTITY = {3,10,3}; // Light, medium and heavy
-    public final static int[] AMMO_DAMAGE= {30,40,50}; // Light, medium and heavy
+    public final static int[] AMMO_QUANTITY = {3, 10, 3}; // Light, medium and heavy
+    public final static int[] AMMO_DAMAGE= {30, 40, 50}; // Light, medium and heavy
+    public final static int[] AMMO_PRICE = {1000, 2500, 4000}; // Light, medium and heavy
     public final static int TANK_HEALTH = 100;
     public final static int TERRAIN_MARGIN = 50;
     public static boolean CPU;

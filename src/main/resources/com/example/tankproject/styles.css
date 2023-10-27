@@ -9,6 +9,7 @@
     -fx-lightRed-color: #94484c;
     -fx-transparentPurple-color: #310B34ee;
     -fx-purple-color: #310B34;
+    -fx-shop-button-color: #622A66;
     -fx-buttonsPanel-color: #19212A;
     -fx-buttonsPanelContainer-color: #151C23;
     -fx-buttonsPanelBorder-color: #D5CBC5;
@@ -239,9 +240,59 @@
     -fx-background-color: -fx-lightRed-color;
 }
 
+#currentTankSpinnerShop {
+    -fx-pref-width: 100px;
+    -fx-background-color: transparent;
+}
+
+#currentTankSpinnerShop.text-field {
+    -fx-pref-height: 35px;
+    -fx-padding: 0 5px 0 5px;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#currentTankSpinnerShop .increment-arrow-button, .decrement-arrow-button {
+    -fx-padding: 0 8px 0 8px;
+    -fx-background-radius: 4px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px 35px;
+    -fx-background-position: center;
+}
+
+#currentTankSpinnerShop .increment-arrow-button {
+    -fx-background-image: url("icons/arrow_right_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#currentTankSpinnerShop .decrement-arrow-button {
+    -fx-background-image: url("icons/arrow_left_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#currentTankSpinnerShop .increment-arrow {
+    -fx-background-color: transparent;
+}
+
+#currentTankSpinnerShop .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+#currentTankSpinnerShop .increment-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
+#currentTankSpinnerShop .decrement-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
 .split-arrows-horizontal {
 
 }
+
 
 .difficultyButtons {
     -fx-max-width: 100px;
@@ -261,3 +312,18 @@
     -fx-background-color: -fx-lightRed-color;
     -fx-text-fill: -fx-buttonsPanelBorder-color;
 }
+
+.buyShotShopButton {
+    -fx-background-color: -fx-shop-button-color;
+    -fx-background-radius: 4px;
+
+}
+
+.buyShotShopButton:hover {
+    -fx-background-color: derive(-fx-shop-button-color,15%);
+}
+
+.buyShotShopButton:pressed {
+    -fx-background-color: derive(-fx-shop-button-color,-15%);
+}
+
