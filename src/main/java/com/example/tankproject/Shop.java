@@ -1,7 +1,4 @@
-package com.example;
-
-import com.example.tankproject.Constants;
-import com.example.tankproject.Player;
+package com.example.tankproject;
 
 public class Shop {
     int lightammunitionprice;

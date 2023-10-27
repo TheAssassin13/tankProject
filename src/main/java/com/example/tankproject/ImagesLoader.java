@@ -26,9 +26,9 @@ public class ImagesLoader {
     // This method loads and saves the shot images in an ArrayList
     public void shotImagesLoader() {
         this.shotImages = new ArrayList<>();
-        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/light_shot(halloween).png")).toExternalForm()));
-        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/medium_shot(halloween).png")).toExternalForm()));
-        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/other_heavy_shot(halloween).png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/light_shot.png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/medium_shot.png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/heavy_shot.png")).toExternalForm()));
     }
 
     // This method loads and saves the background images in an ArrayList
