@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ImagesLoader {
+    public static ImagesLoader instance;
     public ArrayList<Image> shotImages;
     public ArrayList<Image> backgroundImages;
     public Image currentTankImage;
@@ -63,5 +64,12 @@ public class ImagesLoader {
         this.umbrellaImage = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
         this.witchHatImage = new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/hat.png")).toExternalForm());
         this.mysteryBoxImage = new Image(Objects.requireNonNull(getClass().getResource("images/mystery_box.png")).toExternalForm());
+    }
+
+    public static synchronized ImagesLoader getInstance() {
+        if (instance == null) {
+            instance = new ImagesLoader();
+        }
+        return instance;
     }
 }

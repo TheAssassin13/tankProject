@@ -2,14 +2,11 @@ package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class Tank {
     public Color color;
@@ -74,7 +71,7 @@ public class Tank {
         return this.ammoSelected;
     }
 
-    public void drawTank(GraphicsContext gc, ImagesLoader images) {
+    public void drawTank(GraphicsContext gc) {
         Double angle = this.getAngle();
         int wheelSize = Constants.TANK_SIZE/3;
 

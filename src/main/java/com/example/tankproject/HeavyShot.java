@@ -13,7 +13,7 @@ public class HeavyShot extends Shot {
     }
 
     @Override
-    public void drawShot(GraphicsContext gc, ImagesLoader images) {
-        gc.drawImage(images.shotImages.get(2), this.position.getX() - Constants.SHOT_SIZE[2]/2.0, this.position.getY() - Constants.SHOT_SIZE[2]/2.0, Constants.SHOT_SIZE[2], Constants.SHOT_SIZE[2]);
+    public void drawShot(GraphicsContext gc) {
+        gc.drawImage(ImagesLoader.getInstance().shotImages.get(2), this.position.getX() - Constants.SHOT_SIZE[2]/2.0, this.position.getY() - Constants.SHOT_SIZE[2]/2.0, Constants.SHOT_SIZE[2], Constants.SHOT_SIZE[2]);
     }
 }

@@ -25,7 +25,6 @@ public class MenuController implements Initializable {
     public VBox vbox;
     public Label titleMenu;
     public Button playButton;
-    public Button playCPUButton;
     public Button exitButton;
     public StackPane stackpane;
     public ImageView backgroundImage;
@@ -46,7 +45,7 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/menu_background_image.png")).toExternalForm()));
+        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(0));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
         this.optionsMenu.setDisable(true);

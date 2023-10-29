@@ -68,7 +68,7 @@ public class Shot {
         return damage;
     }
 
-    public void drawShot(GraphicsContext gc, ImagesLoader images) {
+    public void drawShot(GraphicsContext gc) {
     }
 
     public void drawTrajectory(GraphicsContext gc) {

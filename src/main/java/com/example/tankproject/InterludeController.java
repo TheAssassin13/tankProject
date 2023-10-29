@@ -40,7 +40,7 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(this.imagesLoader,new Tank(Color.WHITE,null)));
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(new Tank(Color.WHITE,null)));
         this.containerVBox.setDisable(true);
         this.containerVBox.setVisible(false);
     }
@@ -64,7 +64,7 @@ public class InterludeController implements Initializable {
             return;
         }
         this.containerVBox.getChildren().clear();
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(this.imagesLoader,new Tank(null,null)));
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(new Tank(null,null)));
         this.containerVBox.setDisable(false);
         this.containerVBox.setVisible(true);
 

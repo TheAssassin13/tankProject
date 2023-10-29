@@ -24,8 +24,8 @@ public class ComponentsCreator {
 
 
     // Creates replay button
-    public static Button createReplayButton(int height, int width, ImagesLoader images) {
-        Image replayIcon = images.iconImages.get(0);
+    public static Button createReplayButton(int height, int width) {
+        Image replayIcon = ImagesLoader.getInstance().iconImages.get(0);
         ImageView replayIconView = new ImageView(replayIcon);
         Button replayButton = new Button("",replayIconView);
 
@@ -41,8 +41,8 @@ public class ComponentsCreator {
     }
 
     // Creates exit button
-    public static Button createExitButton(int height, int width, ImagesLoader images) {
-        Image exitIcon = images.iconImages.get(2);
+    public static Button createExitButton(int height, int width) {
+        Image exitIcon = ImagesLoader.getInstance().iconImages.get(2);
         ImageView exitIconView = new ImageView(exitIcon);
         Button exitButton = new Button("",exitIconView);
 
@@ -58,8 +58,8 @@ public class ComponentsCreator {
     }
 
     // Creates menu exit button
-    public static Button createMenuExitButton(int height, int width, ImagesLoader images) {
-        Image menuExitIcon = images.iconImages.get(1);
+    public static Button createMenuExitButton(int height, int width) {
+        Image menuExitIcon = ImagesLoader.getInstance().iconImages.get(1);
         ImageView menuExitIconView = new ImageView(menuExitIcon);
         Button menuExitButton = new Button("",menuExitIconView);
 
@@ -75,10 +75,10 @@ public class ComponentsCreator {
     }
 
     // Creates win screen
-    public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton, ImagesLoader images) {
+    public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
         Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
         StackPane winnerTankBackgroundStackPane = new StackPane();
-        Image winnerTankImage = images.winnerTankImage;
+        Image winnerTankImage = ImagesLoader.getInstance().winnerTankImage;
         ImageView winnerTankImageView = new ImageView(winnerTankImage);
 
         VBox backgroundVbox = new VBox();
@@ -86,7 +86,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE, images);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
         winnerTankBackgroundStackPane.setAlignment(Pos.CENTER);
@@ -149,10 +149,10 @@ public class ComponentsCreator {
     }
 
     // Creates tank health remaining HBox
-    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor, ImagesLoader images) {
+    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
         HBox healthRemainingHbox = new HBox();
         Text healthRemainingText = new Text(text + " " + tank.getHealth() + " / " + Constants.TANK_HEALTH);
-        Image healthIconImage = healthIcon(tank, images);
+        Image healthIconImage = healthIcon(tank);
         ImageView healthIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
 
@@ -172,12 +172,12 @@ public class ComponentsCreator {
     }
 
     // Choose the health icon image according to tank health
-    public static Image healthIcon(Tank tank, ImagesLoader images) {
-        Image healthIconImage = images.heartIconImages.get(2);
+    public static Image healthIcon(Tank tank) {
+        Image healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
 
-        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = images.heartIconImages.get(2);
-        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = images.heartIconImages.get(1);
-        if (tank.getHealth() == 0) healthIconImage = images.heartIconImages.get(0);
+        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
+        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(1);
+        if (tank.getHealth() == 0) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(0);
 
         return healthIconImage;
     }
@@ -192,12 +192,12 @@ public class ComponentsCreator {
         return posY - Constants.WINDOWS_HEIGHT / 2.0;
     }
 
-    public static VBox createShopVBox(ImagesLoader images, Tank currentTank) {
+    public static VBox createShopVBox(Tank currentTank) {
         VBox shopVBox = new VBox();
         HBox currentTankHBox = new HBox();
-        HBox lightShotButton = createShotShopButton(images.shotImages.get(0),"60mm", Constants.AMMO_PRICE[0], currentTank.ammunition.get(0), Constants.AMMO_QUANTITY[0]);
-        HBox mediumShotButton = createShotShopButton(images.shotImages.get(1),"80mm", Constants.AMMO_PRICE[1], currentTank.ammunition.get(1), Constants.AMMO_QUANTITY[1]);
-        HBox heavyShotButton = createShotShopButton(images.shotImages.get(2),"105mm", Constants.AMMO_PRICE[2], currentTank.ammunition.get(2), Constants.AMMO_QUANTITY[2]);
+        HBox lightShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(0),"60mm", Constants.AMMO_PRICE[0], currentTank.ammunition.get(0), Constants.AMMO_QUANTITY[0]);
+        HBox mediumShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(1),"80mm", Constants.AMMO_PRICE[1], currentTank.ammunition.get(1), Constants.AMMO_QUANTITY[1]);
+        HBox heavyShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(2),"105mm", Constants.AMMO_PRICE[2], currentTank.ammunition.get(2), Constants.AMMO_QUANTITY[2]);
         Text shopText = new Text("Shop");
         Spinner<Tank> tankSpinner = new Spinner<>();
         Text currentTankNameText = new Text();
