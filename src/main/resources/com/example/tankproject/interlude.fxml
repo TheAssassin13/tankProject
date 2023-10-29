@@ -10,7 +10,7 @@
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
       <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
-         <Label fx:id="titleMenu" alignment="CENTER" contentDisplay="CENTER" styleClass="titleMenu" text="TANK GAME" textAlignment="CENTER" wrapText="true">
+         <Label fx:id="roundTitle" alignment="CENTER" contentDisplay="CENTER" styleClass="titleMenu" text="ROUND 1" textAlignment="CENTER" wrapText="true">
             <font>
                <Font name="Arial" size="48.0" />
             </font>

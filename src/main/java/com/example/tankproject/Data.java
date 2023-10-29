@@ -9,6 +9,9 @@ public class Data {
     public ArrayList<MysteryBox> mysteryBoxes;
     public int gameNumber;
     public int roundNumber;
+    public Terrain terrain;
+    public int playersPlayed;
+    public int tanksQuantity;
     public int playableTanksQuantity;
     public int cpuTanksQuantity;
 
@@ -18,8 +21,10 @@ public class Data {
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 1;
         this.roundNumber = 1;
-        this.playableTanksQuantity = Constants.TANKS_QUANTITY;
+        this.playersPlayed = 0;
+        this.playableTanksQuantity = 2;
         this.cpuTanksQuantity = 0;
+        this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
     }
 
     public void reset() {

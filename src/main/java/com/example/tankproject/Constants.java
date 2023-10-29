@@ -13,7 +13,6 @@ public class Constants {
     public final static int BUTTONS_PANEL_HEIGHT = 185;
     public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
     public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
-    public static int TANKS_QUANTITY = 2;
     public final static double GRAVITY = 9.8;
     public final static int SHOT_TRAJECTORY_SIZE = 10;
     public final static double[] SHOT_SIZE = {22, 40, 62};

@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import static com.example.tankproject.App.setRoot;
 import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
@@ -39,7 +40,6 @@ public class GameController implements Initializable {
     public HBox buttonsPanel;
     public TextField angleTextField;
     public TextField powerTextField;
-    public Terrain terrain;
     public Text maxHeightTextField;
     public int maxHeight;
     public Text maxDistanceTextField;
@@ -84,14 +84,14 @@ public class GameController implements Initializable {
     // Initializes JavaFX windows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       gameInitialize();
+       gameInitialize(Data.getInstance().roundNumber == 1);
     }
 
-    // Encapsulation of all methods responsible for initializing the game
-    public void gameInitialize() {
+    // Encapsulation of all methods responsible for initializing the game and rounds
+    public void gameInitialize(boolean gameReset) {
         this.gameCanvasGraphicContext = gameCanvas.getGraphicsContext2D();
         this.random = new Random();
-        Data.getInstance().reset();
+        if (gameReset) Data.getInstance().reset();
         this.maxHeight = 0;
         this.maxDistance = 0;
         this.lastUpdateTime = 0;
@@ -100,10 +100,12 @@ public class GameController implements Initializable {
         this.mediumAmmoButton.setSelected(true);
         this.turn = null;
         this.umbrellaPosition = null;
-        createsPlayers();
-        this.turn = Data.getInstance().alivePlayers.get(this.random.nextInt(Constants.TANKS_QUANTITY));
-        this.terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
-        this.terrain.terrainGeneration(Constants.SEA_LEVEL, true);
+        if (Data.getInstance().roundNumber == 1) createPlayers();
+        this.turn = Data.getInstance().alivePlayers.get(this.random.nextInt(Data.getInstance().tanksQuantity));
+        if (gameReset) {
+            Data.getInstance().terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
+            Data.getInstance().terrain.terrainGeneration(Constants.SEA_LEVEL, true);
+        }
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(1));
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
@@ -123,7 +125,7 @@ public class GameController implements Initializable {
         buttonsPanelInitialize();
         tankRadarInitialize();
         calculateMax(new Shot(new Point(0,0),0,0),this.turn.tank);
-        tanksPlacement();
+        if (gameReset) tanksPlacement();
         componentsSizesInitialize();
         drawingMethods(false);
         buttonsActionInitialize();
@@ -148,7 +150,7 @@ public class GameController implements Initializable {
                 disableWinScreen();
             }
             music.stop();
-            gameInitialize();
+            gameInitialize(true);
         });
     }
 
@@ -201,8 +203,8 @@ public class GameController implements Initializable {
         this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
         if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(ImagesLoader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
-        if (collision) this.terrain.drawTerrain(this.gameCanvasGraphicContext);
-        else this.terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
+        if (collision) Data.getInstance().terrain.drawTerrain(this.gameCanvasGraphicContext);
+        else Data.getInstance().terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
         for (Player p : Data.getInstance().alivePlayers) {
             p.tank.drawTank(this.gameCanvasGraphicContext);
         }
@@ -211,19 +213,27 @@ public class GameController implements Initializable {
         }
     }
 
-    public void createsPlayers() {
+    // This method loads the players and saves them into the alivePlayers arrayList
+    public void createPlayers() {
         int playersQuantity = Data.getInstance().playableTanksQuantity;
         int cpuQuantity = Data.getInstance().cpuTanksQuantity;
+
+        // It loads the playable players
         for (int i = 0; i < playersQuantity; i++) {
             Data.getInstance().alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
+
+        // It loads the CPU players
         for (int i = 0; i < cpuQuantity; i++) {
             Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
         }
 
+        // It shuffles the order
         for (int i = 0; i < Data.getInstance().alivePlayers.size(); i++) {
             int r = random.nextInt(i+1);
-            Player temp = new Player(Data.getInstance().alivePlayers.get(r));
+            Player temp;
+            if (Data.getInstance().alivePlayers.get(r) instanceof CPU) temp = new CPU(Data.getInstance().alivePlayers.get(r));
+            else temp = new Player(Data.getInstance().alivePlayers.get(r));
             Data.getInstance().alivePlayers.set(r, Data.getInstance().alivePlayers.get(i));
             Data.getInstance().alivePlayers.set(i, temp);
         }
@@ -231,31 +241,31 @@ public class GameController implements Initializable {
 
     // Placement of tanks on terrain with random distance
     public void tanksPlacement() {
-        int gap = Constants.WINDOWS_WIDTH / Constants.TANKS_QUANTITY;
+        int gap = Constants.WINDOWS_WIDTH / Data.getInstance().tanksQuantity;
         ArrayList<Point> tanksPosition = new ArrayList<>();
 
         // Position of the first tank
-        int x = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / (Constants.TANKS_QUANTITY * 2 + 1) + Constants.TANK_SIZE);
+        int x = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / (Data.getInstance().tanksQuantity * 2 + 1) + Constants.TANK_SIZE);
         int y = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
         tanksPosition.add(new Point(x, y));
 
-        for (int i = 1; i < Constants.TANKS_QUANTITY; i++) {
-            x = (int) (tanksPosition.get(i-1).getX() + gap + (gap/Constants.TANKS_QUANTITY) * Math.random());
+        for (int i = 1; i < Data.getInstance().tanksQuantity; i++) {
+            x = (int) (tanksPosition.get(i-1).getX() + gap + (gap/Data.getInstance().tanksQuantity) * Math.random());
             tanksPosition.add(new Point(x, y));
         }
 
         // In case the last one gets out of bound
-        if (tanksPosition.get(Constants.TANKS_QUANTITY-1).getX() + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
-            tanksPosition.get(Constants.TANKS_QUANTITY-1).setX(Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2));
+        if (tanksPosition.get(Data.getInstance().tanksQuantity-1).getX() + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
+            tanksPosition.get(Data.getInstance().tanksQuantity-1).setX(Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2));
 
-        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+        for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
             Data.getInstance().alivePlayers.get(i).tank.position.setX(tanksPosition.get(i).getX());
         }
 
         // Positions tanks on terrain
-        for (int i = 0; i < Constants.TANKS_QUANTITY; i++) {
+        for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
             for (int j = 0; j < Constants.CANVAS_HEIGHT; j++) {
-                if (terrain.resolutionMatrix[j][tanksPosition.get(i).getX()] == 1) {
+                if (Data.getInstance().terrain.resolutionMatrix[j][tanksPosition.get(i).getX()] == 1) {
                     Data.getInstance().alivePlayers.get(i).tank.position.setY(j - Constants.TANK_SIZE/3);
                     break;
                 }
@@ -318,7 +328,7 @@ public class GameController implements Initializable {
                 int SubtractionAMMO = this.turn.tank.ammunition.get(1); 
                 this.turn.tank.ammunition.set(1, SubtractionAMMO - 1);
             }
-                else{
+            else{
                 shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()));
                 int SubtractionAMMO = this.turn.tank.ammunition.get(2); 
                 this.turn.tank.ammunition.set(2, SubtractionAMMO - 1);
@@ -352,11 +362,21 @@ public class GameController implements Initializable {
                    if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
                         || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
                        stop();
-                       if (fromTank) stopMethods();
+                       if (fromTank) {
+                           try {
+                               stopMethods();
+                           } catch (IOException e) {
+                               throw new RuntimeException(e);
+                           }
+                       }
                    }
 
                    // Checks all the possible collisions
-                   if (shotCollision(shot, fromTank)) stop();
+                   try {
+                       if (shotCollision(shot, fromTank)) stop();
+                   } catch (IOException e) {
+                       throw new RuntimeException(e);
+                   }
 
                    // Trajectory point added
                    shot.addTrajectory();
@@ -378,7 +398,7 @@ public class GameController implements Initializable {
                     drawingMethods(true);
                     vibration();
                     // When the terrain stops falling, the animation stops
-                    if (!terrain.terrainFalling()) stop();
+                    if (!Data.getInstance().terrain.terrainFalling()) stop();
                 }
             }
         }.start();
@@ -395,7 +415,7 @@ public class GameController implements Initializable {
                     int flag = 0;
                     for (Player p : Data.getInstance().alivePlayers) {
                         if (p.tank.position.getY() + Constants.TANK_SIZE / 3 < Constants.CANVAS_HEIGHT &&
-                                terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
+                                Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(1);
                             healthRemainingHUD.showHUD(p.tank);
@@ -426,7 +446,7 @@ public class GameController implements Initializable {
                     for (MysteryBox box : Data.getInstance().mysteryBoxes) {
                         // Drags down the box 1 pixel per frame
                         if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Constants.CANVAS_HEIGHT &&
-                                terrain.resolutionMatrix[box.position.getY() + Constants.BOX_SIZE/2 + 1][box.position.getX()] == 0) {
+                                Data.getInstance().terrain.resolutionMatrix[box.position.getY() + Constants.BOX_SIZE/2 + 1][box.position.getX()] == 0) {
                             box.position.setY(box.position.getY()+1);
                             flag = 1;
                         }
@@ -483,13 +503,13 @@ public class GameController implements Initializable {
     }
 
     // Checks all the possible collisions with a shot
-    public boolean shotCollision(Shot shot, boolean fromTank) {
+    public boolean shotCollision(Shot shot, boolean fromTank) throws IOException {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer == this.turn) return true;
         else if (hitPlayer != null) {
             hitPlayer.tank.reduceHealth(shot.getDamage());
-            this.terrain.destroyTerrain(shot.position, shot.area);
+            Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
@@ -500,7 +520,9 @@ public class GameController implements Initializable {
             if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
             }
-            if (fromTank) stopMethods();
+            if (fromTank) {
+                stopMethods();
+            }
             return true;
         }
         // Checks if a box is hit
@@ -508,7 +530,7 @@ public class GameController implements Initializable {
             for (MysteryBox box : Data.getInstance().mysteryBoxes) {
                 if (shot.mysteryBoxCollision(box)) {
                     Data.getInstance().mysteryBoxes.remove(box);
-                    terrain.destroyTerrain(shot.position, shot.area);
+                    Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
@@ -521,8 +543,8 @@ public class GameController implements Initializable {
             }
         }
         // Checks if terrain is hit
-        if (shot.terrainCollision(terrain)) {
-            this.terrain.destroyTerrain(shot.position, shot.area);
+        if (shot.terrainCollision(Data.getInstance().terrain)) {
+            Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
@@ -555,7 +577,7 @@ public class GameController implements Initializable {
     }
 
     // Encapsulation of methods in charge of turn change mechanic
-    public void stopMethods() {
+    public void stopMethods() throws IOException {
         changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -582,6 +604,12 @@ public class GameController implements Initializable {
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / "  + Constants.TANK_HEALTH);
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
+        Data.getInstance().playersPlayed++;
+        if (Data.getInstance().playersPlayed == Data.getInstance().tanksQuantity) {
+            Data.getInstance().playersPlayed = 0;
+            Data.getInstance().roundNumber++;
+            setRoot("interlude");
+        }
         if (this.turn instanceof CPU) {
             ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
         }

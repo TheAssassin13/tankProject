@@ -58,6 +58,7 @@ public class MenuController implements Initializable {
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
         difficultyButtonsAlwaysSelected();
+        Data.getInstance().reset();
     }
 
     // Opens game windows
@@ -81,7 +82,7 @@ public class MenuController implements Initializable {
         this.optionsMenu.setDisable(false);
         this.optionsMenu.setVisible(true);
         SpinnerValueFactory<Integer> valueFactory = tanksQuantitySpinner.getValueFactory();
-        valueFactory.setValue(Constants.TANKS_QUANTITY);
+        valueFactory.setValue(Data.getInstance().tanksQuantity);
         this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
         this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
         this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
@@ -108,7 +109,6 @@ public class MenuController implements Initializable {
             App.restartWindow();
             App.updateScreenResolutionConstants();
         }
-        Constants.TANKS_QUANTITY = this.tanksQuantitySpinner.getValue();
         if (easyButton.isSelected()) Constants.CPU_DIFFICULTY = 1;
         else if (mediumButton.isSelected()) Constants.CPU_DIFFICULTY = 2;
         else if (hardButton.isSelected()) Constants.CPU_DIFFICULTY = 3;

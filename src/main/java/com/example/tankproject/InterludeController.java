@@ -20,15 +20,12 @@ import java.util.ResourceBundle;
 
 public class InterludeController implements Initializable {
     public VBox vbox;
-    public Label titleMenu;
+    public Label roundTitle;
     public Button playButton;
     public StackPane stackpane;
     public ImageView backgroundImage;
     public Button shopButton;
     public VBox containerVBox;
-    public HashMap<String, Integer> resolutionsHashMap;
-    public ArrayList<String> resolutionsString;
-    public Spinner<String> resolutionSpinner;
     public Button scoreboardButton;
     public Button menuButton;
     public ImagesLoader imagesLoader;
@@ -43,6 +40,7 @@ public class InterludeController implements Initializable {
         this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(new Tank(Color.WHITE,null)));
         this.containerVBox.setDisable(true);
         this.containerVBox.setVisible(false);
+        this.roundTitle.setText("ROUND " + Data.getInstance().roundNumber);
     }
 
     // Opens game windows

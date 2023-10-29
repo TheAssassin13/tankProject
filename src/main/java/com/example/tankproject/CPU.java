@@ -15,6 +15,10 @@ public class CPU extends Player{
         super(name, color, tank);
     }
 
+    public CPU(Player player) {
+        super(player);
+    }
+
     // The CPU makes its shot with calculations and random variables
     public void shoot(Button shootButton, ToggleButton lightShot, ToggleButton mediumShot, ToggleButton heavyShot, TextField angle, TextField power) {
         if (this.tank.getHealth() == 0) return; // In case the tank is dead
@@ -81,7 +85,7 @@ public class CPU extends Player{
 
         // It chooses a random target that isn't itself
         do {
-            this.target = Data.getInstance().alivePlayers.get(random.nextInt(Constants.TANKS_QUANTITY)).tank.position;
-        } while(this.target != this.tank.position);
+            this.target = Data.getInstance().alivePlayers.get(random.nextInt(Data.getInstance().tanksQuantity)).tank.position;
+        } while(this.target == this.tank.position);
     }
 }
