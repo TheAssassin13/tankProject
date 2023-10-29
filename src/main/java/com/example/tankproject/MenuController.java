@@ -67,13 +67,6 @@ public class MenuController implements Initializable {
         App.setRoot("interlude");
     }
 
-    // Opens game windows with CPU option enabled
-    public void onPlayCPUButtonClick(ActionEvent ignoredEvent) throws IOException {
-        Constants.CPU = true;
-        this.mediaPlayer.stop();
-        App.setRoot("game");
-    }
-
     // Close windows
     public void onExitButtonClick(ActionEvent ignoredActionEvent) {
         Platform.exit();

@@ -9,26 +9,30 @@ import java.util.Random;
 
 public class CPU extends Player{
 
+    Point target;
+
     public CPU(String name, Color color, Tank tank) {
         super(name, color, tank);
     }
 
     // The CPU makes its shot with calculations and random variables
-    public void shoot(Button shootButton, ToggleButton lightShot, ToggleButton mediumShot, ToggleButton heavyShot, TextField angle, TextField power, Point positionEnemy) {
+    public void shoot(Button shootButton, ToggleButton lightShot, ToggleButton mediumShot, ToggleButton heavyShot, TextField angle, TextField power) {
         if (this.tank.getHealth() == 0) return; // In case the tank is dead
         Random random = new Random();
+        chooseTarget(); // It chooses where it wants to shoot
+
         double angleShoot;
         double powerShoot;
-        double inicialPosX = this.tank.position.getX();
-        double inicialPosY = Constants.CANVAS_HEIGHT - this.tank.position.getY();
-        double finalPosX = positionEnemy.getX();
-        double finalPosY = Constants.CANVAS_HEIGHT - positionEnemy.getY();
+        double initialPosX = this.tank.position.getX();
+        double initialPosY = Constants.CANVAS_HEIGHT - this.tank.position.getY();
+        double finalPosX = this.target.getX();
+        double finalPosY = Constants.CANVAS_HEIGHT - this.target.getY();
 
         // Important variables calculation
         double maxHeight = random.nextInt(Constants.CANVAS_HEIGHT, Constants.CANVAS_HEIGHT*2);
-        double verticalVelocity = Math.sqrt(2.0 * Constants.GRAVITY * (maxHeight - inicialPosY));
+        double verticalVelocity = Math.sqrt(2.0 * Constants.GRAVITY * (maxHeight - initialPosY));
         double time = verticalVelocity / Constants.GRAVITY + Math.sqrt((2 / Constants.GRAVITY) * (maxHeight - finalPosY));
-        double horizontalVelocity = (finalPosX - inicialPosX) / time;
+        double horizontalVelocity = (finalPosX - initialPosX) / time;
 
         // Angle and power calculations
         angleShoot = Math.toDegrees(Math.atan(verticalVelocity / horizontalVelocity));
@@ -64,5 +68,20 @@ public class CPU extends Player{
         angle.setText(String.valueOf(angleShoot));
         power.setText(String.valueOf(powerShoot));
         shootButton.fire();
+    }
+
+    // This method chooses a target for the CPU. It could be a player or a mystery box
+    public void chooseTarget() {
+        Random random = new Random();
+        // There's a 1/3 chance that chooses a mystery box as a target
+        if (!Data.getInstance().mysteryBoxes.isEmpty() && random.nextInt(3) == 1) {
+            this.target = Data.getInstance().mysteryBoxes.get(random.nextInt(Data.getInstance().mysteryBoxes.size())).position;
+            return;
+        }
+
+        // It chooses a random target that isn't itself
+        do {
+            this.target = Data.getInstance().alivePlayers.get(random.nextInt(Constants.TANKS_QUANTITY)).tank.position;
+        } while(this.target != this.tank.position);
     }
 }

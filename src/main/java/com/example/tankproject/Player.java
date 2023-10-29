@@ -12,4 +12,10 @@ public class Player {
         this.color = color;
         this.tank = tank;
     }
+
+    public Player(Player player) {
+        this.name = player.name;
+        this.color = player.color;
+        this.tank = player.tank;
+    }
 }
