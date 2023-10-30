@@ -10,14 +10,9 @@
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
       <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game 1">
+         <Text fx:id="gameNumberText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game 1">
             <font>
                <Font name="Arial" size="80.0" />
-            </font>
-         </Text>
-         <Text fx:id="roundTitle" fill="WHITE" layoutX="63.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Round y">
-            <font>
-               <Font name="Arial" size="60.0" />
             </font>
          </Text>
          <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play Local">
