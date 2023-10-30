@@ -37,6 +37,7 @@ public class ImagesLoader {
         this.backgroundImages = new ArrayList<>();
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/menu_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/game_background_image.jpg")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/background_halloween.jpg")).toExternalForm()));
     }
 

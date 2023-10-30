@@ -22,10 +22,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static com.example.tankproject.App.setRoot;
 import static com.example.tankproject.App.toHexString;
@@ -91,7 +88,6 @@ public class GameController implements Initializable {
     public void gameInitialize(boolean gameReset) {
         this.gameCanvasGraphicContext = gameCanvas.getGraphicsContext2D();
         this.random = new Random();
-        if (gameReset) Data.getInstance().reset();
         this.maxHeight = 0;
         this.maxDistance = 0;
         this.lastUpdateTime = 0;
@@ -100,7 +96,6 @@ public class GameController implements Initializable {
         this.mediumAmmoButton.setSelected(true);
         this.turn = null;
         this.umbrellaPosition = null;
-        if (Data.getInstance().roundNumber == 1) createPlayers();
         this.turn = Data.getInstance().alivePlayers.get(this.random.nextInt(Data.getInstance().tanksQuantity));
         if (gameReset) {
             Data.getInstance().terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
@@ -210,32 +205,6 @@ public class GameController implements Initializable {
         }
         for (MysteryBox box : Data.getInstance().mysteryBoxes) {
             box.drawMysteryBox(gameCanvasGraphicContext);
-        }
-    }
-
-    // This method loads the players and saves them into the alivePlayers arrayList
-    public void createPlayers() {
-        int playersQuantity = Data.getInstance().playableTanksQuantity;
-        int cpuQuantity = Data.getInstance().cpuTanksQuantity;
-
-        // It loads the playable players
-        for (int i = 0; i < playersQuantity; i++) {
-            Data.getInstance().alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
-        }
-
-        // It loads the CPU players
-        for (int i = 0; i < cpuQuantity; i++) {
-            Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
-        }
-
-        // It shuffles the order
-        for (int i = 0; i < Data.getInstance().alivePlayers.size(); i++) {
-            int r = random.nextInt(i+1);
-            Player temp;
-            if (Data.getInstance().alivePlayers.get(r) instanceof CPU) temp = new CPU(Data.getInstance().alivePlayers.get(r));
-            else temp = new Player(Data.getInstance().alivePlayers.get(r));
-            Data.getInstance().alivePlayers.set(r, Data.getInstance().alivePlayers.get(i));
-            Data.getInstance().alivePlayers.set(i, temp);
         }
     }
 

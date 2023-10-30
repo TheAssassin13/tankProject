@@ -281,18 +281,18 @@ public class ComponentsCreator {
 
     public static Spinner<Player> createCurrentPlayerShopSpinner() {
         ObservableList<Player> observableArrayList;
-        ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
+        ArrayList<Player> players = Data.getInstance().alivePlayers;
         Spinner<Player> playerSpinner = new Spinner<>();
 
         observableArrayList = FXCollections.observableArrayList(players);
         playerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
 
-        //playerSpinner.getValueFactory().setValue(players.get(0));
+        playerSpinner.getValueFactory().setValue(players.get(0));
         playerSpinner.getStyleClass().add("split-arrows-horizontal");
         playerSpinner.setId("currentPlayerSpinnerShop");
         playerSpinner.setEditable(false);
 
-        //Data.getInstance().currentPlayerShop = players.get(0);
+        Data.getInstance().currentPlayerShop = players.get(0);
 
         playerSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue.name);
