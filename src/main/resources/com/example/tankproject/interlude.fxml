@@ -10,14 +10,16 @@
    <ImageView fx:id="backgroundImage" fitHeight="401.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" />
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
       <VBox fx:id="vbox" alignment="CENTER" spacing="25.0" HBox.hgrow="ALWAYS">
-         <Label fx:id="roundTitle" alignment="CENTER" contentDisplay="CENTER" styleClass="titleMenu" text="ROUND 1" textAlignment="CENTER" wrapText="true">
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Game X">
             <font>
-               <Font name="Arial" size="48.0" />
+               <Font name="Arial" size="80.0" />
             </font>
-            <padding>
-               <Insets bottom="30.0" />
-            </padding>
-         </Label>
+         </Text>
+         <Text fill="WHITE" layoutX="63.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Round y">
+            <font>
+               <Font name="Arial" size="60.0" />
+            </font>
+         </Text>
          <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play Local">
             <font>
                <Font name="Arial Bold" size="12.0" />
@@ -39,12 +41,12 @@
             </font>
          </Button>
       </VBox>
-      <VBox id="optionsMenu" fx:id="containerVBox" alignment="CENTER" spacing="15.0" HBox.hgrow="ALWAYS">
+      <VBox id="optionsMenu" fx:id="containerVBox" alignment="CENTER" fillWidth="false" maxWidth="585.0" HBox.hgrow="ALWAYS">
          <HBox.margin>
-            <Insets right="35.0" />
+            <Insets right="30.0" />
          </HBox.margin>
          <padding>
-            <Insets left="30.0" right="30.0" />
+            <Insets left="25.0" right="25.0" />
          </padding>
       </VBox>
    </HBox>

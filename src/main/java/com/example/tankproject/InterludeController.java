@@ -37,7 +37,7 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(new Tank(Color.WHITE,null)));
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox());
         this.containerVBox.setDisable(true);
         this.containerVBox.setVisible(false);
         this.roundTitle.setText("ROUND " + Data.getInstance().roundNumber);
@@ -62,7 +62,7 @@ public class InterludeController implements Initializable {
             return;
         }
         this.containerVBox.getChildren().clear();
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox(new Tank(null,null)));
+        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox());
         this.containerVBox.setDisable(false);
         this.containerVBox.setVisible(true);
 

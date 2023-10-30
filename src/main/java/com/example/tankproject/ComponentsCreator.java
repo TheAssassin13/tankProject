@@ -1,8 +1,13 @@
 package com.example.tankproject;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -13,6 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ComponentsCreator {
@@ -77,10 +83,7 @@ public class ComponentsCreator {
     // Creates win screen
     public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
         Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
-        StackPane winnerTankBackgroundStackPane = new StackPane();
-        Image winnerTankImage = ImagesLoader.getInstance().winnerTankImage;
-        ImageView winnerTankImageView = new ImageView(winnerTankImage);
-
+        StackPane winnerTankBackgroundStackPane = createCurrentPlayerTankImage(ImagesLoader.getInstance().winnerTankImage);
         VBox backgroundVbox = new VBox();
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -89,10 +92,6 @@ public class ComponentsCreator {
         HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        winnerTankBackgroundStackPane.setAlignment(Pos.CENTER);
-        winnerTankImageView.fitWidthProperty().bind(winnerTankBackgroundStackPane.widthProperty());
-        winnerTankImageView.setPreserveRatio(true);
-        winnerTankBackgroundStackPane.getChildren().add(winnerTankImageView);
 
         victoryText.setFont(primaryFont);
         victoryText.setFill(Color.WHITE);
@@ -192,34 +191,35 @@ public class ComponentsCreator {
         return posY - Constants.WINDOWS_HEIGHT / 2.0;
     }
 
-    public static VBox createShopVBox(Tank currentTank) {
+    public static VBox createShopVBox() {
         VBox shopVBox = new VBox();
         HBox currentTankHBox = new HBox();
-        HBox lightShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(0),"60mm", Constants.AMMO_PRICE[0], currentTank.ammunition.get(0), Constants.AMMO_QUANTITY[0]);
-        HBox mediumShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(1),"80mm", Constants.AMMO_PRICE[1], currentTank.ammunition.get(1), Constants.AMMO_QUANTITY[1]);
-        HBox heavyShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(2),"105mm", Constants.AMMO_PRICE[2], currentTank.ammunition.get(2), Constants.AMMO_QUANTITY[2]);
+        Spinner<Player> playerSpinner = createCurrentPlayerShopSpinner();
+        HBox lightShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(0),"60mm", Constants.AMMO_PRICE[0], Data.getInstance().currentPlayerShop.tank.ammunition.get(0), Constants.AMMO_QUANTITY[0]);
+        HBox mediumShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(1),"80mm", Constants.AMMO_PRICE[1], Data.getInstance().currentPlayerShop.tank.ammunition.get(1), Constants.AMMO_QUANTITY[1]);
+        HBox heavyShotButton = createShotShopButton(ImagesLoader.getInstance().shotImages.get(2),"105mm", Constants.AMMO_PRICE[2], Data.getInstance().currentPlayerShop.tank.ammunition.get(2), Constants.AMMO_QUANTITY[2]);
         Text shopText = new Text("Shop");
-        Spinner<Tank> tankSpinner = new Spinner<>();
-        Text currentTankNameText = new Text();
+        Text currentPlayerNameText = new Text(Data.getInstance().currentPlayerShop.name);
         Button buyAllButton = new Button("Buy all");
-        Text currentTankCreditsText = new Text(String.valueOf(currentTank.credits));
+        Text currentTankCreditsText = new Text(String.valueOf(Data.getInstance().currentPlayerShop.tank.credits));
 
 
         shopText.setFont(subHeaderFont);
         shopText.setFill(Color.WHITE);
-        currentTankCreditsText.setFont(subHeaderFont);
+        currentTankCreditsText.setFont(shopButtonFont);
         currentTankCreditsText.setFill(Color.WHITE);
 
-        tankSpinner.getStyleClass().add("split-arrows-horizontal");
-        tankSpinner.setId("currentTankSpinnerShop");
 
         currentTankHBox.setAlignment(Pos.CENTER);
 
         lightShotButton.getStyleClass().add("buyShotShopButton");
         mediumShotButton.getStyleClass().add("buyShotShopButton");
         heavyShotButton.getStyleClass().add("buyShotShopButton");
+        buyAllButton.setId("buyAllShopButton");
 
-        currentTankHBox.getChildren().add(tankSpinner);
+
+
+        currentTankHBox.getChildren().add(playerSpinner);
         currentTankHBox.getChildren().add(currentTankCreditsText);
 
         shopVBox.setAlignment(Pos.CENTER);
@@ -275,6 +275,48 @@ public class ComponentsCreator {
         shotButtonHBox.getChildren().add(priceCreditsText);
         shotButtonHBox.getChildren().add(amountText);
 
+
         return shotButtonHBox;
+    }
+
+    public static Spinner<Player> createCurrentPlayerShopSpinner() {
+        ObservableList<Player> observableArrayList;
+        ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
+        Spinner<Player> playerSpinner = new Spinner<>();
+
+        observableArrayList = FXCollections.observableArrayList(players);
+        playerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
+
+        //playerSpinner.getValueFactory().setValue(players.get(0));
+        playerSpinner.getStyleClass().add("split-arrows-horizontal");
+        playerSpinner.setId("currentPlayerSpinnerShop");
+        playerSpinner.setEditable(false);
+
+        //Data.getInstance().currentPlayerShop = players.get(0);
+
+        playerSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue.name);
+            Data.getInstance().currentPlayerShop = newValue;
+
+
+        });
+
+
+        return playerSpinner;
+
+    }
+
+    public static StackPane createCurrentPlayerTankImage(Image image) {
+        StackPane currentPlayerTankBackgroundStackPane = new StackPane();
+        ImageView currentPlayerTankImageView = new ImageView(image);
+
+        currentPlayerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
+        currentPlayerTankBackgroundStackPane.setAlignment(Pos.CENTER);
+        currentPlayerTankImageView.fitWidthProperty().bind(currentPlayerTankBackgroundStackPane.widthProperty());
+        currentPlayerTankImageView.setPreserveRatio(true);
+
+        currentPlayerTankBackgroundStackPane.getChildren().add(currentPlayerTankImageView);
+
+        return currentPlayerTankBackgroundStackPane;
     }
 }

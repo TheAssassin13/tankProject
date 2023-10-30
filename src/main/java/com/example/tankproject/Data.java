@@ -9,6 +9,7 @@ public class Data {
     public ArrayList<MysteryBox> mysteryBoxes;
     public int gameNumber;
     public int roundNumber;
+    public Player currentPlayerShop;
     public Terrain terrain;
     public int playersPlayed;
     public int tanksQuantity;
@@ -18,6 +19,7 @@ public class Data {
     private Data() {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
+        this.currentPlayerShop = null;
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 1;
         this.roundNumber = 1;
