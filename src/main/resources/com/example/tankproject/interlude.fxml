@@ -36,13 +36,135 @@
             </font>
          </Button>
       </VBox>
-      <VBox id="optionsMenu" fx:id="containerVBox" alignment="CENTER" fillWidth="false" maxWidth="585.0" HBox.hgrow="ALWAYS">
+      <VBox alignment="CENTER" fillWidth="false" maxWidth="585.0" HBox.hgrow="ALWAYS">
          <HBox.margin>
             <Insets right="30.0" />
          </HBox.margin>
          <padding>
             <Insets left="25.0" right="25.0" />
          </padding>
+         <StackPane VBox.vgrow="ALWAYS">
+            <VBox fx:id="shopVBox" alignment="TOP_CENTER" spacing="15.0" styleClass="menuWindow" StackPane.alignment="CENTER">
+               <padding>
+                  <Insets left="30.0" right="30.0" top="60.0" />
+               </padding>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop">
+                  <font>
+                     <Font name="Arial" size="40.0" />
+                  </font>
+                  <VBox.margin>
+                     <Insets bottom="15.0" />
+                  </VBox.margin>
+               </Text>
+               <HBox alignment="CENTER" spacing="15.0">
+                  <VBox.margin>
+                     <Insets bottom="50.0"/>
+                  </VBox.margin>
+                  <StackPane>
+                     <Spinner id="currentPlayerSpinnerShop" fx:id="currentShopPlayerSpinner"
+                              styleClass="split-arrows-horizontal"/>
+                     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
+                        <StackPane fx:id="currentShopPlayerSpinnerImageStackPane" maxHeight="-Infinity"
+                                   maxWidth="-Infinity">
+                           <ImageView fitHeight="70.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@images/current_tank_image_shop.png"/>
+                           </ImageView>
+                        </StackPane>
+                        <Text fx:id="currentShopPlayerNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0"
+                              text="Text">
+                           <font>
+                              <Font name="Arial" size="24.0"/>
+                           </font>
+                        </Text>
+                     </VBox>
+                  </StackPane>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@icons/tank_money.png"/>
+                  </ImageView>
+                  <Text fx:id="currentShopPlayerCreditsText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0"
+                        text="42.000">
+                     <font>
+                        <Font name="Arial" size="24.0"/>
+                     </font>
+                  </Text>
+               </HBox>
+               <HBox alignment="CENTER" prefHeight="75.0" spacing="15.0" styleClass="buyShotShopButton">
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
+                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@images/light_shot.png" />
+                     </ImageView>
+                  </StackPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="60mm">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@icons/shot_money.png" />
+                  </ImageView>
+                  <Text fx:id="lightAmmoCostText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="1.000">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentShopPlayerLightAmmoText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+               </HBox>
+               <HBox alignment="CENTER" layoutX="40.0" layoutY="228.0" prefHeight="75.0" spacing="15.0" styleClass="buyShotShopButton">
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
+                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@images/medium_shot.png" />
+                     </ImageView>
+                  </StackPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="80mm">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@icons/shot_money.png" />
+                  </ImageView>
+                  <Text fx:id="mediumAmmoCostText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="2.500">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentShopPlayerMediumAmmoText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+               </HBox>
+               <HBox alignment="CENTER" layoutX="40.0" layoutY="265.0" prefHeight="75.0" spacing="15.0" styleClass="buyShotShopButton">
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
+                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@images/heavy_shot.png" />
+                     </ImageView>
+                  </StackPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="105mm">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@icons/shot_money.png" />
+                  </ImageView>
+                  <Text fx:id="heavyAmmoCostText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="4.000">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentShopPlayerHeavyAmmoText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Text>
+               </HBox>
+            </VBox>
+         </StackPane>
       </VBox>
    </HBox>
 </StackPane>

@@ -7,7 +7,7 @@
     -fx-yellow-color: #ffef50;
     -fx-orange-color: #ff9e05;
     -fx-lightRed-color: #94484c;
-    -fx-transparentPurple-color: #310B34ee;
+    -fx-transparentPurple-color: rgba(49, 11, 52, 0.92);
     -fx-purple-color: #310B34;
     -fx-shop-button-color: #622A66;
     -fx-buttonsPanel-color: #19212A;
@@ -38,7 +38,7 @@
     -fx-background-color: -fx-purple-color;
 }
 
-#optionsMenu {
+.menuWindow {
     -fx-background-color: -fx-transparentPurple-color;
     -fx-font-size: 32px;
 }
@@ -242,7 +242,7 @@
 
 #currentPlayerSpinnerShop {
     -fx-pref-height: 70px;
-
+    -fx-pref-width: 200px;
     -fx-background-color: transparent;
 }
 
@@ -348,8 +348,6 @@
     -fx-font-family: Arial;
 }
 
-
-
 #buyAllShopButton:hover {
     -fx-background-color: derive(-fx-shop-button-color,15%);
 }
@@ -358,4 +356,11 @@
     -fx-background-color: derive(-fx-shop-button-color,-15%);
 }
 
+.ammoButtonsShop {
+    -fx-padding: 0px;
+    -fx-background-color: #531A57;
+    -fx-border-color: -fx-white-color;
+    -fx-border-width: 0.5px;
+    -fx-border-radius: 4px;
+}
 

@@ -24,9 +24,9 @@ public class Tank {
         this.angle = null;
         this.power = null;
         this.ammoSelected = null;
-        reloadAmmunition();
         this.health= Constants.TANK_HEALTH;
-        this.credits = 10000;
+        this.credits = Constants.INITIAL_CREDITS;
+        reloadAmmunition();
     }
 
     public void setAngle(double angle) {

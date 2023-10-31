@@ -5,16 +5,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import static com.example.tankproject.App.toHexString;
 
 public class InterludeController implements Initializable {
     public VBox vbox;
@@ -23,9 +23,19 @@ public class InterludeController implements Initializable {
     public StackPane stackpane;
     public ImageView backgroundImage;
     public Button shopButton;
-    public VBox containerVBox;
     public Button scoreboardButton;
     public Button menuButton;
+    public VBox shopVBox;
+    public Spinner<Player> currentShopPlayerSpinner;
+    public StackPane currentShopPlayerSpinnerImageStackPane;
+    public Text currentShopPlayerNameText;
+    public Text currentShopPlayerCreditsText;
+    public Text currentShopPlayerLightAmmoText;
+    public Text currentShopPlayerMediumAmmoText;
+    public Text currentShopPlayerHeavyAmmoText;
+    public Text heavyAmmoCostText;
+    public Text mediumAmmoCostText;
+    public Text lightAmmoCostText;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -34,10 +44,13 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox());
-        this.containerVBox.setDisable(true);
-        this.containerVBox.setVisible(false);
+        this.shopVBox.setDisable(true);
+        this.shopVBox.setVisible(false);
         this.gameNumberText.setText("Game " + Data.getInstance().gameNumber);
+        this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
+        this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
+        this.heavyAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[2]));
+        initializeCurrentPlayerShopSpinner();
     }
 
     // Opens game windows
@@ -53,19 +66,14 @@ public class InterludeController implements Initializable {
 
     // When the options button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
-        if (this.containerVBox.isVisible()) {
-
-            this.containerVBox.setDisable(true);
-            this.containerVBox.setVisible(false);
+        if (this.shopVBox.isVisible()) {
+            this.shopVBox.setDisable(true);
+            this.shopVBox.setVisible(false);
             return;
         }
-        this.containerVBox.getChildren().clear();
-        this.containerVBox.getChildren().addAll(ComponentsCreator.createShopVBox());
-        this.containerVBox.setDisable(false);
-        this.containerVBox.setVisible(true);
-
+        this.shopVBox.setDisable(false);
+        this.shopVBox.setVisible(true);
     }
-
 
     public void onScoreboardButtonClick(ActionEvent ignoredEvent) {
     }
@@ -86,5 +94,35 @@ public class InterludeController implements Initializable {
         for (int i = 0; i < cpuQuantity; i++) {
             Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
         }
+    }
+
+    public void initializeCurrentPlayerShopSpinner() {
+        ObservableList<Player> observableArrayList;
+        ArrayList<Player> players = Data.getInstance().alivePlayers;
+
+        observableArrayList = FXCollections.observableArrayList(players);
+        this.currentShopPlayerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
+
+        this.currentShopPlayerSpinner.getValueFactory().setValue(players.get(0));
+        this.currentShopPlayerSpinner.setEditable(false);
+
+        this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(players.get(0).tank.color) + ";");
+        this.currentShopPlayerNameText.setText(players.get(0).name);
+        this.currentShopPlayerCreditsText.setText(String.valueOf(players.get(0).tank.credits));
+        this.currentShopPlayerLightAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(0)));
+        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(1)));
+        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(2)));
+
+        this.currentShopPlayerSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(newValue.tank.color) + ";");
+            this.currentShopPlayerNameText.setText(newValue.name);
+            this.currentShopPlayerCreditsText.setText(String.valueOf(newValue.tank.credits));
+            this.currentShopPlayerLightAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(0)));
+            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(1)));
+            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(2)));
+        });
+
+
+
     }
 }
