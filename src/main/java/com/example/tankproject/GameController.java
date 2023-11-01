@@ -315,7 +315,7 @@ public class GameController implements Initializable {
    // AnimationTimer responsible for the entire game
     public void gameAnimationTimer(Shot shot, boolean fromTank) {
         shootButton.setDisable(true); //TODO: Temporal fix
-       new AnimationTimer() {
+        new AnimationTimer() {
            @Override
            public void handle(long now) {
                // Makes animation fps constant
