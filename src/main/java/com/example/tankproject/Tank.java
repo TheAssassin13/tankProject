@@ -26,7 +26,8 @@ public class Tank {
         this.ammoSelected = null;
         this.health= Constants.TANK_HEALTH;
         this.credits = Constants.INITIAL_CREDITS;
-        reloadAmmunition();
+        this.ammunition = new ArrayList<>();
+        initializeAmmunition();
     }
 
     public void setAngle(double angle) {
@@ -44,20 +45,27 @@ public class Tank {
     public void setCredits(int credits){
         this.credits = credits;
     }
-    
+
     public int getCredits() {
         return this.credits;
     }
 
-    
+
     public void reduceHealth(int damage) {
         this.health = Math.max(0,this.health - damage);
     }
 
     public void restoreHealth() { this.health = Constants.TANK_HEALTH; }
 
+    public void initializeAmmunition() {
+        this.ammunition.clear();
+        this.ammunition.add(0);
+        this.ammunition.add(0);
+        this.ammunition.add(0);
+    }
+
     public void reloadAmmunition() {
-        this.ammunition = new ArrayList<>();
+        this.ammunition.clear();
         this.ammunition.add(Constants.AMMO_QUANTITY[0]);
         this.ammunition.add(Constants.AMMO_QUANTITY[1]);
         this.ammunition.add(Constants.AMMO_QUANTITY[2]);

@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import static com.example.tankproject.App.setRoot;
 import static com.example.tankproject.App.toHexString;
 
 public class GameController implements Initializable {
@@ -325,6 +324,7 @@ public class GameController implements Initializable {
                    shot.drawTrajectory(gameCanvasGraphicContext);
                    shot.drawShot(gameCanvasGraphicContext);
                    replayButton.setDisable(true);
+                   menuExitButton.setDisable(true);
 
                    // Update tank radar every frame
                    tankRadarUpdate(shot);
@@ -404,8 +404,10 @@ public class GameController implements Initializable {
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
-                    drawingMethods(false);
                     int flag = 0;
+                    drawingMethods(false);
+                    replayButton.setDisable(true);
+                    menuExitButton.setDisable(true);
                     for (MysteryBox box : Data.getInstance().mysteryBoxes) {
                         // Drags down the box 1 pixel per frame
                         if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Constants.CANVAS_HEIGHT &&
@@ -415,7 +417,11 @@ public class GameController implements Initializable {
                         }
                     }
                     ammunitionPanelControl();
-                    if (flag == 0) stop();
+                    if (flag == 0)  {
+                        replayButton.setDisable(false);
+                        menuExitButton.setDisable(false);
+                        stop();
+                    }
                 }
             }
         }.start();
@@ -543,6 +549,7 @@ public class GameController implements Initializable {
         drawingMethods(true);
         shootButton.setDisable(false);
         replayButton.setDisable(false);
+        menuExitButton.setDisable(false);
         ammunitionPanelControl();
         // Saves last angle and power
         if (this.turn.tank.power != null || this.turn.tank.getAngle() != null) {

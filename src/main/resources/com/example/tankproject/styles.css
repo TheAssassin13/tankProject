@@ -320,11 +320,10 @@
 .buyShotShopButton {
     -fx-background-color: -fx-shop-button-color;
     -fx-background-radius: 4px;
-    -fx-min-width: 450px;
-    -fx-pref-width: 525px;
+    -fx-min-width: 415px;
+    -fx-pref-width: 500px;
     -fx-max-width: -fx-pref-width;
-    -fx-padding: 0 10px 0 10px;
-
+    -fx-padding: 0 25px 0 25px;
 }
 
 .buyShotShopButton:hover {
@@ -332,27 +331,6 @@
 }
 
 .buyShotShopButton:pressed {
-    -fx-background-color: derive(-fx-shop-button-color,-15%);
-}
-
-#buyAllShopButton {
-    -fx-background-color: -fx-shop-button-color;
-    -fx-text-fill: white;
-    -fx-background-radius: 4px;
-    -fx-padding: 0;
-    -fx-pref-width: 140px;
-    -fx-max-width: -fx-pref-width;
-    -fx-pref-height: 50px;
-    -fx-max-height: -fx-pref-height;
-    -fx-font-size: 20px;
-    -fx-font-family: Arial;
-}
-
-#buyAllShopButton:hover {
-    -fx-background-color: derive(-fx-shop-button-color,15%);
-}
-
-#buyAllShopButton:pressed {
     -fx-background-color: derive(-fx-shop-button-color,-15%);
 }
 
@@ -364,3 +342,6 @@
     -fx-border-radius: 4px;
 }
 
+#interludeBackground {
+    -fx-background-color: #2D1929;
+}

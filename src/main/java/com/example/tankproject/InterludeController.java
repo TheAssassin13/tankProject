@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -36,11 +37,13 @@ public class InterludeController implements Initializable {
     public Text heavyAmmoCostText;
     public Text mediumAmmoCostText;
     public Text lightAmmoCostText;
+    public Shop shop;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (Data.getInstance().gameNumber == 1) Data.getInstance().reset();
         createPlayers();
+        this.shop = new Shop();
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
@@ -96,33 +99,50 @@ public class InterludeController implements Initializable {
         }
     }
 
+    // Initializes the current shop player spinner
     public void initializeCurrentPlayerShopSpinner() {
         ObservableList<Player> observableArrayList;
         ArrayList<Player> players = Data.getInstance().alivePlayers;
-
         observableArrayList = FXCollections.observableArrayList(players);
-        this.currentShopPlayerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
 
+        this.currentShopPlayerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
         this.currentShopPlayerSpinner.getValueFactory().setValue(players.get(0));
         this.currentShopPlayerSpinner.setEditable(false);
 
-        this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(players.get(0).tank.color) + ";");
-        this.currentShopPlayerNameText.setText(players.get(0).name);
-        this.currentShopPlayerCreditsText.setText(String.valueOf(players.get(0).tank.credits));
-        this.currentShopPlayerLightAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(0)));
-        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(1)));
-        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(players.get(0).tank.ammunition.get(2)));
+        updateShopValues(players.get(0));
 
-        this.currentShopPlayerSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(newValue.tank.color) + ";");
-            this.currentShopPlayerNameText.setText(newValue.name);
-            this.currentShopPlayerCreditsText.setText(String.valueOf(newValue.tank.credits));
-            this.currentShopPlayerLightAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(0)));
-            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(1)));
-            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(newValue.tank.ammunition.get(2)));
-        });
+        // Updates shop text values when another player is selected in spinner
+        this.currentShopPlayerSpinner.valueProperty().addListener((observable, oldPlayer, newPlayer) -> updateShopValues(newPlayer));
+    }
 
+    // Updates all shop text values with player values
+    public void updateShopValues(Player p) {
+        this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(p.tank.color) + ";");
+        this.currentShopPlayerNameText.setText(p.name);
+        this.currentShopPlayerCreditsText.setText(String.valueOf(p.tank.credits));
+        this.currentShopPlayerLightAmmoText.setText(String.valueOf(p.tank.ammunition.get(0)));
+        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(p.tank.ammunition.get(1)));
+        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.ammunition.get(2)));
+    }
 
+    // Buys one unit of light ammo when user clicks the button and updates shop text values related
+    public void onShopLightAmmoButtonClick(MouseEvent ignoredMouseEvent) {
+        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0]);
+        this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
+        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+    }
 
+    // Buys one unit of medium ammo when user clicks the button and updates shop text values related
+    public void onShopMediumAmmoButtonClick(MouseEvent ignoredMouseEvent) {
+        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1]);
+        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
+        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+    }
+
+    // Buys one unit of heavy ammo when user clicks the button and updates shop text values related
+    public void onShopHeavyAmmoButtonClick(MouseEvent ignoredMouseEvent) {
+        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2]);
+        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
+        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 }
