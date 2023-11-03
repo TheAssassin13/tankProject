@@ -81,7 +81,7 @@
                      </font>
                   </Text>
                </HBox>
-               <HBox alignment="CENTER_LEFT" onMouseClicked="#onShopLightAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
+               <HBox fx:id="shopLightAmmoHBox" alignment="CENTER_LEFT" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
                      <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/light_shot.png" />
@@ -112,7 +112,7 @@
                      </font>
                   </Text>
                </HBox>
-               <HBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="228.0" onMouseClicked="#onShopMediumAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
+               <HBox fx:id="shopMediumAmmoHBox" alignment="CENTER_LEFT" layoutX="40.0" layoutY="228.0" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
                      <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/medium_shot.png" />
@@ -143,7 +143,7 @@
                      </font>
                   </Text>
                </HBox>
-               <HBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="265.0" onMouseClicked="#onShopHeavyAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
+               <HBox fx:id="shopHeavyAmmoHBox" alignment="CENTER_LEFT" layoutX="40.0" layoutY="265.0" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
                      <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/heavy_shot.png" />

@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -38,6 +39,9 @@ public class InterludeController implements Initializable {
     public Text mediumAmmoCostText;
     public Text lightAmmoCostText;
     public Shop shop;
+    public HBox shopLightAmmoHBox;
+    public HBox shopMediumAmmoHBox;
+    public HBox shopHeavyAmmoHBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,6 +49,7 @@ public class InterludeController implements Initializable {
             Data.getInstance().reset();
             createPlayers();
         } else loadPlayers();
+
         this.shop = new Shop();
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
@@ -113,9 +118,21 @@ public class InterludeController implements Initializable {
     // Initializes the current shop player spinner
     public void initializeCurrentPlayerShopSpinner() {
         ObservableList<Player> observableArrayList;
-        ArrayList<Player> players = Data.getInstance().alivePlayers;
-        observableArrayList = FXCollections.observableArrayList(players);
+        ArrayList<Player> players = new ArrayList<>();
 
+        for (Player p: Data.getInstance().alivePlayers) {
+            if (!(p instanceof CPU)) {
+                players.add(p);
+            }
+        }
+        
+        for (Player p: Data.getInstance().deadPlayers) {
+            if (!(p instanceof CPU)) {
+                players.add(p);
+            }
+        }
+
+        observableArrayList = FXCollections.observableArrayList(players);
         this.currentShopPlayerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
         this.currentShopPlayerSpinner.getValueFactory().setValue(players.get(0));
         this.currentShopPlayerSpinner.setEditable(false);
@@ -136,24 +153,24 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.ammunition.get(2)));
     }
 
-    // Buys one unit of light ammo when user clicks the button and updates shop text values related
-    public void onShopLightAmmoButtonClick(MouseEvent ignoredMouseEvent) {
-        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0]);
-        this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
-        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
-    }
+    // Buys one unit of selected ammo when user clicks the button and updates shop text values related
+    public void onShopAmmoButtonClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getSource() == this.shopLightAmmoHBox) {
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0]);
+            this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
+            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+        }
+        
+        if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1]);
+            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
+            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+        }
 
-    // Buys one unit of medium ammo when user clicks the button and updates shop text values related
-    public void onShopMediumAmmoButtonClick(MouseEvent ignoredMouseEvent) {
-        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1]);
-        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
-        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
-    }
-
-    // Buys one unit of heavy ammo when user clicks the button and updates shop text values related
-    public void onShopHeavyAmmoButtonClick(MouseEvent ignoredMouseEvent) {
-        this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2]);
-        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
-        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+        if (mouseEvent.getSource() == this.shopHeavyAmmoHBox) {
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2]);
+            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
+            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+        }
     }
 }
