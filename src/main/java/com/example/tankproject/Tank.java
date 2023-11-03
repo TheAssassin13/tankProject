@@ -50,6 +50,10 @@ public class Tank {
         return this.credits;
     }
 
+    public int getAmmunitionQuantity() {
+        return this.ammunition.get(0) + this.ammunition.get(1) + this.ammunition.get(2);
+    }
+
 
     public void reduceHealth(int damage) {
         this.health = Math.max(0,this.health - damage);
@@ -62,13 +66,6 @@ public class Tank {
         this.ammunition.add(0);
         this.ammunition.add(0);
         this.ammunition.add(0);
-    }
-
-    public void reloadAmmunition() {
-        this.ammunition.clear();
-        this.ammunition.add(Constants.AMMO_QUANTITY[0]);
-        this.ammunition.add(Constants.AMMO_QUANTITY[1]);
-        this.ammunition.add(Constants.AMMO_QUANTITY[2]);
     }
 
     public void setAmmoSelected(ToggleButton ammoSelected) {

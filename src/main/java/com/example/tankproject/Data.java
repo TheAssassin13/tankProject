@@ -20,8 +20,8 @@ public class Data {
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 1;
         this.playersPlayed = 0;
-        this.playableTanksQuantity = 1;
-        this.cpuTanksQuantity = 1;
+        this.playableTanksQuantity = 2;
+        this.cpuTanksQuantity = 0;
         this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
     }
 

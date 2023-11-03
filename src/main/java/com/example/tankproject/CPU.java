@@ -52,7 +52,7 @@ public class CPU extends Player{
         }
 
         // Shot type random selection
-        while (true) {
+        while (this.tank.getAmmunitionQuantity() > 0) {
             int shotType = random.nextInt(3);
             if (shotType == 0 && this.tank.ammunition.get(0) > 0) {
                 lightShot.fire();

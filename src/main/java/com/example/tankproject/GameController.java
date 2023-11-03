@@ -116,6 +116,7 @@ public class GameController implements Initializable {
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
         this.turn = Data.getInstance().alivePlayers.get(0);
+        changeTurn();
         buttonsPanelInitialize();
         tankRadarInitialize();
         calculateMax(new Shot(new Point(0,0),0,0),this.turn.tank);
@@ -143,7 +144,12 @@ public class GameController implements Initializable {
                 disableWinScreen();
             }
             music.stop();
-            gameInitialize();
+            Data.getInstance().reset();
+            try {
+                App.setRoot("interlude");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -452,7 +458,6 @@ public class GameController implements Initializable {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
             this.healthRemainingHUD.showHUD(this.turn.tank);
-            turn.tank.reloadAmmunition();
         } else if (box.powerUp == 1) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
@@ -572,7 +577,6 @@ public class GameController implements Initializable {
         this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / "  + Constants.TANK_HEALTH);
         this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        Data.getInstance().playersPlayed++;
         if (Data.getInstance().playersPlayed == Data.getInstance().tanksQuantity) {
             Data.getInstance().playersPlayed = 0;
             Collections.shuffle(Data.getInstance().alivePlayers);
@@ -591,9 +595,25 @@ public class GameController implements Initializable {
                 } else {
                     this.turn = Data.getInstance().alivePlayers.get(0);
                 }
+                Data.getInstance().playersPlayed++;
                 break;
             }
         }
+
+        if (tie()) { // TODO: IT'S A DRAW
+            System.out.println("IT'S A DRAW");
+            return;
+        }
+        if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
+    }
+
+    // This method verifies all players have ammunition available
+    public boolean tie() {
+        boolean onePlayerHasAmmo = false;
+        for (Player player : Data.getInstance().alivePlayers) {
+            onePlayerHasAmmo |= player.tank.getAmmunitionQuantity() > 0;
+        }
+        return !onePlayerHasAmmo;
     }
 
     // Creates the game win screen

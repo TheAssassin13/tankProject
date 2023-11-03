@@ -41,14 +41,16 @@ public class InterludeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (Data.getInstance().gameNumber == 1) Data.getInstance().reset();
-        createPlayers();
+        if (Data.getInstance().gameNumber == 1) {
+            Data.getInstance().reset();
+            createPlayers();
+        } else loadPlayers();
         this.shop = new Shop();
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.shopVBox.setDisable(true);
-        this.shopVBox.setVisible(false);
+        this.shopVBox.setDisable(false);
+        this.shopVBox.setVisible(true);
         this.gameNumberText.setText("Game " + Data.getInstance().gameNumber);
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
@@ -81,22 +83,31 @@ public class InterludeController implements Initializable {
     public void onScoreboardButtonClick(ActionEvent ignoredEvent) {
     }
 
-    // This method loads the players and saves them into the alivePlayers arrayList
+    // This method creates the players and saves them into the alivePlayers arrayList
     public void createPlayers() {
         Data.getInstance().alivePlayers = new ArrayList<>();
         Data.getInstance().deadPlayers = new ArrayList<>();
         int playersQuantity = Data.getInstance().playableTanksQuantity;
         int cpuQuantity = Data.getInstance().cpuTanksQuantity;
 
-        // It loads the playable players
+        // It creates the playable players
         for (int i = 0; i < playersQuantity; i++) {
             Data.getInstance().alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
 
-        // It loads the CPU players
+        // It creates the CPU players
         for (int i = 0; i < cpuQuantity; i++) {
             Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
         }
+    }
+
+    // This method loads the players, and brings the dead players to the alivePlayers arrayList
+    public void loadPlayers() {
+        for (Player player : Data.getInstance().deadPlayers) {
+            Data.getInstance().alivePlayers.add(player);
+            player.tank.restoreHealth();
+        }
+        Data.getInstance().deadPlayers = new ArrayList<>();
     }
 
     // Initializes the current shop player spinner
