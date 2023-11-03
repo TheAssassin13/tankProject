@@ -27,9 +27,9 @@ public class Constants {
     public final static int[] AMMO_DAMAGE= {30, 40, 50}; // Light, medium and heavy
     public final static int[] AMMO_PRICE = {1000, 2500, 4000}; // Light, medium and heavy
     public final static int INITIAL_CREDITS = 10000;
+    public final static int CREDITS_FOR_DESTROYING_TANKS = 5000;
     public final static int TANK_HEALTH = 100;
     public final static int TERRAIN_MARGIN = 50;
-    public static boolean CPU;
     public static int CPU_DIFFICULTY = 2;
     public static double MUSIC_VOLUME = 1;
     public static double SFX_VOLUME = 1;
