@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -29,27 +28,33 @@ public class MenuController implements Initializable {
     public StackPane stackpane;
     public ImageView backgroundImage;
     public Button optionsButton;
-    public VBox optionsMenu;
+    public VBox appOptionsVBox;
     public Media backgroundMusic;
     public MediaPlayer mediaPlayer;
     public HashMap<String, Integer> resolutionsHashMap;
     public ArrayList<String> resolutionsString;
     public Spinner<String> resolutionSpinner;
-    public Spinner<Integer> tanksQuantitySpinner;
+    public Spinner<Integer> playersQuantitySpinner;
     public Slider sfxVolumeSlider;
     public Slider musicVolumeSlider;
     public ToggleButton easyButton;
     public ToggleButton mediumButton;
     public ToggleButton hardButton;
     public ToggleGroup CPUDifficultyButtons;
+    public VBox gameOptionsVBox;
+    public VBox optionsVBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(0));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.optionsMenu.setDisable(true);
-        this.optionsMenu.setVisible(false);
+        this.optionsVBox.setDisable(true);
+        this.optionsVBox.setVisible(false);
+        this.appOptionsVBox.setDisable(true);
+        this.appOptionsVBox.setVisible(false);
+        this.gameOptionsVBox.setDisable(false);
+        this.gameOptionsVBox.setVisible(true);
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm());
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -74,31 +79,20 @@ public class MenuController implements Initializable {
 
     // When the options button is clicked, the options menu appears or disappears
     public void onOptionsButtonClick(ActionEvent ignoredActionEvent) {
-        if (this.optionsMenu.isVisible()) {
-            this.optionsMenu.setDisable(true);
-            this.optionsMenu.setVisible(false);
+        if (this.optionsVBox.isVisible()) {
+            this.optionsVBox.setDisable(true);
+            this.optionsVBox.setVisible(false);
             return;
         }
-        this.optionsMenu.setDisable(false);
-        this.optionsMenu.setVisible(true);
-        SpinnerValueFactory<Integer> valueFactory = tanksQuantitySpinner.getValueFactory();
-        valueFactory.setValue(Data.getInstance().tanksQuantity);
-        this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
-        this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
-        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
-        if (Constants.CPU_DIFFICULTY == 1) {
-            this.CPUDifficultyButtons.selectToggle(easyButton);
-        } else if (Constants.CPU_DIFFICULTY == 2) {
-            this.CPUDifficultyButtons.selectToggle(mediumButton);
-        } else if (Constants.CPU_DIFFICULTY == 3) {
-            this.CPUDifficultyButtons.selectToggle(hardButton);
-        }
+        this.optionsVBox.setDisable(false);
+        this.optionsVBox.setVisible(true);
+
     }
 
-    // Saves user changes in the options menu and applies them
-    public void onSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
-        this.optionsMenu.setDisable(true);
-        this.optionsMenu.setVisible(false);
+    // Saves user changes in the app options menu and applies them
+    public void onAppSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
+        this.optionsVBox.setDisable(true);
+        this.optionsVBox.setVisible(false);
 
         // User changed screen resolution
         if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_HEIGHT || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_WIDTH) {
@@ -152,5 +146,38 @@ public class MenuController implements Initializable {
                 this.CPUDifficultyButtons.selectToggle(oldToggle);
             }
         });
+    }
+
+    // When the game options button is clicked, the game options are displayed
+    public void onGameOptionsButtonClick(ActionEvent ignoredEvent) {
+        this.gameOptionsVBox.setDisable(false);
+        this.gameOptionsVBox.setVisible(true);
+        this.appOptionsVBox.setDisable(true);
+        this.appOptionsVBox.setVisible(false);
+
+        SpinnerValueFactory<Integer> valueFactory = playersQuantitySpinner.getValueFactory();
+        valueFactory.setValue(Data.getInstance().tanksQuantity);
+
+        if (Constants.CPU_DIFFICULTY == 1) {
+            this.CPUDifficultyButtons.selectToggle(easyButton);
+        } else if (Constants.CPU_DIFFICULTY == 2) {
+            this.CPUDifficultyButtons.selectToggle(mediumButton);
+        } else if (Constants.CPU_DIFFICULTY == 3) {
+            this.CPUDifficultyButtons.selectToggle(hardButton);
+        }
+
+    }
+
+    // When the app options button is clicked, the app options are displayed
+    public void onAppOptionsButtonClick(ActionEvent ignoredEvent) {
+        this.appOptionsVBox.setDisable(false);
+        this.appOptionsVBox.setVisible(true);
+        this.gameOptionsVBox.setDisable(true);
+        this.gameOptionsVBox.setVisible(false);
+
+        this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
+        this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
+        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
+
     }
 }

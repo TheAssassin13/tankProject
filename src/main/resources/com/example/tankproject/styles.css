@@ -191,12 +191,12 @@
     -fx-background-color: -fx-lightRed-color;
 }
 
-#tanksQuantitySpinner  {
+#quantitySpinner  {
     -fx-pref-width: 100px;
     -fx-background-color: transparent;
 }
 
-#tanksQuantitySpinner .text-field {
+#quantitySpinner .text-field {
     -fx-pref-height: 35px;
     -fx-padding: 0 5px 0 5px;
     -fx-alignment: center;
@@ -204,7 +204,7 @@
     -fx-text-fill: white;
 }
 
-#tanksQuantitySpinner .increment-arrow-button, .decrement-arrow-button {
+#quantitySpinner .increment-arrow-button, .decrement-arrow-button {
     -fx-padding: 0 8px 0 8px;
     -fx-background-radius: 4px;
     -fx-background-repeat: no-repeat;
@@ -212,31 +212,31 @@
     -fx-background-position: center;
 }
 
-#tanksQuantitySpinner .increment-arrow-button {
+#quantitySpinner .increment-arrow-button {
     -fx-background-image: url("icons/arrow_right_icon.png");
     -fx-background-color: transparent;
 
 }
 
-#tanksQuantitySpinner .decrement-arrow-button {
+#quantitySpinner .decrement-arrow-button {
     -fx-background-image: url("icons/arrow_left_icon.png");
     -fx-background-color: transparent;
 
 }
 
-#tanksQuantitySpinner .increment-arrow {
+#quantitySpinner .increment-arrow {
     -fx-background-color: transparent;
 }
 
-#tanksQuantitySpinner .decrement-arrow {
+#quantitySpinner .decrement-arrow {
     -fx-background-color: transparent;
 }
 
-#tanksQuantitySpinner .increment-arrow-button:hover {
+#quantitySpinner .increment-arrow-button:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
-#tanksQuantitySpinner .decrement-arrow-button:hover {
+#quantitySpinner .decrement-arrow-button:hover {
     -fx-background-color: -fx-lightRed-color;
 }
 
@@ -297,7 +297,6 @@
 
 }
 
-
 .difficultyButtons {
     -fx-max-width: 100px;
     -fx-pref-height: 30px;
@@ -344,4 +343,57 @@
 
 #interludeBackground {
     -fx-background-color: #2D1929;
+}
+
+#gravityAmountSpinner {
+    -fx-pref-width: 450px;
+}
+
+#gravityAmountSpinner  {
+    -fx-pref-width: 120px;
+    -fx-background-color: transparent;
+}
+
+#gravityAmountSpinner .text-field {
+    -fx-pref-height: 35px;
+    -fx-padding: 0 5px 0 5px;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+#gravityAmountSpinner .increment-arrow-button, .decrement-arrow-button {
+    -fx-padding: 0 8px 0 8px;
+    -fx-background-radius: 4px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px 35px;
+    -fx-background-position: center;
+}
+
+#gravityAmountSpinner .increment-arrow-button {
+    -fx-background-image: url("icons/arrow_right_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#gravityAmountSpinner .decrement-arrow-button {
+    -fx-background-image: url("icons/arrow_left_icon.png");
+    -fx-background-color: transparent;
+
+}
+
+#gravityAmountSpinner .increment-arrow {
+    -fx-background-color: transparent;
+}
+
+#gravityAmountSpinner .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+#gravityAmountSpinner .increment-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
+}
+
+#gravityAmountSpinner .decrement-arrow-button:hover {
+    -fx-background-color: -fx-lightRed-color;
 }
