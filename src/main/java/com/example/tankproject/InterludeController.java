@@ -45,12 +45,12 @@ public class InterludeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.shop = new Shop();
         if (Data.getInstance().gameNumber == 1) {
             Data.getInstance().reset();
             createPlayers();
         } else loadPlayers();
 
-        this.shop = new Shop();
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
@@ -103,6 +103,8 @@ public class InterludeController implements Initializable {
         // It creates the CPU players
         for (int i = 0; i < cpuQuantity; i++) {
             Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
+            // The CPU buys the ammo needed
+            CPUBuysAmmo(((CPU) Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)));
         }
     }
 
@@ -113,6 +115,19 @@ public class InterludeController implements Initializable {
             player.tank.restoreHealth();
         }
         Data.getInstance().deadPlayers = new ArrayList<>();
+
+        // It looks for all the CPU, so they can buy the ammo needed
+        for (Player player : Data.getInstance().alivePlayers) {
+            if (player instanceof CPU) CPUBuysAmmo((CPU) player);
+        }
+    }
+
+    // It buys the ammo for the CPU
+    public void CPUBuysAmmo(CPU cpu) {
+        int[] ammo = cpu.getAmmoToBuy();
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[0], ammo[0]);
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[1], ammo[1]);
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[2], ammo[2]);
     }
 
     // Initializes the current shop player spinner
@@ -156,21 +171,19 @@ public class InterludeController implements Initializable {
     // Buys one unit of selected ammo when user clicks the button and updates shop text values related
     public void onShopAmmoButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == this.shopLightAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0]);
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1);
             this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
-            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
         }
         
         if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1]);
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1);
             this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
-            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
         }
 
         if (mouseEvent.getSource() == this.shopHeavyAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2]);
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2], 1);
             this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
-            this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
         }
+        this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 }

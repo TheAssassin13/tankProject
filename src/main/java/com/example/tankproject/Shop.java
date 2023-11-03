@@ -6,9 +6,9 @@ public class Shop {
     int heavyammunitionprice;
 
     public Shop(){
-        this.lightammunitionprice = 1000;
-        this.mediumammunitionprice = 2500;
-        this.heavyammunitionprice = 4000;
+        this.lightammunitionprice = Constants.AMMO_PRICE[0];
+        this.mediumammunitionprice = Constants.AMMO_PRICE[1];
+        this.heavyammunitionprice = Constants.AMMO_PRICE[2];
     }
     
     /*
@@ -45,23 +45,23 @@ public class Shop {
         }
     }*/
 
-    public void BuyBullet(Player p, int price){
+    public void BuyBullet(Player p, int price, int quantity){
         int SaveAmmo;
         if(p.tank.getCredits() >= price){
             if(price == this.lightammunitionprice){
                 SaveAmmo = p.tank.ammunition.get(0);
-                p.tank.ammunition.set(0, SaveAmmo + 1);
+                p.tank.ammunition.set(0, SaveAmmo + quantity);
                 ReduceCredits(p, this.lightammunitionprice);
         }
             else if(price == this.mediumammunitionprice){
                 SaveAmmo = p.tank.ammunition.get(1);
-                p.tank.ammunition.set(1,SaveAmmo + 1);
+                p.tank.ammunition.set(1,SaveAmmo + quantity);
                 ReduceCredits(p, this.mediumammunitionprice);
         }
             else{
                 SaveAmmo = p.tank.ammunition.get(2);
-                p.tank.ammunition.set(2,SaveAmmo + 1);
-                ReduceCredits(p, this.heavyammunitionprice);
+                p.tank.ammunition.set(2,SaveAmmo + quantity);
+                ReduceCredits(p, this.heavyammunitionprice * quantity);
         }
     }
 }

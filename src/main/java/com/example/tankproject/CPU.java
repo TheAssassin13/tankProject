@@ -5,6 +5,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class CPU extends Player{
@@ -87,5 +88,21 @@ public class CPU extends Player{
         do {
             this.target = Data.getInstance().alivePlayers.get(random.nextInt(Data.getInstance().tanksQuantity)).tank.position;
         } while(this.target == this.tank.position);
+    }
+
+    // This method returns an array with the amount of ammo it wants
+    public int[] getAmmoToBuy() {
+        Random random = new Random();
+        int creditsToUse = this.tank.credits; // Credits to simulate the purchase
+        int[] ammo = {0, 0, 0};
+
+        while (creditsToUse >= Constants.AMMO_PRICE[0]) {
+            int shotType = random.nextInt(3);
+            if (creditsToUse >= Constants.AMMO_PRICE[shotType]) {
+                creditsToUse -= Constants.AMMO_PRICE[shotType];
+                ammo[shotType]++;
+            }
+        }
+        return ammo;
     }
 }
