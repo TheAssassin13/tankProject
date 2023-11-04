@@ -20,13 +20,21 @@ public class Data {
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 1;
         this.playersPlayed = 0;
-        this.playableTanksQuantity = 1;
-        this.cpuTanksQuantity = 1;
+        this.playableTanksQuantity = 2;
+        this.cpuTanksQuantity = 0;
         this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
     }
 
+    public void updatesTanksQuantity(int playableTanks, int cpuTanks) {
+        this.playableTanksQuantity = playableTanks;
+        this.cpuTanksQuantity = cpuTanks;
+        this.tanksQuantity = playableTanks + cpuTanks;
+    }
+
     public void reset() {
-        instance = new Data();
+        this.mysteryBoxes = new ArrayList<>();
+        this.gameNumber = 1;
+        this.playersPlayed = 0;
     }
 
     public static synchronized Data getInstance() {

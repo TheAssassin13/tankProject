@@ -43,6 +43,7 @@ public class MenuController implements Initializable {
     public ToggleGroup CPUDifficultyButtons;
     public VBox gameOptionsVBox;
     public VBox optionsVBox;
+    public Spinner<Integer> CPUQuantitySpinner;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,9 +85,10 @@ public class MenuController implements Initializable {
             this.optionsVBox.setVisible(false);
             return;
         }
+
+        onGameOptionsButtonClick(new ActionEvent());
         this.optionsVBox.setDisable(false);
         this.optionsVBox.setVisible(true);
-
     }
 
     // Saves user changes in the app options menu and applies them
@@ -106,6 +108,8 @@ public class MenuController implements Initializable {
         if (easyButton.isSelected()) Constants.CPU_DIFFICULTY = 1;
         else if (mediumButton.isSelected()) Constants.CPU_DIFFICULTY = 2;
         else if (hardButton.isSelected()) Constants.CPU_DIFFICULTY = 3;
+
+        Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap
@@ -155,8 +159,8 @@ public class MenuController implements Initializable {
         this.appOptionsVBox.setDisable(true);
         this.appOptionsVBox.setVisible(false);
 
-        SpinnerValueFactory<Integer> valueFactory = playersQuantitySpinner.getValueFactory();
-        valueFactory.setValue(Data.getInstance().tanksQuantity);
+        playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
+        CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
 
         if (Constants.CPU_DIFFICULTY == 1) {
             this.CPUDifficultyButtons.selectToggle(easyButton);
@@ -165,7 +169,6 @@ public class MenuController implements Initializable {
         } else if (Constants.CPU_DIFFICULTY == 3) {
             this.CPUDifficultyButtons.selectToggle(hardButton);
         }
-
     }
 
     // When the app options button is clicked, the app options are displayed
@@ -179,5 +182,17 @@ public class MenuController implements Initializable {
         this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
         this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
 
+    }
+
+    public void onPlayerSpinnerClick(MouseEvent mouseEvent) {
+        int min = Math.max(0, 2 - playersQuantitySpinner.getValue());
+        int max = 10 - playersQuantitySpinner.getValue();
+        CPUQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, CPUQuantitySpinner.getValue())));
+    }
+
+    public void onCPUSpinnerClick(MouseEvent mouseEvent) {
+        int min = Math.max(0, 2 - CPUQuantitySpinner.getValue());
+        int max = 10 - CPUQuantitySpinner.getValue();
+        playersQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, playersQuantitySpinner.getValue())));
     }
 }

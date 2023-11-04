@@ -51,12 +51,12 @@ public class Shop {
             if(price == this.lightammunitionprice){
                 SaveAmmo = p.tank.ammunition.get(0);
                 p.tank.ammunition.set(0, SaveAmmo + quantity);
-                ReduceCredits(p, this.lightammunitionprice);
+                ReduceCredits(p, this.lightammunitionprice * quantity);
         }
             else if(price == this.mediumammunitionprice){
                 SaveAmmo = p.tank.ammunition.get(1);
                 p.tank.ammunition.set(1,SaveAmmo + quantity);
-                ReduceCredits(p, this.mediumammunitionprice);
+                ReduceCredits(p, this.mediumammunitionprice * quantity);
         }
             else{
                 SaveAmmo = p.tank.ammunition.get(2);

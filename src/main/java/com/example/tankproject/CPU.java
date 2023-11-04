@@ -86,7 +86,7 @@ public class CPU extends Player{
 
         // It chooses a random target that isn't itself
         do {
-            this.target = Data.getInstance().alivePlayers.get(random.nextInt(Data.getInstance().tanksQuantity)).tank.position;
+            this.target = Data.getInstance().alivePlayers.get(random.nextInt(Data.getInstance().alivePlayers.size())).tank.position;
         } while(this.target == this.tank.position);
     }
 

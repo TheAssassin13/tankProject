@@ -601,8 +601,12 @@ public class GameController implements Initializable {
             }
         }
 
-        if (tie()) { // TODO: IT'S A DRAW
-            System.out.println("IT'S A DRAW");
+        if (tie()) {
+            try {
+                App.setRoot("interlude");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             return;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();

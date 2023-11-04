@@ -54,13 +54,18 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
         this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
-        this.shopVBox.setDisable(false);
-        this.shopVBox.setVisible(true);
         this.gameNumberText.setText("Game " + Data.getInstance().gameNumber);
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
         this.heavyAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[2]));
-        initializeCurrentPlayerShopSpinner();
+        if (Data.getInstance().playableTanksQuantity > 0) {
+            this.shopVBox.setDisable(false);
+            this.shopVBox.setVisible(true);
+            initializeCurrentPlayerShopSpinner();
+        } else {
+            this.shopVBox.setDisable(true);
+            this.shopVBox.setVisible(false);
+        }
     }
 
     // Opens game windows
@@ -76,6 +81,7 @@ public class InterludeController implements Initializable {
 
     // When the options button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
+        if (Data.getInstance().playableTanksQuantity < 1) return;
         if (this.shopVBox.isVisible()) {
             this.shopVBox.setDisable(true);
             this.shopVBox.setVisible(false);
