@@ -124,6 +124,7 @@ public class MenuController implements Initializable {
 
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
+        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
     }
 
     // Sets the sfx game volume and play a sound for reference
@@ -184,13 +185,13 @@ public class MenuController implements Initializable {
 
     }
 
-    public void onPlayerSpinnerClick(MouseEvent mouseEvent) {
+    public void onPlayerSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - playersQuantitySpinner.getValue());
         int max = 10 - playersQuantitySpinner.getValue();
         CPUQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, CPUQuantitySpinner.getValue())));
     }
 
-    public void onCPUSpinnerClick(MouseEvent mouseEvent) {
+    public void onCPUSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - CPUQuantitySpinner.getValue());
         int max = 10 - CPUQuantitySpinner.getValue();
         playersQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, playersQuantitySpinner.getValue())));

@@ -45,17 +45,44 @@
                     <font>
                         <Font name="Arial" size="18.0" />
                     </font>
+               <VBox.margin>
+                  <Insets bottom="8.0" />
+               </VBox.margin>
                 </Text>
-                <HBox alignment="CENTER" fillHeight="false" spacing="5.0">
+                <HBox alignment="CENTER" fillHeight="false" spacing="4.0">
                     <Text fx:id="currentTankHealth" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
                         <font>
                             <Font name="Arial" size="18.0" />
                         </font>
                     </Text>
-                    <ImageView fx:id="currentTankHealthIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                    <ImageView fx:id="currentTankHealthIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox.margin>
+                     <Insets right="15.0" />
+                  </HBox.margin></ImageView>
+               <Text fx:id="currentTankKills" fill="WHITE" layoutX="95.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <font>
+                     <Font name="Arial" size="18.0" />
+                  </font>
+               </Text>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="100.0" layoutY="10.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <HBox.margin>
+                            <Insets right="15.0"/>
+                        </HBox.margin>
+                        <Image url="@icons/kills_icon.png"/>
+                    </ImageView>
+               <Text fx:id="currentTankCredits" fill="WHITE" layoutX="113.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <font>
+                     <Font name="Arial" size="18.0" />
+                  </font>
+               </Text>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="118.0" layoutY="10.0" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@icons/tank_money.png"/>
+                    </ImageView>
                 </HBox>
             <padding>
-               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
             </VBox>
             <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="170.0" spacing="20.0" styleClass="buttonsPanelContainer">
@@ -91,7 +118,7 @@
             </padding>
             </VBox>
             <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="170.0" spacing="10.0" styleClass="buttonsPanelContainer">
-                <HBox alignment="CENTER" fillHeight="false" spacing="5.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" fillHeight="false" spacing="10.0" VBox.vgrow="NEVER">
                     <Circle fx:id="lightAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="OUTSIDE" strokeWidth="2.0">
                         <effect>
                      <Glow level="1.0" />
@@ -100,7 +127,10 @@
                      <Insets />
                   </HBox.margin>
                     </Circle>
-                    <Text fx:id="lightAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
+                    <Text fx:id="lightAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3">
+                  <font>
+                     <Font name="Arial" size="12.0" />
+                  </font></Text>
                     <ToggleButton fx:id="lightAmmoButton" mnemonicParsing="false" selected="true" styleClass="ammoButtons">
                         <toggleGroup>
                             <ToggleGroup fx:id="ammunitionButtons" />
@@ -111,37 +141,40 @@
                       </ImageView>
                   </graphic>
                     </ToggleButton>
-               <Text fill="WHITE" layoutX="30.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="60mm" />
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="56.0" spacing="5.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="56.0" spacing="10.0" VBox.vgrow="NEVER">
                     <Circle fx:id="mediumAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="OUTSIDE" strokeWidth="2.0">
                         <effect>
                      <Glow level="1.0" />
                         </effect>
                     </Circle>
-                    <Text fx:id="mediumAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
+                    <Text fx:id="mediumAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3">
+                  <font>
+                     <Font name="Arial" size="12.0" />
+                  </font></Text>
                     <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                           <Image url="@images/medium_shot.png" />
                       </ImageView>
                   </graphic></ToggleButton>
-                    <Text fill="WHITE" layoutX="30.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="80mm" />
                 </HBox>
-                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="43.0" spacing="5.0" VBox.vgrow="NEVER">
+                <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="43.0" spacing="10.0" VBox.vgrow="NEVER">
                     <Circle fx:id="heavyAmmoQuantityLight" fill="#22da2f" radius="10.0" stroke="BLACK" strokeMiterLimit="5.0" strokeType="OUTSIDE" strokeWidth="2.0">
                   <effect>
                      <Glow level="1.0" />
                   </effect>
                     </Circle>
-                    <Text fx:id="heavyAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3" />
+                    <Text fx:id="heavyAmmoQuantityText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="3/3">
+                  <font>
+                     <Font name="Arial" size="12.0" />
+                  </font></Text>
                     <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                           <Image url="@images/heavy_shot.png" />
                       </ImageView>
                   </graphic></ToggleButton>
-                    <Text fill="WHITE" layoutX="30.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="105mm" />
                 </HBox>
             <padding>
                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -158,7 +191,7 @@
                     </font>
                 </Text>
             </VBox>
-         <VBox fx:id="replayExitButtonsVbox" alignment="CENTER" prefHeight="170.0" prefWidth="100.0" spacing="15.0" />
+         <VBox fx:id="replayExitButtonsVbox" alignment="CENTER" prefHeight="170.0" spacing="15.0" />
         </HBox>
     </VBox>
 

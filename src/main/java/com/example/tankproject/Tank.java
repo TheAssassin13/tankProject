@@ -17,6 +17,7 @@ public class Tank {
     public ArrayList<Integer> ammunition;
     private int health;
     public int credits;
+    public int kills;
 
     public Tank(Color color, Point position) {
         this.color = color;
@@ -27,6 +28,7 @@ public class Tank {
         this.health= Constants.TANK_HEALTH;
         this.credits = Constants.INITIAL_CREDITS;
         this.ammunition = new ArrayList<>();
+        this.kills = 0;
         initializeAmmunition();
     }
 
@@ -100,5 +102,9 @@ public class Tank {
         //hat
         /*
         gc.drawImage(images.witchHatImage, this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);*/
+    }
+
+    public int getKills() {
+        return kills;
     }
 }

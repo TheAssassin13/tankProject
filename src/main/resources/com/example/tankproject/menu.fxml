@@ -149,7 +149,7 @@
                   </Text>
                   <Spinner id="gravityAmountSpinner" fx:id="gravityAmountSpinner" editable="true" maxWidth="250.0" styleClass="split-arrows-horizontal">
                      <valueFactory>
-                        <SpinnerValueFactory.DoubleSpinnerValueFactory amountToStepBy="0.1" initialValue="1.0" max="9.8" min="1.0" />
+                        <SpinnerValueFactory.DoubleSpinnerValueFactory amountToStepBy="0.1" initialValue="9.8" max="15" min="5" />
                      </valueFactory>
                   </Spinner>
                </HBox>

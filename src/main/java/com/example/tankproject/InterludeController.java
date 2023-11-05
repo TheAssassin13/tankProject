@@ -118,8 +118,9 @@ public class InterludeController implements Initializable {
     public void loadPlayers() {
         for (Player player : Data.getInstance().deadPlayers) {
             Data.getInstance().alivePlayers.add(player);
-            player.tank.restoreHealth();
         }
+
+        Data.getInstance().alivePlayers.forEach(player -> player.tank.restoreHealth());
         Data.getInstance().deadPlayers = new ArrayList<>();
 
         // It looks for all the CPU, so they can buy the ammo needed

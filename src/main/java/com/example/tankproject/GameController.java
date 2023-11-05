@@ -76,6 +76,8 @@ public class GameController implements Initializable {
     public HealthRemainingHUD healthRemainingHUD;
     public ImageView explosionAnimation;
     public AnimationsCreator animationsCreator;
+    public Text currentTankKills;
+    public Text currentTankCredits;
 
     // Initializes JavaFX windows
     @Override
@@ -112,6 +114,8 @@ public class GameController implements Initializable {
         this.animationsCreator = new AnimationsCreator();
         this.explosionAnimation = this.animationsCreator.explosionImageView;
         this.stackPane.getChildren().add(this.explosionAnimation);
+        this.maxDistanceTextField.setText("Max distance = 0 m");
+        this.maxHeightTextField.setText("Max height = 0 m");
 
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
@@ -119,12 +123,12 @@ public class GameController implements Initializable {
         changeTurn();
         buttonsPanelInitialize();
         tankRadarInitialize();
-        calculateMax(new Shot(new Point(0,0),0,0),this.turn.tank);
         componentsSizesInitialize();
         drawingMethods(false);
         buttonsActionInitialize();
         ammunitionPanelControl();
         this.healthRemainingHUD.HUDMouseEvents(Data.getInstance().alivePlayers);
+
         // If CPU plays first
         if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
     }
@@ -268,6 +272,8 @@ public class GameController implements Initializable {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         this.turn.tank.credits += Constants.CREDITS_FOR_DESTROYING_TANKS;
+        this.turn.tank.kills++;
+
         // Checks if there is only one player left
         if (Data.getInstance().alivePlayers.size() == 1) {
             try {
@@ -397,7 +403,7 @@ public class GameController implements Initializable {
                             flag = 1;
                         }
                     }
-                    ammunitionPanelControl();
+                    updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(turn.tank));
                     if (flag == 0) stop();
                 }
             }
@@ -423,7 +429,7 @@ public class GameController implements Initializable {
                             flag = 1;
                         }
                     }
-                    ammunitionPanelControl();
+                    updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(turn.tank));
                     if (flag == 0)  {
                         replayButton.setDisable(false);
                         menuExitButton.setDisable(false);
@@ -459,6 +465,7 @@ public class GameController implements Initializable {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
             this.healthRemainingHUD.showHUD(this.turn.tank);
+            updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
@@ -574,9 +581,6 @@ public class GameController implements Initializable {
         }
 
         this.tankRadarPointerRotate.setAngle(0);
-        this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / "  + Constants.TANK_HEALTH);
-        this.currentTankHealthIcon.setImage(ComponentsCreator.healthIcon(this.turn.tank));
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (Data.getInstance().playersPlayed == Data.getInstance().tanksQuantity) {
             Data.getInstance().playersPlayed = 0;
@@ -585,6 +589,8 @@ public class GameController implements Initializable {
         if (this.turn instanceof CPU) {
             ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
         }
+
+        updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
     }
 
     // Turn change, if there's no next player comes back to the first one
@@ -674,22 +680,22 @@ public class GameController implements Initializable {
         this.replayButton = ComponentsCreator.createReplayButton(25,25);
         this.exitButton = ComponentsCreator.createExitButton(25,25);
         this.menuExitButton = ComponentsCreator.createMenuExitButton(25,25);
-        this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText("Health : " + this.turn.tank.getHealth() + " / " + Constants.TANK_HEALTH);
+
         this.replayExitButtonsVbox.getChildren().add(this.replayButton);
         this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);
-        this.currentTankHealthIcon.setImage(heartIcon);
         this.currentPlayerTankImage.setImage(ImagesLoader.getInstance().currentTankImage);
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
+
+        updateCurrentPlayerInterfaceValues(heartIcon);
         ammunitionPanelControlInitialize();
     }
 
     // Encapsulation of methods responsible for updating remaining ammo and ammo lights color every turn
     public void ammunitionPanelControl() {
-        this.lightAmmoQuantityText.setText(this.turn.tank.ammunition.get(0) + " / 3");
-        this.mediumAmmoQuantityText.setText(this.turn.tank.ammunition.get(1) + " / 10");
-        this.heavyAmmoQuantityText.setText(this.turn.tank.ammunition.get(2) + " / 3");
+        this.lightAmmoQuantityText.setText(String.valueOf(this.turn.tank.ammunition.get(0)));
+        this.mediumAmmoQuantityText.setText(String.valueOf(this.turn.tank.ammunition.get(1)));
+        this.heavyAmmoQuantityText.setText(String.valueOf(this.turn.tank.ammunition.get(2)));
         this.lightAmmoButton.setUserData(this.turn.tank.ammunition.get(0));
         this.mediumAmmoButton.setUserData(this.turn.tank.ammunition.get(1));
         this.heavyAmmoButton.setUserData(this.turn.tank.ammunition.get(2));
@@ -700,7 +706,7 @@ public class GameController implements Initializable {
         }
 
         // Changes ammo light color based on ammo left
-        if (this.turn.tank.ammunition.get(0) > Constants.AMMO_QUANTITY[0] / 2) {
+        if (this.turn.tank.ammunition.get(0) > 5) {
             this.lightAmmoQuantityLight.setFill(Color.GREEN);
         } else if (this.turn.tank.ammunition.get(0) >= 1) {
             this.lightAmmoQuantityLight.setFill(Color.YELLOW);
@@ -708,14 +714,14 @@ public class GameController implements Initializable {
             this.lightAmmoQuantityLight.setFill(Color.RED);
         }
 
-        if (this.turn.tank.ammunition.get(1) > Constants.AMMO_QUANTITY[1] / 2) {
+        if (this.turn.tank.ammunition.get(1) > 5) {
             this.mediumAmmoQuantityLight.setFill(Color.GREEN);
         } else if (this.turn.tank.ammunition.get(1) >= 1) {
             this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
         } else {
             this.mediumAmmoQuantityLight.setFill(Color.RED);
         }
-        if (this.turn.tank.ammunition.get(2) > Constants.AMMO_QUANTITY[2] / 2) {
+        if (this.turn.tank.ammunition.get(2) > 5) {
             this.heavyAmmoQuantityLight.setFill(Color.GREEN);
         } else if (this.turn.tank.ammunition.get(2) >= 1) {
             this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
@@ -786,6 +792,14 @@ public class GameController implements Initializable {
         if (angleTextField.getText().isEmpty()) return;
         this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
         drawingMethods(false);
+    }
+
+    public void updateCurrentPlayerInterfaceValues(Image heartIcon) {
+        this.currentPlayerText.setText(this.turn.name + " is playing");
+        this.currentTankHealth.setText(String.valueOf(this.turn.tank.getHealth()));
+        this.currentTankKills.setText(String.valueOf(this.turn.tank.getKills()));
+        this.currentTankCredits.setText(String.valueOf(this.turn.tank.getCredits()));
+        this.currentTankHealthIcon.setImage(heartIcon);
     }
 }
 
