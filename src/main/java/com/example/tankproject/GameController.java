@@ -80,6 +80,7 @@ public class GameController implements Initializable {
     public Text currentTankCredits;
     public ImageView windDirectionImageView;
     public Text windVelocityText;
+    public VBox windHUDVBox;
 
     // Initializes JavaFX windows
     @Override
@@ -120,11 +121,19 @@ public class GameController implements Initializable {
         this.maxHeightTextField.setText("Max height = 0 m");
         this.windVelocityText.setText("Wind velocity = " + Data.getInstance().windVelocity + " m/s");
 
-        if (Data.getInstance().windVelocity < 0) {
-            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
+        if (Data.getInstance().wind) {
+            this.windHUDVBox.setVisible(true);
+
+            if (Data.getInstance().windVelocity < 0) {
+                this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
+            } else {
+                this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
+            }
+
         } else {
-            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
+            this.windHUDVBox.setVisible(false);
         }
+
 
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
