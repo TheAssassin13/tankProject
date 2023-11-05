@@ -58,6 +58,8 @@ public class ImagesLoader {
         this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/menu_exit_icon.png")).toExternalForm()));
         this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/exit_icon.png")).toExternalForm()));
         this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/windows_icon.png")).toExternalForm()));
+        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/arrow2_left_icon.png")).toExternalForm()));
+        this.iconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/arrow2_right_icon.png")).toExternalForm()));
     }
 
     // This method loads and saves all the game related images

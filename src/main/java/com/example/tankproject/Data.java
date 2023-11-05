@@ -13,6 +13,17 @@ public class Data {
     public int tanksQuantity;
     public int playableTanksQuantity;
     public int cpuTanksQuantity;
+    public int windowsHeight;
+    public int windowsWidth;
+    public int buttonsPanelHeight;
+    public int canvasHeight;
+    public int seaLevel;
+    public int CPUDifficulty;
+    public double musicVolume;
+    public double SFXVolume;
+    public double gravity;
+    public boolean wind;
+    public int windVelocity;
 
     private Data() {
         this.alivePlayers = new ArrayList<>();
@@ -23,6 +34,17 @@ public class Data {
         this.playableTanksQuantity = 2;
         this.cpuTanksQuantity = 0;
         this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
+        this.windowsHeight = Constants.RESOLUTION_HEIGHT[1];
+        this.windowsWidth  = Constants.RESOLUTION_WIDTH[1];
+        this.buttonsPanelHeight = 185;
+        this.canvasHeight = windowsHeight - buttonsPanelHeight;
+        this.seaLevel = canvasHeight - 200;
+        this.CPUDifficulty = 2;
+        this.musicVolume = 1;
+        this.SFXVolume = 1;
+        this.gravity = 9.8;
+        this.wind = false;
+        this.windVelocity = 0;
     }
 
     public void updatesTanksQuantity(int playableTanks, int cpuTanks) {

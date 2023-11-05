@@ -44,12 +44,14 @@ public class MenuController implements Initializable {
     public VBox gameOptionsVBox;
     public VBox optionsVBox;
     public Spinner<Integer> CPUQuantitySpinner;
+    public Spinner<Double> gravityAmountSpinner;
+    public CheckBox windCheckBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(0));
-        this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
-        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
+        this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.optionsVBox.setDisable(true);
         this.optionsVBox.setVisible(false);
         this.appOptionsVBox.setDisable(true);
@@ -60,7 +62,7 @@ public class MenuController implements Initializable {
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
-        this.mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
+        this.mediaPlayer.setVolume(0.5 * Data.getInstance().musicVolume);
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
         difficultyButtonsAlwaysSelected();
@@ -91,25 +93,28 @@ public class MenuController implements Initializable {
         this.optionsVBox.setVisible(true);
     }
 
-    // Saves user changes in the app options menu and applies them
-    public void onAppSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
+    // Saves user changes in the options menu and applies them
+    public void onSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.optionsVBox.setDisable(true);
         this.optionsVBox.setVisible(false);
 
         // User changed screen resolution
-        if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_HEIGHT || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Constants.WINDOWS_WIDTH) {
-            Constants.WINDOWS_HEIGHT = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
-            Constants.WINDOWS_WIDTH = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
+        if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsHeight || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsWidth) {
+            Data.getInstance().windowsHeight = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
+            Data.getInstance().windowsWidth = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
             // Closes the actual windows and opens a new one with the resolution selected by user
             this.mediaPlayer.stop();
             App.restartWindow();
             App.updateScreenResolutionConstants();
         }
-        if (easyButton.isSelected()) Constants.CPU_DIFFICULTY = 1;
-        else if (mediumButton.isSelected()) Constants.CPU_DIFFICULTY = 2;
-        else if (hardButton.isSelected()) Constants.CPU_DIFFICULTY = 3;
+        if (easyButton.isSelected()) Data.getInstance().CPUDifficulty = 1;
+        else if (mediumButton.isSelected()) Data.getInstance().CPUDifficulty = 2;
+        else if (hardButton.isSelected()) Data.getInstance().CPUDifficulty = 3;
 
         Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
+        Data.getInstance().gravity = this.gravityAmountSpinner.getValue();
+        Data.getInstance().wind = this.windCheckBox.isSelected();
+
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap
@@ -124,22 +129,22 @@ public class MenuController implements Initializable {
 
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
         this.resolutionSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
-        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
+        this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
     }
 
     // Sets the sfx game volume and play a sound for reference
     public void onSFXVolumeDrag(MouseEvent ignoredMouseEvent) {
-        Constants.SFX_VOLUME = sfxVolumeSlider.getValue()/100;
+        Data.getInstance().SFXVolume = sfxVolumeSlider.getValue()/100;
         MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
-        sound.setVolume(Constants.SFX_VOLUME);
+        sound.setVolume(Data.getInstance().SFXVolume);
         sound.play();
     }
 
     // Sets the music game volume
     public void musicVolumeDragInitialize() {
         this.musicVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Constants.MUSIC_VOLUME = newValue.doubleValue() / 100;
-            mediaPlayer.setVolume(0.5 * Constants.MUSIC_VOLUME);
+            Data.getInstance().musicVolume = newValue.doubleValue() / 100;
+            mediaPlayer.setVolume(0.5 * Data.getInstance().musicVolume);
         });
     }
 
@@ -160,14 +165,16 @@ public class MenuController implements Initializable {
         this.appOptionsVBox.setDisable(true);
         this.appOptionsVBox.setVisible(false);
 
-        playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
-        CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
+        this.playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
+        this.CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
+        this.gravityAmountSpinner.getValueFactory().setValue(Data.getInstance().gravity);
+        this.windCheckBox.setSelected(Data.getInstance().wind);
 
-        if (Constants.CPU_DIFFICULTY == 1) {
+        if (Data.getInstance().CPUDifficulty == 1) {
             this.CPUDifficultyButtons.selectToggle(easyButton);
-        } else if (Constants.CPU_DIFFICULTY == 2) {
+        } else if (Data.getInstance().CPUDifficulty == 2) {
             this.CPUDifficultyButtons.selectToggle(mediumButton);
-        } else if (Constants.CPU_DIFFICULTY == 3) {
+        } else if (Data.getInstance().CPUDifficulty == 3) {
             this.CPUDifficultyButtons.selectToggle(hardButton);
         }
     }
@@ -179,9 +186,9 @@ public class MenuController implements Initializable {
         this.gameOptionsVBox.setDisable(true);
         this.gameOptionsVBox.setVisible(false);
 
-        this.musicVolumeSlider.adjustValue(Constants.MUSIC_VOLUME * 100);
-        this.sfxVolumeSlider.adjustValue(Constants.SFX_VOLUME * 100);
-        this.resolutionSpinner.getValueFactory().setValue(Constants.WINDOWS_WIDTH + " x " + Constants.WINDOWS_HEIGHT);
+        this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100);
+        this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100);
+        this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
 
     }
 
@@ -196,4 +203,5 @@ public class MenuController implements Initializable {
         int max = 10 - CPUQuantitySpinner.getValue();
         playersQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, playersQuantitySpinner.getValue())));
     }
+
 }

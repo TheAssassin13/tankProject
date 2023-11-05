@@ -142,7 +142,7 @@ public class Terrain {
             gc.setFill(Color.DARKORANGE);
             gc.fillRect(i, this.maxTerrainHeight[i], 1, 2);
             gc.setFill(Constants.TERRAIN_COLOR);
-            gc.fillRect(i, this.maxTerrainHeight[i] + 2, 1, Constants.CANVAS_HEIGHT - this.maxTerrainHeight[i]);
+            gc.fillRect(i, this.maxTerrainHeight[i] + 2, 1, Data.getInstance().canvasHeight - this.maxTerrainHeight[i]);
         }
     }
 
@@ -151,7 +151,7 @@ public class Terrain {
         gc.setFill(Constants.TERRAIN_COLOR);
         for (int j = 0; j < this.width; j++) {
             int i = this.maxTerrainHeight[j];
-            while (i < Constants.CANVAS_HEIGHT) {
+            while (i < Data.getInstance().canvasHeight) {
                 if (this.resolutionMatrix[i][j] == 1) {
                     if (i > 0 && this.resolutionMatrix[i-1][j] == 0) {
                         // Border is added

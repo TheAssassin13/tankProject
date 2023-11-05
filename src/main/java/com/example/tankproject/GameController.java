@@ -78,6 +78,8 @@ public class GameController implements Initializable {
     public AnimationsCreator animationsCreator;
     public Text currentTankKills;
     public Text currentTankCredits;
+    public ImageView windDirectionImageView;
+    public Text windVelocityText;
 
     // Initializes JavaFX windows
     @Override
@@ -97,14 +99,14 @@ public class GameController implements Initializable {
         this.mediumAmmoButton.setSelected(true);
         this.turn = null;
         this.umbrellaPosition = null;
-        Data.getInstance().terrain = new Terrain(Constants.CANVAS_HEIGHT, Constants.WINDOWS_WIDTH);
-        Data.getInstance().terrain.terrainGeneration(Constants.SEA_LEVEL, true);
+        Data.getInstance().terrain = new Terrain(Data.getInstance().canvasHeight, Data.getInstance().windowsWidth);
+        Data.getInstance().terrain.terrainGeneration(Data.getInstance().seaLevel, true);
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(1));
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
-        this.music.setVolume(Constants.MUSIC_VOLUME);
+        this.music.setVolume(Data.getInstance().musicVolume);
         this.tankRadarStackPane.getChildren().clear();
         this.stackPane.getChildren().remove(this.healthRemainingHBox);
         this.healthRemainingHUD = new HealthRemainingHUD();
@@ -116,6 +118,13 @@ public class GameController implements Initializable {
         this.stackPane.getChildren().add(this.explosionAnimation);
         this.maxDistanceTextField.setText("Max distance = 0 m");
         this.maxHeightTextField.setText("Max height = 0 m");
+        this.windVelocityText.setText("Wind velocity = " + Data.getInstance().windVelocity + " m/s");
+
+        if (Data.getInstance().windVelocity < 0) {
+            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
+        } else {
+            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
+        }
 
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
@@ -176,25 +185,25 @@ public class GameController implements Initializable {
 
     // Encapsulation of methods responsible for changing the size of components
     public void componentsSizesInitialize() {
-        this.gameCanvas.setHeight(Constants.CANVAS_HEIGHT);
-        this.gameCanvas.setWidth(Constants.WINDOWS_WIDTH);
-        this.backgroundImage.setFitHeight(Constants.CANVAS_HEIGHT);
-        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.gameCanvas.setHeight(Data.getInstance().canvasHeight);
+        this.gameCanvas.setWidth(Data.getInstance().windowsWidth);
+        this.backgroundImage.setFitHeight(Data.getInstance().canvasHeight);
+        this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.backgroundImage.setPreserveRatio(false);
-        this.stackPane.setPrefHeight(Constants.WINDOWS_HEIGHT);
-        this.stackPane.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.stackPane.setMaxSize(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
-        this.stackPaneCanvas.setPrefHeight(Constants.CANVAS_HEIGHT);
-        this.stackPaneCanvas.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.stackPaneCanvas.setMaxSize(Constants.WINDOWS_WIDTH,Constants.CANVAS_HEIGHT);
-        this.gameVBox.setPrefHeight(Constants.WINDOWS_HEIGHT);
-        this.gameVBox.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.buttonsPanel.setPrefHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        this.buttonsPanel.setMinHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        this.buttonsPanel.setMaxHeight(Constants.BUTTONS_PANEL_HEIGHT);
-        this.buttonsPanel.setPrefWidth(Constants.WINDOWS_WIDTH);
-        this.buttonsPanel.setMinWidth(Constants.WINDOWS_WIDTH);
-        this.buttonsPanel.setMaxWidth(Constants.WINDOWS_WIDTH);
+        this.stackPane.setPrefHeight(Data.getInstance().windowsHeight);
+        this.stackPane.setPrefWidth(Data.getInstance().windowsWidth);
+        this.stackPane.setMaxSize(Data.getInstance().windowsWidth,Data.getInstance().windowsHeight);
+        this.stackPaneCanvas.setPrefHeight(Data.getInstance().canvasHeight);
+        this.stackPaneCanvas.setPrefWidth(Data.getInstance().windowsWidth);
+        this.stackPaneCanvas.setMaxSize(Data.getInstance().windowsWidth,Data.getInstance().canvasHeight);
+        this.gameVBox.setPrefHeight(Data.getInstance().windowsHeight);
+        this.gameVBox.setPrefWidth(Data.getInstance().windowsWidth);
+        this.buttonsPanel.setPrefHeight(Data.getInstance().buttonsPanelHeight);
+        this.buttonsPanel.setMinHeight(Data.getInstance().buttonsPanelHeight);
+        this.buttonsPanel.setMaxHeight(Data.getInstance().buttonsPanelHeight);
+        this.buttonsPanel.setPrefWidth(Data.getInstance().windowsWidth);
+        this.buttonsPanel.setMinWidth(Data.getInstance().windowsWidth);
+        this.buttonsPanel.setMaxWidth(Data.getInstance().windowsWidth);
         this.currentPlayerTankStackPane.setPrefWidth(120);
         this.currentPlayerTankStackPane.setPrefHeight(80);
         this.currentPlayerTankImage.setFitWidth(120);
@@ -203,7 +212,7 @@ public class GameController implements Initializable {
 
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
-        this.gameCanvasGraphicContext.clearRect(0, 0, Constants.WINDOWS_WIDTH, Constants.WINDOWS_HEIGHT);
+        this.gameCanvasGraphicContext.clearRect(0, 0, Data.getInstance().windowsWidth, Data.getInstance().windowsHeight);
         if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(ImagesLoader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
         if (collision) Data.getInstance().terrain.drawTerrain(this.gameCanvasGraphicContext);
@@ -218,12 +227,12 @@ public class GameController implements Initializable {
 
     // Placement of tanks on terrain with random distance
     public void tanksPlacement() {
-        int gap = Constants.WINDOWS_WIDTH / Data.getInstance().tanksQuantity;
+        int gap = Data.getInstance().windowsWidth / Data.getInstance().tanksQuantity;
         ArrayList<Point> tanksPosition = new ArrayList<>();
 
         // Position of the first tank
-        int x = (int) (Math.random() * 2 * Constants.WINDOWS_WIDTH / (Data.getInstance().tanksQuantity * 2 + 1) + Constants.TANK_SIZE);
-        int y = Constants.CANVAS_HEIGHT - Constants.TANK_SIZE;
+        int x = (int) (Math.random() * 2 * Data.getInstance().windowsWidth / (Data.getInstance().tanksQuantity * 2 + 1) + Constants.TANK_SIZE);
+        int y = Data.getInstance().canvasHeight - Constants.TANK_SIZE;
         tanksPosition.add(new Point(x, y));
 
         for (int i = 1; i < Data.getInstance().tanksQuantity; i++) {
@@ -232,8 +241,8 @@ public class GameController implements Initializable {
         }
 
         // In case the last one gets out of bound
-        if (tanksPosition.get(Data.getInstance().tanksQuantity-1).getX() + Constants.TANK_SIZE / 2 >= Constants.WINDOWS_WIDTH)
-            tanksPosition.get(Data.getInstance().tanksQuantity-1).setX(Constants.WINDOWS_WIDTH - (Constants.TANK_SIZE * 2));
+        if (tanksPosition.get(Data.getInstance().tanksQuantity-1).getX() + Constants.TANK_SIZE / 2 >= Data.getInstance().windowsWidth)
+            tanksPosition.get(Data.getInstance().tanksQuantity-1).setX(Data.getInstance().windowsWidth - (Constants.TANK_SIZE * 2));
 
         for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
             Data.getInstance().alivePlayers.get(i).tank.position.setX(tanksPosition.get(i).getX());
@@ -241,7 +250,7 @@ public class GameController implements Initializable {
 
         // Positions tanks on terrain
         for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
-            for (int j = 0; j < Constants.CANVAS_HEIGHT; j++) {
+            for (int j = 0; j < Data.getInstance().canvasHeight; j++) {
                 if (Data.getInstance().terrain.resolutionMatrix[j][tanksPosition.get(i).getX()] == 1) {
                     Data.getInstance().alivePlayers.get(i).tank.position.setY(j - Constants.TANK_SIZE/3);
                     break;
@@ -345,8 +354,8 @@ public class GameController implements Initializable {
                    calculateMax(shot, turn.tank);
 
                    // Shot is out of the screen
-                   if (shot.position.getX() >= Constants.WINDOWS_WIDTH || shot.position.getX() < 0
-                        || shot.position.getY() >= Constants.CANVAS_HEIGHT) {
+                   if (shot.position.getX() >= Data.getInstance().windowsWidth || shot.position.getX() < 0
+                        || shot.position.getY() >= Data.getInstance().canvasHeight) {
                        stop();
                        if (fromTank) stopMethods();
                    }
@@ -390,7 +399,7 @@ public class GameController implements Initializable {
                     drawingMethods(false);
                     int flag = 0;
                     for (Player p : Data.getInstance().alivePlayers) {
-                        if (p.tank.position.getY() + Constants.TANK_SIZE / 3 < Constants.CANVAS_HEIGHT &&
+                        if (p.tank.position.getY() + Constants.TANK_SIZE / 3 < Data.getInstance().canvasHeight &&
                                 Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(1);
@@ -423,7 +432,7 @@ public class GameController implements Initializable {
                     menuExitButton.setDisable(true);
                     for (MysteryBox box : Data.getInstance().mysteryBoxes) {
                         // Drags down the box 1 pixel per frame
-                        if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Constants.CANVAS_HEIGHT &&
+                        if (box.position.getY() + Constants.BOX_SIZE/2 + 1 < Data.getInstance().canvasHeight &&
                                 Data.getInstance().terrain.resolutionMatrix[box.position.getY() + Constants.BOX_SIZE/2 + 1][box.position.getX()] == 0) {
                             box.position.setY(box.position.getY()+1);
                             flag = 1;
@@ -445,7 +454,7 @@ public class GameController implements Initializable {
         boolean isOnTank = false;
         // Makes sure the box created is not above a tank
         while(true) {
-            boxPositionX = random.nextInt(Constants.WINDOWS_WIDTH);
+            boxPositionX = random.nextInt(Data.getInstance().windowsWidth);
             for (Player p : Data.getInstance().alivePlayers) {
                 if (boxPositionX < p.tank.position.getX() + Constants.TERRAIN_MARGIN &&
                         boxPositionX > p.tank.position.getX() - Constants.TERRAIN_MARGIN){
@@ -475,7 +484,7 @@ public class GameController implements Initializable {
     // Power up that creates a bombardment of shots from the sky
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Constants.WINDOWS_WIDTH - 1), 0), 10, -90), false);
+            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 10, -90), false);
         }
     }
 
@@ -497,7 +506,7 @@ public class GameController implements Initializable {
             this.healthRemainingHUD.showHUD(hitPlayer.tank);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
-            this.sounds.setVolume(Constants.SFX_VOLUME);
+            this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
@@ -514,7 +523,7 @@ public class GameController implements Initializable {
                     terrainFallAnimationTimer();
                     tankFallAnimationTimer();
                     sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
-                    this.sounds.setVolume(Constants.SFX_VOLUME);
+                    this.sounds.setVolume(Data.getInstance().SFXVolume);
                     this.sounds.play();
                     mysteryBoxPower(box);
                     stopMethods();
@@ -528,7 +537,7 @@ public class GameController implements Initializable {
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
-            this.sounds.setVolume(Constants.SFX_VOLUME);
+            this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             // Checks if a tank is nearby
             Player playerNearby = tanksCollision(shot, true);
@@ -613,6 +622,7 @@ public class GameController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            this.music.stop();
             return;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
@@ -655,7 +665,7 @@ public class GameController implements Initializable {
 
         this.music.stop();
         this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
-        this.music.setVolume(Constants.MUSIC_VOLUME);
+        this.music.setVolume(Data.getInstance().musicVolume);
         this.music.play();
     }
 
@@ -773,9 +783,9 @@ public class GameController implements Initializable {
         double screenXRadar = this.tankRadarStackPane.localToScene(0,0).getX();
         double screenYRadar = this.tankRadarStackPane.localToScene(0,0).getY();
         double posXRadar = screenXRadar + this.tankRadarStackPane.getWidth() / 2;
-        double posYRadar = Constants.WINDOWS_HEIGHT - (screenYRadar + this.tankRadarStackPane.getHeight() / 2);
+        double posYRadar = Data.getInstance().windowsHeight - (screenYRadar + this.tankRadarStackPane.getHeight() / 2);
         double posXShot = shot.position.getX();
-        double posYShot = Constants.CANVAS_HEIGHT - shot.position.getY();
+        double posYShot = Data.getInstance().canvasHeight - shot.position.getY();
         double deltaX = posXShot - posXRadar;
         double deltaY = posYShot - posYRadar;
         double angle;

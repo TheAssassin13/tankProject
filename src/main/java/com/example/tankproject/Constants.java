@@ -8,12 +8,6 @@ public class Constants {
     public final static long FRAME_TIME = 1_000_000_000L / FPS;
     public final static int[] RESOLUTION_HEIGHT = {800, 720, 768, 900, 992, 1080};
     public final static int[] RESOLUTION_WIDTH = {800, 1280, 1366, 1440, 1768, 1920};
-    public static int WINDOWS_HEIGHT = RESOLUTION_HEIGHT[1];
-    public static int WINDOWS_WIDTH = RESOLUTION_WIDTH[1];
-    public final static int BUTTONS_PANEL_HEIGHT = 185;
-    public static int CANVAS_HEIGHT = WINDOWS_HEIGHT - BUTTONS_PANEL_HEIGHT;
-    public static int SEA_LEVEL = CANVAS_HEIGHT - 200;
-    public final static double GRAVITY = 9.8;
     public final static int SHOT_TRAJECTORY_SIZE = 10;
     public final static double[] SHOT_SIZE = {22, 40, 62};
     public final static int TANK_SIZE = 30;
@@ -29,7 +23,6 @@ public class Constants {
     public final static int CREDITS_FOR_DESTROYING_TANKS = 5000;
     public final static int TANK_HEALTH = 100;
     public final static int TERRAIN_MARGIN = 50;
-    public static int CPU_DIFFICULTY = 2;
-    public static double MUSIC_VOLUME = 1;
-    public static double SFX_VOLUME = 1;
+    public final static int WIND_MAX_VELOCITY = 10;
+
 }

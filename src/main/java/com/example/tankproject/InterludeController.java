@@ -52,8 +52,8 @@ public class InterludeController implements Initializable {
         } else loadPlayers();
 
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
-        this.backgroundImage.setFitHeight(Constants.WINDOWS_HEIGHT);
-        this.backgroundImage.setFitWidth(Constants.WINDOWS_WIDTH);
+        this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
+        this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.gameNumberText.setText("Game " + Data.getInstance().gameNumber);
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
@@ -71,6 +71,7 @@ public class InterludeController implements Initializable {
     // Opens game windows
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         Data.getInstance().gameNumber++;
+        if (Data.getInstance().wind) setRandomWind();
         App.setRoot("game");
     }
 
@@ -120,7 +121,11 @@ public class InterludeController implements Initializable {
             Data.getInstance().alivePlayers.add(player);
         }
 
-        Data.getInstance().alivePlayers.forEach(player -> player.tank.restoreHealth());
+        for (Player player : Data.getInstance().alivePlayers) {
+            player.tank.restoreHealth();
+            player.tank.setCredits(player.tank.credits + Constants.INITIAL_CREDITS);
+        }
+
         Data.getInstance().deadPlayers = new ArrayList<>();
 
         // It looks for all the CPU, so they can buy the ammo needed
@@ -192,5 +197,16 @@ public class InterludeController implements Initializable {
             this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
         }
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
+    }
+
+    public void setRandomWind() {
+        Random r = new Random();
+        int wind;
+
+        do {
+            wind = r.nextInt(Constants.WIND_MAX_VELOCITY * -1, Constants.WIND_MAX_VELOCITY);
+        } while (wind == 0);
+
+        Data.getInstance().windVelocity = wind;
     }
 }

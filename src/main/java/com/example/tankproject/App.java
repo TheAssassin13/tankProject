@@ -24,7 +24,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         App.stage = stage;
-        initializeGame(Constants.WINDOWS_WIDTH,Constants.WINDOWS_HEIGHT);
+        initializeGame(Data.getInstance().windowsWidth,Data.getInstance().windowsHeight);
     }
 
     public static void initializeGame(int width, int height) throws IOException {
@@ -47,8 +47,8 @@ public class App extends Application {
 
     // Updates screen resolution constants related
     public static void updateScreenResolutionConstants() {
-        Constants.CANVAS_HEIGHT = Constants.WINDOWS_HEIGHT - Constants.BUTTONS_PANEL_HEIGHT;
-        Constants.SEA_LEVEL = Constants.CANVAS_HEIGHT - 200;
+        Data.getInstance().canvasHeight = Data.getInstance().windowsHeight - Data.getInstance().buttonsPanelHeight;
+        Data.getInstance().seaLevel = Data.getInstance().canvasHeight - 200;
     }
 
     // Converts a Color object to a Hexadecimal string

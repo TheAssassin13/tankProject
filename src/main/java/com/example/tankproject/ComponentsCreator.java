@@ -15,7 +15,6 @@ import javafx.scene.text.Text;
 public class ComponentsCreator {
 
     static Font primaryFont = Font.font("Arial", FontWeight.BOLD,50);
-    static Font subHeaderFont = Font.font("Arial", FontWeight.NORMAL,36);
     static Font secondaryFont = Font.font("Arial", FontWeight.NORMAL,30);
 
     // Creates replay button
@@ -172,12 +171,12 @@ public class ComponentsCreator {
 
     // Transforms x-coordinates to a translation x-distance from the center of the screen, used in StackPane translations
     public static double transformX(double posX) {
-        return posX - Constants.WINDOWS_WIDTH / 2.0;
+        return posX - Data.getInstance().windowsWidth / 2.0;
     }
 
     // Transforms y-coordinates to a translation y-distance from the center of the screen, used in StackPane translations
     public static double transformY(double posY) {
-        return posY - Constants.WINDOWS_HEIGHT / 2.0;
+        return posY - Data.getInstance().windowsHeight / 2.0;
     }
 
     // Creates a tank image StackPane

@@ -2,7 +2,6 @@ package com.example.tankproject;
 
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 
@@ -30,9 +29,10 @@ public class Shot {
 
     // Updates the position of the shot
     public void shotPosition() {
-        x = (x + velocityX * Constants.SHOT_VELOCITY);
+
+        x = (x + (velocityX + Data.getInstance().windVelocity) * Constants.SHOT_VELOCITY);
         y = (y + velocityY * Constants.SHOT_VELOCITY);
-        this.velocityY += Constants.GRAVITY * Constants.SHOT_VELOCITY;
+        this.velocityY += Data.getInstance().gravity * Constants.SHOT_VELOCITY;
         this.position.setX((int) x);
         this.position.setY((int) y);
     }
@@ -47,7 +47,7 @@ public class Shot {
 
     // Checks if the shot hits the terrain
     public boolean terrainCollision(Terrain terrain) {
-        if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() >= Constants.WINDOWS_WIDTH) {
+        if (this.position.getY() < 0 || this.position.getX() < 0 || this.position.getX() >= Data.getInstance().windowsWidth) {
             return false;
         }
         return terrain.resolutionMatrix[this.position.getY()][this.position.getX()] == 1;

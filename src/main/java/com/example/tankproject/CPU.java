@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class CPU extends Player{
@@ -29,14 +28,14 @@ public class CPU extends Player{
         double angleShoot;
         double powerShoot;
         double initialPosX = this.tank.position.getX();
-        double initialPosY = Constants.CANVAS_HEIGHT - this.tank.position.getY();
+        double initialPosY = Data.getInstance().canvasHeight - this.tank.position.getY();
         double finalPosX = this.target.getX();
-        double finalPosY = Constants.CANVAS_HEIGHT - this.target.getY();
+        double finalPosY = Data.getInstance().canvasHeight - this.target.getY();
 
         // Important variables calculation
-        double maxHeight = random.nextInt(Constants.CANVAS_HEIGHT, Constants.CANVAS_HEIGHT*2);
-        double verticalVelocity = Math.sqrt(2.0 * Constants.GRAVITY * (maxHeight - initialPosY));
-        double time = verticalVelocity / Constants.GRAVITY + Math.sqrt((2 / Constants.GRAVITY) * (maxHeight - finalPosY));
+        double maxHeight = random.nextInt(Data.getInstance().canvasHeight, Data.getInstance().canvasHeight *2);
+        double verticalVelocity = Math.sqrt(2.0 * Data.getInstance().gravity * (maxHeight - initialPosY));
+        double time = verticalVelocity / Data.getInstance().gravity + Math.sqrt((2 / Data.getInstance().gravity) * (maxHeight - finalPosY));
         double horizontalVelocity = (finalPosX - initialPosX) / time;
 
         // Angle and power calculations
@@ -45,10 +44,10 @@ public class CPU extends Player{
         powerShoot = Math.sqrt(Math.pow(verticalVelocity, 2) + Math.pow(horizontalVelocity, 2));
 
         // Depending on the difficulty the power is randomized
-        if (Constants.CPU_DIFFICULTY == 1) {
+        if (Data.getInstance().CPUDifficulty== 1) {
             powerShoot = random.nextInt((int) powerShoot - 20, (int) powerShoot + 20);
         }
-        else if (Constants.CPU_DIFFICULTY == 2) {
+        else if (Data.getInstance().CPUDifficulty== 2) {
             powerShoot = random.nextInt((int) powerShoot - 10, (int) powerShoot + 10);
         }
 

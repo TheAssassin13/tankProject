@@ -76,7 +76,7 @@
                   </VBox.margin>
                </Slider>
 
-               <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onAppSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
+               <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
@@ -162,7 +162,7 @@
                         <Insets />
                      </HBox.margin>
                   </Text>
-                  <CheckBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" />
+                  <CheckBox fx:id="windCheckBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" />
 
                </HBox>
                <VBox alignment="CENTER" spacing="15.0">
@@ -184,7 +184,7 @@
                      <ToggleButton fx:id="hardButton" mnemonicParsing="false" styleClass="difficultyButtons" text="Hard" toggleGroup="$CPUDifficultyButtons" />
                   </HBox>
                </VBox>
-               <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onAppSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
+               <Button maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="55.0" prefWidth="150.0" styleClass="menuButtons" text="Save">
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
