@@ -70,9 +70,9 @@ public class InterludeController implements Initializable {
 
     // Opens game windows
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
+        App.setRoot("game");
         Data.getInstance().gameNumber++;
         if (Data.getInstance().wind) setRandomWind();
-        App.setRoot("game");
     }
 
     // Opens menu screen
