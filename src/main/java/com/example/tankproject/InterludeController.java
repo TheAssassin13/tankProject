@@ -46,10 +46,11 @@ public class InterludeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.shop = new Shop();
-        if (Data.getInstance().gameNumber == 1) {
-            Data.getInstance().reset();
-            createPlayers();
-        } else loadPlayers();
+        if (Data.getInstance().gameNumber == 1) createPlayers();
+        else  {
+            Data.getInstance().restart();
+            loadPlayers();
+        }
 
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
@@ -123,7 +124,6 @@ public class InterludeController implements Initializable {
 
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
-            player.tank.setCredits(player.tank.credits + Constants.INITIAL_CREDITS);
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();

@@ -54,8 +54,15 @@ public class Data {
     }
 
     public void reset() {
+        this.alivePlayers = new ArrayList<>();
+        this.deadPlayers = new ArrayList<>();
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 1;
+        this.playersPlayed = 0;
+    }
+
+    public void restart() {
+        this.mysteryBoxes = new ArrayList<>();
         this.playersPlayed = 0;
     }
 

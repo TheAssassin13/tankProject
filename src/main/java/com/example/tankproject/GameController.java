@@ -289,7 +289,7 @@ public class GameController implements Initializable {
     public void deleteDeadPlayer(Player player) {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
-        this.turn.tank.credits += Constants.CREDITS_FOR_DESTROYING_TANKS;
+        this.turn.tank.setCredits(this.turn.tank.getCredits() + Constants.CREDITS_FOR_DESTROYING_TANKS);
         this.turn.tank.kills++;
 
         // Checks if there is only one player left
