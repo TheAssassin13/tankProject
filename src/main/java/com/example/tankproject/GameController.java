@@ -98,7 +98,6 @@ public class GameController implements Initializable {
         this.angleTextField.clear();
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
-        this.turn = null;
         this.umbrellaPosition = null;
         Data.getInstance().terrain = new Terrain(Data.getInstance().canvasHeight, Data.getInstance().windowsWidth);
         Data.getInstance().terrain.terrainGeneration(Data.getInstance().seaLevel, true);
@@ -138,7 +137,6 @@ public class GameController implements Initializable {
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
         this.turn = Data.getInstance().alivePlayers.get(0);
-        changeTurn();
         buttonsPanelInitialize();
         tankRadarInitialize();
         componentsSizesInitialize();
@@ -296,6 +294,7 @@ public class GameController implements Initializable {
         if (Data.getInstance().alivePlayers.size() == 1) {
             try {
                 this.music.stop();
+                Data.getInstance().gameNumber++;
                 App.setRoot("interlude");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -485,6 +484,8 @@ public class GameController implements Initializable {
             this.healthRemainingHUD.showHUD(this.turn.tank);
             updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
+            this.turn.tank.setCredits(this.turn.tank.getCredits() + 1500);
+        } else if (box.powerUp == 2) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
         }
@@ -626,12 +627,13 @@ public class GameController implements Initializable {
         }
 
         if (tie()) {
+            this.music.stop();
+            Data.getInstance().gameNumber++;
             try {
                 App.setRoot("interlude");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            this.music.stop();
             return;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();

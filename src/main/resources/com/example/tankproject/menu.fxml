@@ -133,7 +133,7 @@
                   </Text>
                   <Spinner id="quantitySpinner" fx:id="CPUQuantitySpinner" maxWidth="250.0" onMouseClicked="#onCPUSpinnerClick" styleClass="split-arrows-horizontal">
                      <valueFactory>
-                        <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="10" min="0" />
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="8" min="0" />
                      </valueFactory>
 
                   </Spinner>

@@ -71,9 +71,13 @@ public class InterludeController implements Initializable {
 
     // Opens game windows
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
-        App.setRoot("game");
-        Data.getInstance().gameNumber++;
+        boolean needToBuyAmmo = true;
+        for (Player player : Data.getInstance().alivePlayers) {
+            if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
+        }
+        if (needToBuyAmmo) return;
         if (Data.getInstance().wind) setRandomWind();
+        App.setRoot("game");
     }
 
     // Opens menu screen
@@ -124,6 +128,7 @@ public class InterludeController implements Initializable {
 
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
+            player.tank.setCredits(player.tank.getCredits() + Constants.INITIAL_CREDITS);
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -152,12 +157,7 @@ public class InterludeController implements Initializable {
                 players.add(p);
             }
         }
-        
-        for (Player p: Data.getInstance().deadPlayers) {
-            if (!(p instanceof CPU)) {
-                players.add(p);
-            }
-        }
+        players.sort(Comparator.comparing(player -> player.name));
 
         observableArrayList = FXCollections.observableArrayList(players);
         this.currentShopPlayerSpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(observableArrayList));
