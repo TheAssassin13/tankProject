@@ -36,7 +36,7 @@ public class CPU extends Player{
         double maxHeight = random.nextInt(Data.getInstance().canvasHeight, Data.getInstance().canvasHeight *2);
         double verticalVelocity = Math.sqrt(2.0 * Data.getInstance().gravity * (maxHeight - initialPosY));
         double time = verticalVelocity / Data.getInstance().gravity + Math.sqrt((2 / Data.getInstance().gravity) * (maxHeight - finalPosY));
-        double horizontalVelocity = (finalPosX - initialPosX) / time;
+        double horizontalVelocity = (finalPosX - initialPosX) / time - Data.getInstance().windVelocity;
 
         // Angle and power calculations
         angleShoot = Math.toDegrees(Math.atan(verticalVelocity / horizontalVelocity));
@@ -45,10 +45,10 @@ public class CPU extends Player{
 
         // Depending on the difficulty the power is randomized
         if (Data.getInstance().CPUDifficulty== 1) {
-            powerShoot = random.nextInt((int) powerShoot - 20, (int) powerShoot + 20);
+            powerShoot = random.nextDouble(powerShoot - 20, powerShoot + 20);
         }
         else if (Data.getInstance().CPUDifficulty== 2) {
-            powerShoot = random.nextInt((int) powerShoot - 10, (int) powerShoot + 10);
+            powerShoot = random.nextDouble(powerShoot - 10, powerShoot + 10);
         }
 
         // Shot type random selection

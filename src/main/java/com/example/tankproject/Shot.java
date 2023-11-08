@@ -29,7 +29,6 @@ public class Shot {
 
     // Updates the position of the shot
     public void shotPosition() {
-
         x = (x + (velocityX + Data.getInstance().windVelocity) * Constants.SHOT_VELOCITY);
         y = (y + velocityY * Constants.SHOT_VELOCITY);
         this.velocityY += Data.getInstance().gravity * Constants.SHOT_VELOCITY;
