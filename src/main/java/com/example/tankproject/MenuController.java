@@ -46,6 +46,7 @@ public class MenuController implements Initializable {
     public Spinner<Integer> CPUQuantitySpinner;
     public Spinner<Double> gravityAmountSpinner;
     public CheckBox windCheckBox;
+    public Spinner<Integer> gamesQuantitySpinner;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -112,9 +113,9 @@ public class MenuController implements Initializable {
         else if (hardButton.isSelected()) Data.getInstance().CPUDifficulty = 3;
 
         Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
+        Data.getInstance().gamesMax = this.gamesQuantitySpinner.getValue();
         Data.getInstance().gravity = this.gravityAmountSpinner.getValue();
         Data.getInstance().wind = this.windCheckBox.isSelected();
-
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap
@@ -167,6 +168,7 @@ public class MenuController implements Initializable {
 
         this.playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
         this.CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
+        this.gamesQuantitySpinner.getValueFactory().setValue(Data.getInstance().gamesMax);
         this.gravityAmountSpinner.getValueFactory().setValue(Data.getInstance().gravity);
         this.windCheckBox.setSelected(Data.getInstance().wind);
 

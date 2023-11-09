@@ -821,6 +821,8 @@ public class GameController implements Initializable {
     }
 
     public void updateWindHUD() {
+        if (!Data.getInstance().wind) return;
+
         setRandomWind();
 
         if (Data.getInstance().windVelocity < 0) {
