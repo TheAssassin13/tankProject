@@ -120,22 +120,10 @@ public class GameController implements Initializable {
         this.stackPane.getChildren().add(this.explosionAnimation);
         this.maxDistanceTextField.setText("Max distance = 0 m");
         this.maxHeightTextField.setText("Max height = 0 m");
-        this.windVelocityText.setText("Wind velocity = " + Math.abs(Data.getInstance().windVelocity) + " m/s");
-
-        if (Data.getInstance().wind) {
-            this.windHUDVBox.setVisible(true);
-
-            if (Data.getInstance().windVelocity < 0) {
-                this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
-            } else {
-                this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
-            }
-
-        } else {
-            this.windHUDVBox.setVisible(false);
-        }
+        this.windHUDVBox.setVisible(Data.getInstance().wind);
 
 
+        updateWindHUD();
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
         this.turn = Data.getInstance().alivePlayers.get(0);
@@ -642,6 +630,9 @@ public class GameController implements Initializable {
             return;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
+
+        updateWindHUD();
+
     }
 
     // This method verifies all players have ammunition available
@@ -755,6 +746,7 @@ public class GameController implements Initializable {
             this.heavyAmmoQuantityLight.setFill(Color.RED);
         }
 
+
     }
 
     // Encapsulation of methods responsible for initializing toggle buttons, data related
@@ -827,5 +819,31 @@ public class GameController implements Initializable {
         this.currentTankCredits.setText(String.valueOf(this.turn.tank.getCredits()));
         this.currentTankHealthIcon.setImage(heartIcon);
     }
+
+    public void updateWindHUD() {
+        setRandomWind();
+
+        if (Data.getInstance().windVelocity < 0) {
+            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
+        } else {
+            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
+        }
+
+        this.windVelocityText.setText("Wind velocity = " + Math.abs(Data.getInstance().windVelocity) + " m/s");
+
+
+    }
+    public void setRandomWind() {
+        Random r = new Random();
+        int wind;
+
+        do {
+            wind = r.nextInt(Constants.WIND_MAX_VELOCITY * -1, Constants.WIND_MAX_VELOCITY);
+        } while (wind == 0);
+
+        Data.getInstance().windVelocity = wind;
+    }
+
+
 }
 

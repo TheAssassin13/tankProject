@@ -76,7 +76,6 @@ public class InterludeController implements Initializable {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
         if (needToBuyAmmo) return;
-        if (Data.getInstance().wind) setRandomWind();
         App.setRoot("game");
     }
 
@@ -199,14 +198,4 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 
-    public void setRandomWind() {
-        Random r = new Random();
-        int wind;
-
-        do {
-            wind = r.nextInt(Constants.WIND_MAX_VELOCITY * -1, Constants.WIND_MAX_VELOCITY);
-        } while (wind == 0);
-
-        Data.getInstance().windVelocity = wind;
-    }
 }
