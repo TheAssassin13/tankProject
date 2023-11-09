@@ -1,13 +1,10 @@
 package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-
-import java.util.Objects;
 
 public class LightShot extends Shot {
-    public LightShot(Point position, double initialVelocity, double angle){
-        super(position, initialVelocity, angle);
+    public LightShot(Point position, double initialVelocity, double angle, Player shotPlayer){
+        super(position, initialVelocity, angle, shotPlayer);
         this.damage = Constants.AMMO_DAMAGE[0];
         this.area = 100;
     }

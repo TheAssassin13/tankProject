@@ -1,13 +1,10 @@
 package com.example.tankproject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-
-import java.util.Objects;
 
 public class MediumShot extends Shot {
-    public MediumShot(Point position, double initialVelocity, double angle){
-        super(position, initialVelocity, angle);
+    public MediumShot(Point position, double initialVelocity, double angle, Player shotPlayer){
+        super(position, initialVelocity, angle, shotPlayer);
         this.damage = Constants.AMMO_DAMAGE[1];
         this.area = 300;
     }

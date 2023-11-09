@@ -15,8 +15,8 @@ public class Shot {
     public ArrayList<Point> trajectory;
     public int damage;
     public int area;
-
-    public Shot(Point position, double initialVelocity, double angle) {
+    public Player shotPlayer;
+    public Shot(Point position, double initialVelocity, double angle, Player shotPlayer) {
         this.initialVelocity = initialVelocity;
         this.angle = Math.toRadians(angle);
         this.position = position;
@@ -24,7 +24,8 @@ public class Shot {
         this.y = position.getY();
         this.velocityX = initialVelocity * Math.cos(this.angle);
         this.velocityY = -initialVelocity * Math.sin(this.angle);
-        trajectory = new ArrayList<>();
+        this.trajectory = new ArrayList<>();
+        this.shotPlayer = shotPlayer;
     }
 
     // Updates the position of the shot
