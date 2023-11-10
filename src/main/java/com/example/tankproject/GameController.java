@@ -126,7 +126,13 @@ public class GameController implements Initializable {
         updateWindHUD();
         tanksPlacement();
         Collections.shuffle(Data.getInstance().alivePlayers);
-        this.turn = Data.getInstance().alivePlayers.get(0);
+        for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
+            this.turn = Data.getInstance().alivePlayers.get(i);
+            if (this.turn.tank.getAmmunitionQuantity() > 0) {
+                Collections.swap(Data.getInstance().alivePlayers, 0, i);
+                break;
+            }
+        }
         buttonsPanelInitialize();
         tankRadarInitialize();
         componentsSizesInitialize();
@@ -284,13 +290,17 @@ public class GameController implements Initializable {
             this.shot.shotPlayer.tank.setCredits(this.shot.shotPlayer.tank.getCredits() - Constants.CREDITS_FOR_DESTROYING_TANKS);
         }
 
-
         // Checks if there is only one player left
         if (Data.getInstance().alivePlayers.size() == 1) {
             try {
                 this.music.stop();
-                Data.getInstance().gameNumber++;
-                App.setRoot("interlude");
+                if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
+                    //TODO: Victory menu goes here
+                    winScreen();
+                } else {
+                    Data.getInstance().gameNumber++;
+                    App.setRoot("interlude");
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -329,14 +339,14 @@ public class GameController implements Initializable {
                 int SubtractionAMMO = this.turn.tank.ammunition.get(2); 
                 this.turn.tank.ammunition.set(2, SubtractionAMMO - 1);
             }
-            gameAnimationTimer(this.shot, true);
+            gameAnimationTimer(this.shot);
         }
         ammunitionPanelControl();
         this.angleTextField.requestFocus();
    }
 
    // AnimationTimer responsible for the entire game
-    public void gameAnimationTimer(Shot shot, boolean fromTank) {
+    public void gameAnimationTimer(Shot shot) {
         shootButton.setDisable(true);
         new AnimationTimer() {
            @Override
@@ -344,7 +354,7 @@ public class GameController implements Initializable {
                // Makes animation fps constant
                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
                    shot.shotPosition();
-                   drawingMethods(!fromTank);
+                   drawingMethods(false);
                    shot.drawTrajectory(gameCanvasGraphicContext);
                    shot.drawShot(gameCanvasGraphicContext);
                    replayButton.setDisable(true);
@@ -359,11 +369,11 @@ public class GameController implements Initializable {
                    if (shot.position.getX() >= Data.getInstance().windowsWidth || shot.position.getX() < 0
                         || shot.position.getY() >= Data.getInstance().canvasHeight) {
                        stop();
-                       if (fromTank) stopMethods();
+                       stopMethods();
                    }
 
                    // Checks all the possible collisions
-                   if (shotCollision(shot, fromTank)) stop();
+                   if (shotCollision(shot)) stop();
 
                    // Trajectory point added
                    shot.addTrajectory();
@@ -488,7 +498,7 @@ public class GameController implements Initializable {
     // Power up that creates a bombardment of shots from the sky
     public void bombardment() {
         for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 10, -90, this.turn), false);
+            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 10, -90, this.turn));
         }
     }
 
@@ -498,7 +508,7 @@ public class GameController implements Initializable {
     }
 
     // Checks all the possible collisions with a shot
-    public boolean shotCollision(Shot shot, boolean fromTank) {
+    public boolean shotCollision(Shot shot) {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer == this.turn) return true;
@@ -515,24 +525,22 @@ public class GameController implements Initializable {
             if (hitPlayer.tank.getHealth() <= 0) {
                 deleteDeadPlayer(hitPlayer);
             }
-            if (fromTank) stopMethods();
+            stopMethods();
             return true;
         }
         // Checks if a box is hit
-        else if (fromTank) {
-            for (MysteryBox box : Data.getInstance().mysteryBoxes) {
-                if (shot.mysteryBoxCollision(box)) {
-                    Data.getInstance().mysteryBoxes.remove(box);
-                    Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
-                    terrainFallAnimationTimer();
-                    tankFallAnimationTimer();
-                    sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
-                    this.sounds.setVolume(Data.getInstance().SFXVolume);
-                    this.sounds.play();
-                    mysteryBoxPower(box);
-                    stopMethods();
-                    return true;
-                }
+        for (MysteryBox box : Data.getInstance().mysteryBoxes) {
+            if (shot.mysteryBoxCollision(box)) {
+                Data.getInstance().mysteryBoxes.remove(box);
+                Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
+                terrainFallAnimationTimer();
+                tankFallAnimationTimer();
+                sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+                this.sounds.setVolume(Data.getInstance().SFXVolume);
+                this.sounds.play();
+                mysteryBoxPower(box);
+                stopMethods();
+                return true;
             }
         }
         // Checks if terrain is hit
@@ -552,7 +560,7 @@ public class GameController implements Initializable {
                     deleteDeadPlayer(playerNearby);
                 }
             }
-            if (fromTank) stopMethods();
+            stopMethods();
             return true;
         }
         return false;
@@ -571,7 +579,10 @@ public class GameController implements Initializable {
 
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods() {
-        changeTurn();
+        if (this.turn == Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)) {
+            Collections.shuffle(Data.getInstance().alivePlayers);
+            this.turn = Data.getInstance().alivePlayers.get(0);
+        } else changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
         replayButton.setDisable(false);
@@ -595,9 +606,6 @@ public class GameController implements Initializable {
 
         this.tankRadarPointerRotate.setAngle(0);
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
-        if (this.turn == Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)) {
-            Collections.shuffle(Data.getInstance().alivePlayers);
-        }
         if (this.turn instanceof CPU) {
             ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
         }
@@ -621,18 +629,22 @@ public class GameController implements Initializable {
 
         if (tie()) {
             this.music.stop();
-            Data.getInstance().gameNumber++;
             try {
-                App.setRoot("interlude");
+                if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
+                    //TODO: Draw menu goes here
+                    App.setRoot("menu");
+                } else {
+                    Data.getInstance().gameNumber++;
+                    App.setRoot("interlude");
+                }
+                return;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
 
         updateWindHUD();
-
     }
 
     // This method verifies all players have ammunition available
@@ -745,8 +757,6 @@ public class GameController implements Initializable {
         } else {
             this.heavyAmmoQuantityLight.setFill(Color.RED);
         }
-
-
     }
 
     // Encapsulation of methods responsible for initializing toggle buttons, data related
