@@ -279,8 +279,8 @@ public class GameController implements Initializable {
         return null;
     }
 
-    // Removes hit player from alive players and add to dead players
-    public void deleteDeadPlayer(Player player) {
+    // Removes hit player from alive players and add to dead players. It returns true if there's only one player left
+    public boolean deleteDeadPlayer(Player player) {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         if (this.shot.shotPlayer != player) {
@@ -301,10 +301,12 @@ public class GameController implements Initializable {
                     Data.getInstance().gameNumber++;
                     App.setRoot("interlude");
                 }
+                return true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        return false;
     }
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
@@ -523,7 +525,7 @@ public class GameController implements Initializable {
             this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             if (hitPlayer.tank.getHealth() <= 0) {
-                deleteDeadPlayer(hitPlayer);
+                if (deleteDeadPlayer(hitPlayer)) return true;
             }
             stopMethods();
             return true;
@@ -557,7 +559,7 @@ public class GameController implements Initializable {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
                 this.healthRemainingHUD.showHUD(playerNearby.tank);
                 if (playerNearby.tank.getHealth() <= 0) {
-                    deleteDeadPlayer(playerNearby);
+                    if (deleteDeadPlayer(playerNearby)) return true;
                 }
             }
             stopMethods();
@@ -582,6 +584,17 @@ public class GameController implements Initializable {
         if (this.turn == Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)) {
             Collections.shuffle(Data.getInstance().alivePlayers);
             this.turn = Data.getInstance().alivePlayers.get(0);
+            for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
+                if (tie()) {
+                    changeTurn();
+                    return;
+                }
+                this.turn = Data.getInstance().alivePlayers.get(i);
+                if (this.turn.tank.getAmmunitionQuantity() > 0) {
+                    Collections.swap(Data.getInstance().alivePlayers, 0, i);
+                    break;
+                }
+            }
         } else changeTurn();
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -855,7 +868,4 @@ public class GameController implements Initializable {
 
         Data.getInstance().windVelocity = wind;
     }
-
-
 }
-
