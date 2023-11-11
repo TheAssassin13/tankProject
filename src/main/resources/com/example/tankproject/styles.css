@@ -397,3 +397,15 @@
 #gravityAmountSpinner .decrement-arrow-button:hover {
     -fx-background-color: -fx-lightRed-color;
 }
+
+#scoreboardTableView {
+    -fx-font-size: 22px;
+}
+
+#scoreboardTableView .column-header {
+    -fx-padding: 0;
+}
+
+.table-cell-centered {
+    -fx-alignment: center;
+}

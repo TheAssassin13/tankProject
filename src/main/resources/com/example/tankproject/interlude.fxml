@@ -175,6 +175,19 @@
                   </Text>
                </HBox>
             </VBox>
+            <VBox fx:id="scoreboardVBox" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="15.0" styleClass="menuWindow" visible="false">
+               <padding>
+                  <Insets left="20.0" right="20.0" top="60.0" />
+               </padding>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Scoreboard">
+                  <font>
+                     <Font name="Arial" size="40.0" />
+                  </font>
+               </Text>
+               <TableView id="scoreboardTableView" fx:id="scoreboardTableView" maxHeight="-Infinity" prefHeight="550.0">
+ 
+               </TableView>
+            </VBox>
          </StackPane>
       </VBox>
    </HBox>

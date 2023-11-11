@@ -748,25 +748,20 @@ public class GameController implements Initializable {
         }
 
         // Changes ammo light color based on ammo left
-        if (this.turn.tank.ammunition.get(0) > 5) {
+        if (this.turn.tank.ammunition.get(0) >= 1) {
             this.lightAmmoQuantityLight.setFill(Color.GREEN);
-        } else if (this.turn.tank.ammunition.get(0) >= 1) {
-            this.lightAmmoQuantityLight.setFill(Color.YELLOW);
         } else {
             this.lightAmmoQuantityLight.setFill(Color.RED);
         }
 
-        if (this.turn.tank.ammunition.get(1) > 5) {
+        if (this.turn.tank.ammunition.get(1) >= 1) {
             this.mediumAmmoQuantityLight.setFill(Color.GREEN);
-        } else if (this.turn.tank.ammunition.get(1) >= 1) {
-            this.mediumAmmoQuantityLight.setFill(Color.YELLOW);
         } else {
             this.mediumAmmoQuantityLight.setFill(Color.RED);
         }
-        if (this.turn.tank.ammunition.get(2) > 5) {
+
+        if (this.turn.tank.ammunition.get(2) >= 1) {
             this.heavyAmmoQuantityLight.setFill(Color.GREEN);
-        } else if (this.turn.tank.ammunition.get(2) >= 1) {
-            this.heavyAmmoQuantityLight.setFill(Color.YELLOW);
         } else {
             this.heavyAmmoQuantityLight.setFill(Color.RED);
         }

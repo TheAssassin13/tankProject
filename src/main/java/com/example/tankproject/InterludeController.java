@@ -1,10 +1,12 @@
 package com.example.tankproject;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -45,6 +47,8 @@ public class InterludeController implements Initializable {
     public HBox shopMediumAmmoHBox;
     public HBox shopHeavyAmmoHBox;
     public MediaPlayer music;
+    public VBox scoreboardVBox;
+    public TableView<Player> scoreboardTableView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -74,6 +78,9 @@ public class InterludeController implements Initializable {
         this.music.setVolume(Data.getInstance().musicVolume);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
+
+        calculatePlayersPosition();
+        scoreboardTableViewInitialize();
     }
 
     // Opens game windows
@@ -95,6 +102,7 @@ public class InterludeController implements Initializable {
 
     // When the options button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
+        this.scoreboardVBox.setVisible(false);
         if (Data.getInstance().playableTanksQuantity < 1) return;
         if (this.shopVBox.isVisible()) {
             this.shopVBox.setDisable(true);
@@ -106,6 +114,15 @@ public class InterludeController implements Initializable {
     }
 
     public void onScoreboardButtonClick(ActionEvent ignoredEvent) {
+        this.shopVBox.setVisible(false);
+        if (this.scoreboardVBox.isVisible()) {
+            this.scoreboardVBox.setDisable(true);
+            this.scoreboardVBox.setVisible(false);
+            return;
+        }
+        this.scoreboardVBox.setDisable(false);
+        this.scoreboardVBox.setVisible(true);
+        scoreboardTableViewInitialize();
     }
 
     // This method creates the players and saves them into the alivePlayers arrayList
@@ -207,4 +224,54 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 
+    public void scoreboardTableViewInitialize() {
+        TableColumn<Player, String> playerPositionColumn = new TableColumn<>("Pos");
+        TableColumn<Player, Void> playerTankColumn = new TableColumn<>("Tank");
+        TableColumn<Player, String> playerNameColumn = new TableColumn<>("Name");
+        TableColumn<Player, String> playerKillsColumn = new TableColumn<>("Kills");
+        TableColumn<Player, String> playerCreditsColumn = new TableColumn<>("Credits");
+
+        playerPositionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().position)));
+        playerTankColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        playerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name));
+        playerKillsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.kills)));
+        playerCreditsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.credits)));
+
+        playerPositionColumn.setPrefWidth(85);
+        playerTankColumn.setPrefWidth(115);
+        playerNameColumn.setPrefWidth(115);
+        playerKillsColumn.setPrefWidth(85);
+        playerCreditsColumn.setPrefWidth(115);
+
+        playerPositionColumn.getStyleClass().add("table-cell-centered");
+        playerTankColumn.getStyleClass().add("table-cell-centered");
+        playerNameColumn.getStyleClass().add("table-cell-centered");
+        playerKillsColumn.getStyleClass().add("table-cell-centered");
+        playerCreditsColumn.getStyleClass().add("table-cell-centered");
+
+        this.scoreboardTableView.getColumns().clear();
+        this.scoreboardTableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerCreditsColumn);
+        this.scoreboardTableView.setItems(FXCollections.observableArrayList(Data.getInstance().alivePlayers));
+        this.scoreboardTableView.getSortOrder().add(playerPositionColumn);
+        playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
+    }
+
+    public void calculatePlayersPosition() {
+        ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
+        int position = 1;
+        int kills;
+
+        players.sort(Comparator.comparing(player -> player.tank.kills));
+        Collections.reverse(players);
+        kills = players.get(0).tank.kills;
+
+        for (Player p: players) {
+            if (p.tank.kills == kills) {
+                p.position = position;
+            } else {
+                p.position = ++position;
+                kills = p.tank.kills;
+            }
+        }
+    }
 }
