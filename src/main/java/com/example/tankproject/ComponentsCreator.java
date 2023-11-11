@@ -138,7 +138,7 @@ public class ComponentsCreator {
     // Creates tank health remaining HBox
     public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
         HBox healthRemainingHbox = new HBox();
-        Text healthRemainingText = new Text(text + " " + tank.getHealth() + " / " + Constants.TANK_HEALTH);
+        Text healthRemainingText = new Text(String.format("%s %.1f / %d", text, tank.getHealth(), Constants.TANK_HEALTH));
         Image healthIconImage = healthIcon(tank);
         ImageView healthIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
@@ -163,7 +163,7 @@ public class ComponentsCreator {
         Image healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
 
         if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
-        if (tank.getHealth() <= Constants.TANK_HEALTH / 2) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(1);
+        if (tank.getHealth() <= Constants.TANK_HEALTH / 2.0) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(1);
         if (tank.getHealth() == 0) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(0);
 
         return healthIconImage;

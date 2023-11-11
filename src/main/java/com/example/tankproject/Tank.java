@@ -15,7 +15,7 @@ public class Tank {
     public Double power;
     private ToggleButton ammoSelected;
     public ArrayList<Integer> ammunition;
-    private int health;
+    private double health;
     public int credits;
     public int kills;
 
@@ -40,7 +40,7 @@ public class Tank {
         return angle;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
 
@@ -57,7 +57,7 @@ public class Tank {
     }
 
 
-    public void reduceHealth(int damage) {
+    public void reduceHealth(double damage) {
         this.health = Math.max(0,this.health - damage);
     }
 

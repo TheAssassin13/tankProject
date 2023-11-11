@@ -25,4 +25,6 @@ public class Constants {
     public final static int TERRAIN_MARGIN = 50;
     public final static int WIND_MAX_VELOCITY = 10;
 
+    public final static double MAX_VOLUME = 0.5;
+
 }

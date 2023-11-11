@@ -416,7 +416,7 @@ public class GameController implements Initializable {
                         if (p.tank.position.getY() + Constants.TANK_SIZE / 3 < Data.getInstance().canvasHeight &&
                                 Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
-                            p.tank.reduceHealth(1);
+                            p.tank.reduceHealth(Data.getInstance().gravity/9.8);
                             healthRemainingHUD.showHUD(p.tank);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
@@ -696,9 +696,9 @@ public class GameController implements Initializable {
         this.stackPane.getChildren().add(this.winScreenVBox);
 
         this.music.stop();
-        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
-        this.music.setVolume(Data.getInstance().musicVolume);
-        this.music.play();
+        MediaPlayer victorySound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        victorySound.setVolume(Data.getInstance().SFXVolume);
+        victorySound.play();
     }
 
     // Disables win screen to keep playing
@@ -837,7 +837,7 @@ public class GameController implements Initializable {
 
     public void updateCurrentPlayerInterfaceValues(Image heartIcon) {
         this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText(String.valueOf(this.turn.tank.getHealth()));
+        this.currentTankHealth.setText(String.format("%.1f", this.turn.tank.getHealth()));
         this.currentTankKills.setText(String.valueOf(this.turn.tank.getKills()));
         this.currentTankCredits.setText(String.valueOf(this.turn.tank.getCredits()));
         this.currentTankHealthIcon.setImage(heartIcon);

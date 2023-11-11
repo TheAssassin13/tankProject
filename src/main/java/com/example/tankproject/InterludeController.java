@@ -10,6 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class InterludeController implements Initializable {
     public HBox shopLightAmmoHBox;
     public HBox shopMediumAmmoHBox;
     public HBox shopHeavyAmmoHBox;
+    public MediaPlayer music;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,6 +70,10 @@ public class InterludeController implements Initializable {
             this.shopVBox.setDisable(true);
             this.shopVBox.setVisible(false);
         }
+        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
+        this.music.setVolume(Data.getInstance().musicVolume);
+        this.music.setCycleCount(MediaPlayer.INDEFINITE);
+        this.music.play();
     }
 
     // Opens game windows
@@ -76,11 +83,13 @@ public class InterludeController implements Initializable {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
         if (needToBuyAmmo) return;
+        this.music.stop();
         App.setRoot("game");
     }
 
     // Opens menu screen
     public void onMenuButtonClick(ActionEvent ignoredActionEvent) throws IOException {
+        this.music.stop();
         App.setRoot("menu");
     }
 

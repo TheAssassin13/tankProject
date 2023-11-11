@@ -63,7 +63,7 @@ public class MenuController implements Initializable {
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
-        this.mediaPlayer.setVolume(0.5 * Data.getInstance().musicVolume);
+        this.mediaPlayer.setVolume(Data.getInstance().musicVolume);
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
         difficultyButtonsAlwaysSelected();
@@ -125,7 +125,7 @@ public class MenuController implements Initializable {
 
         for (int i = 0; i < Constants.RESOLUTION_WIDTH.length; i++) {
             this.resolutionsString.add(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i]);
-            this.resolutionsHashMap.put(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i],i);
+            this.resolutionsHashMap.put(Constants.RESOLUTION_WIDTH[i] + " x " + Constants.RESOLUTION_HEIGHT[i], i);
         }
 
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(this.resolutionsString);
@@ -135,7 +135,7 @@ public class MenuController implements Initializable {
 
     // Sets the sfx game volume and play a sound for reference
     public void onSFXVolumeDrag(MouseEvent ignoredMouseEvent) {
-        Data.getInstance().SFXVolume = sfxVolumeSlider.getValue()/100;
+        Data.getInstance().SFXVolume = sfxVolumeSlider.getValue() / 100 * Constants.MAX_VOLUME;
         MediaPlayer sound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
         sound.setVolume(Data.getInstance().SFXVolume);
         sound.play();
@@ -144,8 +144,8 @@ public class MenuController implements Initializable {
     // Sets the music game volume
     public void musicVolumeDragInitialize() {
         this.musicVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Data.getInstance().musicVolume = newValue.doubleValue() / 100;
-            mediaPlayer.setVolume(0.5 * Data.getInstance().musicVolume);
+            Data.getInstance().musicVolume = newValue.doubleValue() / 100 * Constants.MAX_VOLUME;
+            mediaPlayer.setVolume(Data.getInstance().musicVolume);
         });
     }
 
