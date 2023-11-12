@@ -45,8 +45,8 @@ public class App extends Application {
         newApp.start(new Stage());
     }
 
-    // Updates screen resolution constants related
-    public static void updateScreenResolutionConstants() {
+    // Updates screen resolution variables related
+    public static void updateScreenResolutionVariables() {
         Data.getInstance().canvasHeight = Data.getInstance().windowsHeight - Data.getInstance().buttonsPanelHeight;
         Data.getInstance().seaLevel = Data.getInstance().canvasHeight - 200;
     }

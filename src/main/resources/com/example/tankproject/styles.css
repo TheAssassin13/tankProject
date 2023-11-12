@@ -127,7 +127,7 @@
     -fx-padding: 0 15px 0 0;
 }
 
-#healthRemainingHBox {
+#tankInfoHBox {
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 3px;
     -fx-pref-height: 30px;

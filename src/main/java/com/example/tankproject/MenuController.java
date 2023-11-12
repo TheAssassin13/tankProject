@@ -106,7 +106,7 @@ public class MenuController implements Initializable {
             // Closes the actual windows and opens a new one with the resolution selected by user
             this.mediaPlayer.stop();
             App.restartWindow();
-            App.updateScreenResolutionConstants();
+            App.updateScreenResolutionVariables();
         }
         if (easyButton.isSelected()) Data.getInstance().CPUDifficulty = 1;
         else if (mediumButton.isSelected()) Data.getInstance().CPUDifficulty = 2;

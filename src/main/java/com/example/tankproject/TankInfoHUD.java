@@ -10,27 +10,27 @@ import java.util.ArrayList;
 
 import static com.example.tankproject.App.scene;
 
-public class HealthRemainingHUD {
-    HBox healthRemainingHBox;
+public class TankInfoHUD {
+    HBox tankInfoHBox;
     Timeline timeline;
     double showingSeconds = 2.5;
 
-    public HealthRemainingHUD() {
-        this.healthRemainingHBox = new HBox();
+    public TankInfoHUD() {
+        this.tankInfoHBox = new HBox();
         this.timeline = new Timeline();
 
-        this.healthRemainingHBox.setId("healthRemainingHBox");
-        this.healthRemainingHBox.setVisible(false);
+        this.tankInfoHBox.setId("tankInfoHBox");
+        this.tankInfoHBox.setVisible(false);
         timelineAnimationInitialize();
     }
 
     // Makes HUD visible showing the tank remaining health
     public void showHUD(Tank tank) {
-        this.healthRemainingHBox.setVisible(true);
-        this.healthRemainingHBox.getChildren().clear();
-        this.healthRemainingHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20,5, Color.BLACK));
-        this.healthRemainingHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
-        this.healthRemainingHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
+        this.tankInfoHBox.setVisible(true);
+        this.tankInfoHBox.getChildren().clear();
+        this.tankInfoHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20,5, Color.BLACK,true));
+        this.tankInfoHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
+        this.tankInfoHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
 
         this.timeline.play();
     }
@@ -51,8 +51,8 @@ public class HealthRemainingHUD {
     public void timelineAnimationInitialize() {
         // Makes HUD invisible after some time
         this.timeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.ZERO, e -> healthRemainingHBox.setOpacity(1)),
-                new KeyFrame(Duration.seconds(this.showingSeconds), e -> healthRemainingHBox.setOpacity(0))
+                new KeyFrame(Duration.ZERO, e -> tankInfoHBox.setOpacity(1)),
+                new KeyFrame(Duration.seconds(this.showingSeconds), e -> tankInfoHBox.setOpacity(0))
         );
 
         this.timeline.setOnFinished(event -> this.timeline.stop());

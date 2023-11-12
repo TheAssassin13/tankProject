@@ -73,7 +73,7 @@ public class GameController implements Initializable {
     public MediaPlayer sounds;
     public Point umbrellaPosition;
     public HBox healthRemainingHBox;
-    public HealthRemainingHUD healthRemainingHUD;
+    public TankInfoHUD tankInfoHUD;
     public ImageView explosionAnimation;
     public AnimationsCreator animationsCreator;
     public Text currentTankKills;
@@ -111,8 +111,8 @@ public class GameController implements Initializable {
         this.music.setVolume(Data.getInstance().musicVolume);
         this.tankRadarStackPane.getChildren().clear();
         this.stackPane.getChildren().remove(this.healthRemainingHBox);
-        this.healthRemainingHUD = new HealthRemainingHUD();
-        this.healthRemainingHBox = this.healthRemainingHUD.healthRemainingHBox;
+        this.tankInfoHUD = new TankInfoHUD();
+        this.healthRemainingHBox = this.tankInfoHUD.tankInfoHBox;
         this.stackPane.getChildren().add(this.healthRemainingHBox);
         this.stackPane.getChildren().remove(this.explosionAnimation);
         this.animationsCreator = new AnimationsCreator();
@@ -139,7 +139,7 @@ public class GameController implements Initializable {
         drawingMethods(false);
         buttonsActionInitialize();
         ammunitionPanelControl();
-        this.healthRemainingHUD.HUDMouseEvents(Data.getInstance().alivePlayers);
+        this.tankInfoHUD.HUDMouseEvents(Data.getInstance().alivePlayers);
 
         // If CPU plays first
         if (this.turn instanceof CPU) ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
@@ -417,7 +417,7 @@ public class GameController implements Initializable {
                                 Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(Data.getInstance().gravity/9.8);
-                            healthRemainingHUD.showHUD(p.tank);
+                            tankInfoHUD.showHUD(p.tank);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
                                 flag = 0;
@@ -487,7 +487,7 @@ public class GameController implements Initializable {
     public void mysteryBoxPower(MysteryBox box) {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
-            this.healthRemainingHUD.showHUD(this.turn.tank);
+            this.tankInfoHUD.showHUD(this.turn.tank);
             updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
             this.turn.tank.setCredits(this.turn.tank.getCredits() + 1500);
@@ -519,7 +519,7 @@ public class GameController implements Initializable {
             Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            this.healthRemainingHUD.showHUD(hitPlayer.tank);
+            this.tankInfoHUD.showHUD(hitPlayer.tank);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
             this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
             this.sounds.setVolume(Data.getInstance().SFXVolume);
@@ -557,7 +557,7 @@ public class GameController implements Initializable {
             Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
-                this.healthRemainingHUD.showHUD(playerNearby.tank);
+                this.tankInfoHUD.showHUD(playerNearby.tank);
                 if (playerNearby.tank.getHealth() <= 0) {
                     if (deleteDeadPlayer(playerNearby)) return true;
                 }

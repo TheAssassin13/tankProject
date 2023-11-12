@@ -78,7 +78,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35,25, Color.WHITE);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35,25, Color.WHITE,false);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
 
@@ -137,7 +137,7 @@ public class ComponentsCreator {
     }
 
     // Creates tank health remaining HBox
-    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize, int spacing, Color fontColor) {
+    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize, int spacing, Color fontColor, boolean inverse) {
         HBox healthRemainingHbox = new HBox();
         Text healthRemainingText = new Text(String.valueOf( (int) tank.getHealth()));
         Text killsText = new Text(String.valueOf(tank.kills));
@@ -148,6 +148,8 @@ public class ComponentsCreator {
 
         healthRemainingText.setFont(font);
         healthRemainingText.setFill(fontColor);
+        killsText.setFont(font);
+        killsText.setFill(fontColor);
 
         healthIconImageView = new ImageView(healthIconImage);
         healthIconImageView.setFitWidth(iconSize);
@@ -155,7 +157,7 @@ public class ComponentsCreator {
         killsIconImageView = new ImageView(ImagesLoader.getInstance().currentTankKillsImage);
         killsIconImageView.setFitWidth(iconSize);
         killsIconImageView.setFitHeight(iconSize);
-        killsIconImageView.setEffect(new ColorAdjust(1,1,-1,1));
+        if (inverse) killsIconImageView.setEffect(new ColorAdjust(1,1,-1,1));
 
         healthRemainingHbox.setAlignment(Pos.CENTER);
         healthRemainingHbox.setSpacing(spacing);
