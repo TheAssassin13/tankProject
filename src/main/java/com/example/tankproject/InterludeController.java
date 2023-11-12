@@ -1,5 +1,7 @@
 package com.example.tankproject;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +52,7 @@ public class InterludeController implements Initializable {
     public MediaPlayer music;
     public VBox scoreboardVBox;
     public TableView<Player> scoreboardTableView;
+    public HBox warningHBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,7 +93,10 @@ public class InterludeController implements Initializable {
         for (Player player : Data.getInstance().alivePlayers) {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
-        if (needToBuyAmmo) return;
+        if (needToBuyAmmo) {
+            showWarningHBox();
+            return;
+        }
         this.music.stop();
         App.setRoot("game");
     }
@@ -273,5 +280,18 @@ public class InterludeController implements Initializable {
                 kills = p.tank.kills;
             }
         }
+    }
+
+    public void showWarningHBox() {
+        Timeline timeline = new Timeline();
+        int showingSeconds = 3;
+        // Makes HUD invisible after some time
+        timeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, e -> warningHBox.setVisible(true)),
+                new KeyFrame(Duration.seconds(showingSeconds), e -> warningHBox.setVisible(false))
+        );
+
+        timeline.setOnFinished(event -> timeline.stop());
+        timeline.play();
     }
 }

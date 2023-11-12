@@ -832,7 +832,7 @@ public class GameController implements Initializable {
 
     public void updateCurrentPlayerInterfaceValues(Image heartIcon) {
         this.currentPlayerText.setText(this.turn.name + " is playing");
-        this.currentTankHealth.setText(String.format("%.1f", this.turn.tank.getHealth()));
+        this.currentTankHealth.setText(String.valueOf((int)this.turn.tank.getHealth()));
         this.currentTankKills.setText(String.valueOf(this.turn.tank.getKills()));
         this.currentTankCredits.setText(String.valueOf(this.turn.tank.getCredits()));
         this.currentTankHealthIcon.setImage(heartIcon);

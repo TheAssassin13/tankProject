@@ -131,7 +131,7 @@
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 3px;
     -fx-pref-height: 30px;
-    -fx-pref-width: 145px;
+    -fx-pref-width: 120px;
     -fx-max-height: -fx-pref-height;
     -fx-max-width: -fx-pref-width;
     -fx-min-height: -fx-pref-height;
@@ -408,4 +408,13 @@
 
 .table-cell-centered {
     -fx-alignment: center;
+}
+
+.warningHBox {
+    -fx-background-color: #e7e7e7;
+    -fx-background-radius: 8px;
+    -fx-border-width: 4px;
+    -fx-border-color: -fx-purple-color;
+    -fx-border-radius: 4px;
+    -fx-padding: 16px;
 }

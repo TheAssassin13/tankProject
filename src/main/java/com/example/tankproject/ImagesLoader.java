@@ -10,6 +10,7 @@ public class ImagesLoader {
     public ArrayList<Image> shotImages;
     public ArrayList<Image> backgroundImages;
     public Image currentTankImage;
+    public Image currentTankKillsImage;
     public Image winnerTankImage;
     public ArrayList<Image> heartIconImages;
     public ArrayList<Image> iconImages;
@@ -49,6 +50,7 @@ public class ImagesLoader {
         this.heartIconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm()));
         this.heartIconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm()));
         this.heartIconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/full_heart_icon.png")).toExternalForm()));
+        this.currentTankKillsImage = new Image(Objects.requireNonNull(getClass().getResource("icons/kills_icon.png")).toExternalForm());
     }
 
     // This method loads and saves the icon images in an ArrayList

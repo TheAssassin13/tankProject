@@ -2,6 +2,7 @@ package com.example.tankproject;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -77,7 +78,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35, "Health:",25, Color.WHITE);
+        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35,25, Color.WHITE);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
 
@@ -136,11 +137,13 @@ public class ComponentsCreator {
     }
 
     // Creates tank health remaining HBox
-    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize ,String text, int spacing, Color fontColor) {
+    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize, int spacing, Color fontColor) {
         HBox healthRemainingHbox = new HBox();
-        Text healthRemainingText = new Text(String.format("%s %.1f / %d", text, tank.getHealth(), Constants.TANK_HEALTH));
+        Text healthRemainingText = new Text(String.valueOf( (int) tank.getHealth()));
+        Text killsText = new Text(String.valueOf(tank.kills));
         Image healthIconImage = healthIcon(tank);
         ImageView healthIconImageView;
+        ImageView killsIconImageView;
         Font font = Font.font("Arial",FontWeight.NORMAL,fontSize);
 
         healthRemainingText.setFont(font);
@@ -149,11 +152,18 @@ public class ComponentsCreator {
         healthIconImageView = new ImageView(healthIconImage);
         healthIconImageView.setFitWidth(iconSize);
         healthIconImageView.setFitHeight(iconSize);
+        killsIconImageView = new ImageView(ImagesLoader.getInstance().currentTankKillsImage);
+        killsIconImageView.setFitWidth(iconSize);
+        killsIconImageView.setFitHeight(iconSize);
+        killsIconImageView.setEffect(new ColorAdjust(1,1,-1,1));
 
         healthRemainingHbox.setAlignment(Pos.CENTER);
         healthRemainingHbox.setSpacing(spacing);
         healthRemainingHbox.getChildren().add(healthRemainingText);
         healthRemainingHbox.getChildren().add(healthIconImageView);
+        healthRemainingHbox.getChildren().add(new Text("  "));
+        healthRemainingHbox.getChildren().add(killsText);
+        healthRemainingHbox.getChildren().add(killsIconImageView);
 
         return healthRemainingHbox;
     }

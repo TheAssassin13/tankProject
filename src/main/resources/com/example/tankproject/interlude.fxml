@@ -191,4 +191,15 @@
          </StackPane>
       </VBox>
    </HBox>
+   <HBox fx:id="warningHBox" alignment="CENTER" disable="true" fillHeight="false" maxHeight="-Infinity"
+         maxWidth="-Infinity" spacing="10.0" styleClass="warningHBox" visible="false">
+      <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+         <Image url="@icons/warning_icon.png"/>
+      </ImageView>
+      <Text fill="#1b0019" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy at least one ammo!">
+         <font>
+            <Font name="Arial" size="48.0"/>
+         </font>
+      </Text>
+   </HBox>
 </StackPane>
