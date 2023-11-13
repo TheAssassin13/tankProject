@@ -273,7 +273,7 @@ public class GameController implements Initializable {
         if (nearby) minimumDistance = 0.1;
         else minimumDistance = 1;
         for (Player p : Data.getInstance().alivePlayers) {
-            if (shot.tankCollision(p.tank) > minimumDistance) {
+            if (shot.tankCollision(p.tank) >= minimumDistance) {
                 return p;
             }
         }
@@ -326,7 +326,7 @@ public class GameController implements Initializable {
             }
 
             ToggleButton selectedAmmo = this.turn.tank.getAmmoSelected();
-            int shotPositionMargin = 10;
+            int shotPositionMargin = 22;
 
             if (selectedAmmo == this.lightAmmoButton){
                 this.shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
@@ -516,6 +516,7 @@ public class GameController implements Initializable {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer != null) {
+            System.out.println("a");
             hitPlayer.tank.reduceHealth(shot.getDamage());
             Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
