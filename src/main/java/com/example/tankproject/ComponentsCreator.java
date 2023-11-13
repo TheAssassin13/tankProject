@@ -78,7 +78,7 @@ public class ComponentsCreator {
         HBox hbox = new HBox();
         Text victoryText = new Text("Victory!");
         Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createHealthRemainingHBox(winnerPlayer.tank,30,35,25, Color.WHITE,false);
+        HBox healthRemainingHBox = createTankInfoHBox(winnerPlayer.tank,30,35,25, Color.WHITE,false);
 
         winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
 
@@ -136,8 +136,8 @@ public class ComponentsCreator {
         return pointer;
     }
 
-    // Creates tank health remaining HBox
-    public static HBox createHealthRemainingHBox(Tank tank, int fontSize, int iconSize, int spacing, Color fontColor, boolean inverse) {
+    // Creates tank information HBox
+    public static HBox createTankInfoHBox(Tank tank, int fontSize, int iconSize, int spacing, Color fontColor, boolean inverse) {
         HBox healthRemainingHbox = new HBox();
         Text healthRemainingText = new Text(String.valueOf( (int) tank.getHealth()));
         Text killsText = new Text(String.valueOf(tank.kills));

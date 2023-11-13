@@ -24,11 +24,11 @@ public class TankInfoHUD {
         timelineAnimationInitialize();
     }
 
-    // Makes HUD visible showing the tank remaining health
+    // Makes HUD visible showing the tank remaining health and kills
     public void showHUD(Tank tank) {
         this.tankInfoHBox.setVisible(true);
         this.tankInfoHBox.getChildren().clear();
-        this.tankInfoHBox.getChildren().add(ComponentsCreator.createHealthRemainingHBox(tank,14,20,5, Color.BLACK,true));
+        this.tankInfoHBox.getChildren().add(ComponentsCreator.createTankInfoHBox(tank,14,20,5, Color.BLACK,true));
         this.tankInfoHBox.setTranslateX(ComponentsCreator.transformX(tank.position.getX()));
         this.tankInfoHBox.setTranslateY(ComponentsCreator.transformY(tank.position.getY()) - 65);
 

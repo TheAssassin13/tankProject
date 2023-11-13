@@ -160,7 +160,7 @@ public class InterludeController implements Initializable {
 
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
-            player.tank.setCredits(player.tank.getCredits() + Constants.INITIAL_CREDITS);
+            this.shop.LoadCredits(player,Constants.INITIAL_CREDITS);
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -231,6 +231,7 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 
+    // Initializes the scoreboard table
     public void scoreboardTableViewInitialize() {
         TableColumn<Player, String> playerPositionColumn = new TableColumn<>("Pos");
         TableColumn<Player, Void> playerTankColumn = new TableColumn<>("Tank");
@@ -263,6 +264,7 @@ public class InterludeController implements Initializable {
         playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
     }
 
+    // Calculates the player's position based on the number of kills
     public void calculatePlayersPosition() {
         ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
         int position = 1;
@@ -282,10 +284,11 @@ public class InterludeController implements Initializable {
         }
     }
 
+    // Makes warning HBox visible for a few seconds
     public void showWarningHBox() {
         Timeline timeline = new Timeline();
         int showingSeconds = 3;
-        // Makes HUD invisible after some time
+        // Makes warning invisible after some time
         timeline.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, e -> warningHBox.setVisible(true)),
                 new KeyFrame(Duration.seconds(showingSeconds), e -> warningHBox.setVisible(false))

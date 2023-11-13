@@ -81,7 +81,8 @@ public class GameController implements Initializable {
     public ImageView windDirectionImageView;
     public Text windVelocityText;
     public VBox windHUDVBox;
-    Shot shot;
+    public Shot shot;
+    public Shop shop;
 
 
     // Initializes JavaFX windows
@@ -121,7 +122,7 @@ public class GameController implements Initializable {
         this.maxDistanceTextField.setText("Max distance = 0 m");
         this.maxHeightTextField.setText("Max height = 0 m");
         this.windHUDVBox.setVisible(Data.getInstance().wind);
-
+        this.shop = new Shop();
 
         updateWindHUD();
         tanksPlacement();
@@ -262,7 +263,7 @@ public class GameController implements Initializable {
         }
     }
 
-    /* Checks if a player's tank, that is not the current player, is hit and return the hit player.
+    /* Checks if a player's tank, is hit and return the hit player.
     As the method from shot tankCollision() returns a value between 0 and 1, we can use it to know
     if the tank was hit or the shot was close. When the shot is nearby we only return the player
     if the method returns a number greater than 0.1
@@ -272,7 +273,7 @@ public class GameController implements Initializable {
         if (nearby) minimumDistance = 0.1;
         else minimumDistance = 1;
         for (Player p : Data.getInstance().alivePlayers) {
-            if (this.turn != p && shot.tankCollision(p.tank) >= minimumDistance) {
+            if (shot.tankCollision(p.tank) > minimumDistance) {
                 return p;
             }
         }
@@ -284,10 +285,10 @@ public class GameController implements Initializable {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         if (this.shot.shotPlayer != player) {
-            this.shot.shotPlayer.tank.setCredits(this.shot.shotPlayer.tank.getCredits() + Constants.CREDITS_FOR_DESTROYING_TANKS);
+            this.shop.LoadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.tank.kills++;
         } else {
-            this.shot.shotPlayer.tank.setCredits(this.shot.shotPlayer.tank.getCredits() - Constants.CREDITS_FOR_DESTROYING_TANKS);
+            this.shop.ReduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
         }
 
         // Checks if there is only one player left
@@ -325,19 +326,20 @@ public class GameController implements Initializable {
             }
 
             ToggleButton selectedAmmo = this.turn.tank.getAmmoSelected();
+            int shotPositionMargin = 10;
 
             if (selectedAmmo == this.lightAmmoButton){
-                this.shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(0); 
                 this.turn.tank.ammunition.set(0, SubtractionAMMO - 1);
             }
             else if(selectedAmmo == this.mediumAmmoButton){
-                this.shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(1); 
                 this.turn.tank.ammunition.set(1, SubtractionAMMO - 1);
             }
             else{
-                this.shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY()), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(2); 
                 this.turn.tank.ammunition.set(2, SubtractionAMMO - 1);
             }
@@ -490,7 +492,7 @@ public class GameController implements Initializable {
             this.tankInfoHUD.showHUD(this.turn.tank);
             updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
-            this.turn.tank.setCredits(this.turn.tank.getCredits() + 1500);
+            this.shop.LoadCredits(this.turn,1500);
         } else if (box.powerUp == 2) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
@@ -513,8 +515,7 @@ public class GameController implements Initializable {
     public boolean shotCollision(Shot shot) {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
-        if (hitPlayer == this.turn) return true;
-        else if (hitPlayer != null) {
+        if (hitPlayer != null) {
             hitPlayer.tank.reduceHealth(shot.getDamage());
             Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
