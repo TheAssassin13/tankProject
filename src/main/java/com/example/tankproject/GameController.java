@@ -57,7 +57,6 @@ public class GameController implements Initializable {
     public Button exitButton;
     public Button menuExitButton;
     public StackPane stackPaneCanvas;
-    public VBox winScreenVBox;
     public ImageView currentPlayerTankImage;
     public StackPane currentPlayerTankStackPane;
     public ToggleGroup ammunitionButtons;
@@ -156,10 +155,6 @@ public class GameController implements Initializable {
     // Sets replay button action
     public void setReplayButtonAction(Button replayButton) {
         replayButton.setOnAction(event -> {
-            // WinScreen is in screen
-            if (this.stackPane.getChildren().size() != 1) {
-                disableWinScreen();
-            }
             music.stop();
             Data.getInstance().reset();
             try {
@@ -295,13 +290,9 @@ public class GameController implements Initializable {
         if (Data.getInstance().alivePlayers.size() == 1) {
             try {
                 this.music.stop();
-                if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-                    //TODO: Victory menu goes here
-                    winScreen();
-                } else {
-                    Data.getInstance().gameNumber++;
-                    App.setRoot("interlude");
-                }
+                if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
+                App.setRoot("interlude");
+
                 return true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -516,7 +507,6 @@ public class GameController implements Initializable {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer != null) {
-            System.out.println("a");
             hitPlayer.tank.reduceHealth(shot.getDamage());
             Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
@@ -645,13 +635,11 @@ public class GameController implements Initializable {
         if (tie()) {
             this.music.stop();
             try {
-                if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-                    //TODO: Draw menu goes here
-                    App.setRoot("menu");
-                } else {
-                    Data.getInstance().gameNumber++;
-                    App.setRoot("interlude");
-                }
+                if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
+                Data.getInstance().tie = true;
+
+                App.setRoot("interlude");
+
                 return;
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -669,52 +657,6 @@ public class GameController implements Initializable {
             onePlayerHasAmmo |= player.tank.getAmmunitionQuantity() > 0;
         }
         return !onePlayerHasAmmo;
-    }
-
-    // Creates the game win screen
-    public void winScreen() {
-        if (this.healthRemainingHBox != null) this.stackPane.getChildren().remove(this.healthRemainingHBox);
-        if (this.explosionAnimation != null) this.stackPane.getChildren().remove(this.explosionAnimation);
-        if (this.stackPane.getChildren().size() != 1) return;
-        Button replayButton = ComponentsCreator.createReplayButton(40,40);
-        Button exitButton = ComponentsCreator.createExitButton(40,40);
-        VBox backgroundVbox = ComponentsCreator.createWinScreenVBox(Data.getInstance().alivePlayers.get(0),replayButton,exitButton);
-
-        setReplayButtonAction(replayButton);
-        setExitButtonAction(exitButton);
-
-        // Disables buttons of the interface game
-        this.angleTextField.setDisable(true);
-        this.powerTextField.setDisable(true);
-        this.shootButton.setDisable(true);
-        this.replayButton.setDisable(true);
-        this.exitButton.setDisable(true);
-        this.menuExitButton.setDisable(true);
-        this.lightAmmoButton.setDisable(true);
-        this.mediumAmmoButton.setDisable(true);
-        this.heavyAmmoButton.setDisable(true);
-
-        this.winScreenVBox = backgroundVbox;
-        this.stackPane.getChildren().add(this.winScreenVBox);
-
-        this.music.stop();
-        MediaPlayer victorySound = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
-        victorySound.setVolume(Data.getInstance().SFXVolume);
-        victorySound.play();
-    }
-
-    // Disables win screen to keep playing
-    public void disableWinScreen() {
-        this.stackPane.getChildren().remove(this.winScreenVBox);
-        this.angleTextField.setDisable(false);
-        this.powerTextField.setDisable(false);
-        this.shootButton.setDisable(false);
-        this.replayButton.setDisable(false);
-        this.exitButton.setDisable(false);
-        this.menuExitButton.setDisable(false);
-        this.lightAmmoButton.setDisable(false);
-        this.mediumAmmoButton.setDisable(false);
-        this.heavyAmmoButton.setDisable(false);
     }
 
     // Initializes the buttons panel of the interface

@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -16,9 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -51,22 +50,35 @@ public class InterludeController implements Initializable {
     public HBox shopHeavyAmmoHBox;
     public MediaPlayer music;
     public VBox scoreboardVBox;
-    public TableView<Player> scoreboardTableView;
+    public TableView<Player> menuScoreboardTableView;
+    public TableView<Player> winScreenScoreboardTableView;
     public HBox warningHBox;
+    public StackPane winnerPlayerImageStackPane;
+    public HBox winScreenHBox;
+    public Text winnerPlayerNameText;
+    public Text winnerPlayerHealthText;
+    public Text winnerPlayerKillsText;
+    public ImageView winnerPlayerHealthImage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.shop = new Shop();
-        if (Data.getInstance().gameNumber == 1) createPlayers();
+        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
+        this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
+        this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
+
+        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax && !Data.getInstance().tie) {
+            showWinScreen();
+            return;
+        }
+        if (Data.getInstance().gameNumber == 0) createPlayers();
         else  {
             Data.getInstance().restart();
             loadPlayers();
         }
 
-        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
-        this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
-        this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
-        this.gameNumberText.setText("Game " + Data.getInstance().gameNumber);
+
+        this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
         this.heavyAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[2]));
@@ -83,8 +95,7 @@ public class InterludeController implements Initializable {
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
 
-        calculatePlayersPosition();
-        scoreboardTableViewInitialize();
+        scoreboardTableViewInitialize(this.menuScoreboardTableView);
     }
 
     // Opens game windows
@@ -129,7 +140,7 @@ public class InterludeController implements Initializable {
         }
         this.scoreboardVBox.setDisable(false);
         this.scoreboardVBox.setVisible(true);
-        scoreboardTableViewInitialize();
+        scoreboardTableViewInitialize(this.menuScoreboardTableView);
     }
 
     // This method creates the players and saves them into the alivePlayers arrayList
@@ -232,18 +243,32 @@ public class InterludeController implements Initializable {
     }
 
     // Initializes the scoreboard table
-    public void scoreboardTableViewInitialize() {
+    public void scoreboardTableViewInitialize(TableView<Player> tableView) {
+        calculatePlayersPosition();
         TableColumn<Player, String> playerPositionColumn = new TableColumn<>("Pos");
-        TableColumn<Player, Void> playerTankColumn = new TableColumn<>("Tank");
+        TableColumn<Player, String> playerTankColumn = new TableColumn<>("Tank");
         TableColumn<Player, String> playerNameColumn = new TableColumn<>("Name");
         TableColumn<Player, String> playerKillsColumn = new TableColumn<>("Kills");
         TableColumn<Player, String> playerCreditsColumn = new TableColumn<>("Credits");
 
         playerPositionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().position)));
-        playerTankColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+        playerTankColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().color)));
         playerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name));
         playerKillsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.kills)));
         playerCreditsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.credits)));
+
+        playerTankColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String color, boolean empty) {
+                super.updateItem(color, empty);
+
+                if (color != null && !empty) {
+                    StackPane tankImageStackPane = ComponentsCreator.createPlayerTankImage(ImagesLoader.getInstance().currenkTankScoreboardImage, Color.valueOf(color), 35);
+                    setGraphic(tankImageStackPane);
+                }
+            }
+        });
+
 
         playerPositionColumn.setPrefWidth(85);
         playerTankColumn.setPrefWidth(115);
@@ -257,10 +282,10 @@ public class InterludeController implements Initializable {
         playerKillsColumn.getStyleClass().add("table-cell-centered");
         playerCreditsColumn.getStyleClass().add("table-cell-centered");
 
-        this.scoreboardTableView.getColumns().clear();
-        this.scoreboardTableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerCreditsColumn);
-        this.scoreboardTableView.setItems(FXCollections.observableArrayList(Data.getInstance().alivePlayers));
-        this.scoreboardTableView.getSortOrder().add(playerPositionColumn);
+        tableView.getColumns().clear();
+        tableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerCreditsColumn);
+        tableView.setItems(FXCollections.observableArrayList(Data.getInstance().alivePlayers));
+        tableView.getSortOrder().add(playerPositionColumn);
         playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
     }
 
@@ -296,5 +321,40 @@ public class InterludeController implements Initializable {
 
         timeline.setOnFinished(event -> timeline.stop());
         timeline.play();
+    }
+
+    // Makes win screen visible
+    public void showWinScreen() {
+        Player winnerPlayer = getWinnerPlayer();
+
+        this.winScreenHBox.setVisible(true);
+        this.winScreenHBox.setDisable(false);
+        this.winnerPlayerImageStackPane.setStyle(this.winnerPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayer.tank.color) + ";");
+        this.winnerPlayerNameText.setText(winnerPlayer.name);
+        this.winnerPlayerHealthText.setText(String.valueOf((int)winnerPlayer.tank.getHealth()));
+        this.winnerPlayerKillsText.setText(String.valueOf(winnerPlayer.tank.kills));
+        this.winnerPlayerHealthImage.setImage(ComponentsCreator.healthIcon(winnerPlayer.tank));
+        this.shopVBox.setVisible(false);
+
+        //TODO add victory SFX here
+
+        scoreboardTableViewInitialize(this.winScreenScoreboardTableView);
+    }
+
+    // Gets player with the most kills
+    public Player getWinnerPlayer() {
+        Player winnerPlayer = Data.getInstance().alivePlayers.get(0);
+
+        for (Player player : Data.getInstance().deadPlayers) {
+            Data.getInstance().alivePlayers.add(player);
+        }
+
+        calculatePlayersPosition();
+
+        for (Player player : Data.getInstance().alivePlayers) {
+            if (player.position == 1) winnerPlayer = player;
+        }
+
+        return winnerPlayer;
     }
 }

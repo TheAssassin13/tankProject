@@ -25,12 +25,13 @@ public class Data {
     public double gravity;
     public boolean wind;
     public int windVelocity;
+    public boolean tie;
 
     private Data() {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
         this.mysteryBoxes = new ArrayList<>();
-        this.gameNumber = 1;
+        this.gameNumber = 0;
         this.gamesMax = 1;
         this.playersPlayed = 0;
         this.playableTanksQuantity = 2;
@@ -47,6 +48,7 @@ public class Data {
         this.gravity = 9.8;
         this.wind = false;
         this.windVelocity = 0;
+        this.tie = false;
     }
 
     public void updatesTanksQuantity(int playableTanks, int cpuTanks) {
@@ -59,8 +61,9 @@ public class Data {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
         this.mysteryBoxes = new ArrayList<>();
-        this.gameNumber = 1;
+        this.gameNumber = 0;
         this.playersPlayed = 0;
+        this.tie = false;
     }
 
     public void restart() {

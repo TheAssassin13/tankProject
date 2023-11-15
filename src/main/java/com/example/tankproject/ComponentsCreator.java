@@ -15,9 +15,6 @@ import javafx.scene.text.Text;
 
 public class ComponentsCreator {
 
-    static Font primaryFont = Font.font("Arial", FontWeight.BOLD,50);
-    static Font secondaryFont = Font.font("Arial", FontWeight.NORMAL,30);
-
     // Creates replay button
     public static Button createReplayButton(int height, int width) {
         Image replayIcon = ImagesLoader.getInstance().iconImages.get(0);
@@ -67,48 +64,6 @@ public class ComponentsCreator {
         menuExitIconView.setFitWidth(width);
 
         return menuExitButton;
-    }
-
-    // Creates win screen
-    public static VBox createWinScreenVBox(Player winnerPlayer, Button replayButton, Button exitButton) {
-        Color backgroundColor = Color.rgb((int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getRed() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getGreen() * 255), (int) (Constants.WIN_SCREEN_BACKGROUND_COLOR.getBlue() * 255), 0.5);
-        StackPane winnerTankBackgroundStackPane = createPlayerTankImage(ImagesLoader.getInstance().winnerTankImage);
-        VBox backgroundVbox = new VBox();
-        VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        Text victoryText = new Text("Victory!");
-        Text winnerNameText = new Text(winnerPlayer.name);
-        HBox healthRemainingHBox = createTankInfoHBox(winnerPlayer.tank,30,35,25, Color.WHITE,false);
-
-        winnerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(winnerPlayer.color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-
-        victoryText.setFont(primaryFont);
-        victoryText.setFill(Color.WHITE);
-
-        winnerNameText.setFont(secondaryFont);
-        winnerNameText.setFill(Color.WHITE);
-
-        hbox.setId("winScreenButtonHBox");
-        hbox.alignmentProperty().set(Pos.CENTER);
-        hbox.setSpacing(30);
-        hbox.getChildren().add(replayButton);
-        hbox.getChildren().add(exitButton);
-
-        vbox.setId("winnerTankBackground");
-        vbox.alignmentProperty().set(Pos.CENTER);
-        vbox.setSpacing(15);
-        vbox.maxWidthProperty().bind(winnerTankBackgroundStackPane.widthProperty());
-        vbox.getChildren().add(winnerTankBackgroundStackPane);
-        vbox.getChildren().add(victoryText);
-        vbox.getChildren().add(winnerNameText);
-        vbox.getChildren().add(healthRemainingHBox);
-        vbox.getChildren().add(hbox);
-
-        backgroundVbox.setBackground(new Background(new BackgroundFill(backgroundColor,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
-        backgroundVbox.setAlignment(Pos.CENTER);
-        backgroundVbox.getChildren().add(vbox);
-
-        return backgroundVbox;
     }
 
     // Creates tank radar background circle
@@ -192,14 +147,17 @@ public class ComponentsCreator {
     }
 
     // Creates a tank image StackPane
-    public static StackPane createPlayerTankImage(Image image) {
+    public static StackPane createPlayerTankImage(Image image, Color color, int size) {
         StackPane currentPlayerTankBackgroundStackPane = new StackPane();
         ImageView currentPlayerTankImageView = new ImageView(image);
 
-        currentPlayerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
+        currentPlayerTankBackgroundStackPane.setBackground(new Background(new BackgroundFill(color,CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
         currentPlayerTankBackgroundStackPane.setAlignment(Pos.CENTER);
-        currentPlayerTankImageView.fitWidthProperty().bind(currentPlayerTankBackgroundStackPane.widthProperty());
         currentPlayerTankImageView.setPreserveRatio(true);
+        currentPlayerTankBackgroundStackPane.setMinSize(size,size);
+        currentPlayerTankBackgroundStackPane.setPrefSize(size,size);
+        currentPlayerTankImageView.fitWidthProperty().bind(currentPlayerTankBackgroundStackPane.widthProperty());
+        currentPlayerTankImageView.fitHeightProperty().bind(currentPlayerTankBackgroundStackPane.widthProperty());
 
         currentPlayerTankBackgroundStackPane.getChildren().add(currentPlayerTankImageView);
 

@@ -184,22 +184,73 @@
                      <Font name="Arial" size="40.0" />
                   </font>
                </Text>
-               <TableView id="scoreboardTableView" fx:id="scoreboardTableView" maxHeight="-Infinity" prefHeight="550.0">
+               <TableView id="scoreboardTableView" fx:id="menuScoreboardTableView" maxHeight="-Infinity" prefHeight="550.0">
  
                </TableView>
             </VBox>
          </StackPane>
       </VBox>
    </HBox>
-   <HBox fx:id="warningHBox" alignment="CENTER" disable="true" fillHeight="false" maxHeight="-Infinity"
-         maxWidth="-Infinity" spacing="10.0" styleClass="warningHBox" visible="false">
+   <HBox id="warningHBox" fx:id="warningHBox" alignment="CENTER" disable="true" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" visible="false">
       <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@icons/warning_icon.png"/>
+         <Image url="@icons/warning_icon.png" />
       </ImageView>
       <Text fill="#1b0019" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy at least one ammo!">
          <font>
-            <Font name="Arial" size="48.0"/>
+            <Font name="Arial" size="48.0" />
          </font>
       </Text>
+   </HBox>
+   <HBox fx:id="winScreenHBox" alignment="CENTER" disable="true" fillHeight="false" layoutX="-5.0" layoutY="153.0" spacing="25.0" visible="false">
+      <padding>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+      <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+         <TableView id="scoreboardTableView" fx:id="winScreenScoreboardTableView" maxWidth="-Infinity" prefHeight="600.0" styleClass="winScreenContainersVBox">
+            <columns>
+               <TableColumn prefWidth="75.0" text="C1" />
+               <TableColumn prefWidth="75.0" text="C2" />
+            </columns>
+         </TableView>
+      </VBox>
+      <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="winScreenContainersVBox">
+            <StackPane fx:id="winnerPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
+               <ImageView fitHeight="280.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@images/current_tank_image.png" />
+               </ImageView>
+            </StackPane>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Victory!">
+               <font>
+                  <Font size="64.0" />
+               </font>
+            </Text>
+            <Text fx:id="winnerPlayerNameText" fill="WHITE" layoutX="10.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player name">
+               <font>
+                  <Font size="48.0" />
+               </font>
+            </Text>
+            <HBox alignment="CENTER" spacing="10.0">
+               <Text fx:id="winnerPlayerHealthText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="health">
+                  <font>
+                     <Font size="36.0" />
+                  </font>
+               </Text>
+               <ImageView fx:id="winnerPlayerHealthImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox.margin>
+                     <Insets right="15.0" />
+                  </HBox.margin>
+               </ImageView>
+               <Text fx:id="winnerPlayerKillsText" fill="WHITE" layoutX="71.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kills">
+                  <font>
+                     <Font size="36.0" />
+                  </font>
+               </Text>
+               <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@icons/kills_icon.png" />
+               </ImageView>
+            </HBox>
+         </VBox>
+      </VBox>
    </HBox>
 </StackPane>

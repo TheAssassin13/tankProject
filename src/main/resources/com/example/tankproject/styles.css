@@ -410,11 +410,17 @@
     -fx-alignment: center;
 }
 
-.warningHBox {
+#warningHBox {
     -fx-background-color: #e7e7e7;
     -fx-background-radius: 8px;
     -fx-border-width: 4px;
     -fx-border-color: -fx-purple-color;
     -fx-border-radius: 4px;
     -fx-padding: 16px;
+}
+
+.winScreenContainersVBox {
+    -fx-background-color: -fx-purple-color;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
 }

@@ -11,7 +11,7 @@ public class ImagesLoader {
     public ArrayList<Image> backgroundImages;
     public Image currentTankImage;
     public Image currentTankKillsImage;
-    public Image winnerTankImage;
+    public Image currenkTankScoreboardImage;
     public ArrayList<Image> heartIconImages;
     public ArrayList<Image> iconImages;
     public Image umbrellaImage;
@@ -45,7 +45,7 @@ public class ImagesLoader {
     // This method loads and saves all the images related to the interface
     public void interfaceImagesLoader() {
         this.currentTankImage = new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image.png")).toExternalForm());
-        this.winnerTankImage = new Image(Objects.requireNonNull(getClass().getResource("images/winner_tank_image.png")).toExternalForm());
+        this.currenkTankScoreboardImage = new Image(Objects.requireNonNull(getClass().getResource("images/current_tank_image_scoreboard.png")).toExternalForm());
         this.heartIconImages = new ArrayList<>();
         this.heartIconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/empty_heart_icon.png")).toExternalForm()));
         this.heartIconImages.add(new Image(Objects.requireNonNull(getClass().getResource("icons/hearts_icons/half_heart_icon.png")).toExternalForm()));
