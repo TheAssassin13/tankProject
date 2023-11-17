@@ -317,20 +317,22 @@ public class GameController implements Initializable {
             }
 
             ToggleButton selectedAmmo = this.turn.tank.getAmmoSelected();
-            int shotPositionMargin = 22;
+            double shotInitialX = Math.cos(Math.toRadians(this.turn.tank.getAngle())) * Constants.TANK_SIZE;
+            double shotInitialY = Math.sin(Math.toRadians(this.turn.tank.getAngle())) * Constants.TANK_SIZE + Constants.TANK_SIZE * 0.6;
+            Point shotInitialPosition = new Point((int) (turn.tank.position.getX() + shotInitialX), (int) (turn.tank.position.getY() - shotInitialY));
 
             if (selectedAmmo == this.lightAmmoButton){
-                this.shot = new LightShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new LightShot(shotInitialPosition, Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(0); 
                 this.turn.tank.ammunition.set(0, SubtractionAMMO - 1);
             }
             else if(selectedAmmo == this.mediumAmmoButton){
-                this.shot = new MediumShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new MediumShot(shotInitialPosition, Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(1); 
                 this.turn.tank.ammunition.set(1, SubtractionAMMO - 1);
             }
             else{
-                this.shot = new HeavyShot(new Point(turn.tank.position.getX(), turn.tank.position.getY() - shotPositionMargin), Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
+                this.shot = new HeavyShot(shotInitialPosition, Double.parseDouble(powerTextField.getText()), Double.parseDouble(angleTextField.getText()), this.turn);
                 int SubtractionAMMO = this.turn.tank.ammunition.get(2); 
                 this.turn.tank.ammunition.set(2, SubtractionAMMO - 1);
             }
