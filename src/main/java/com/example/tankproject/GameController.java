@@ -125,14 +125,7 @@ public class GameController implements Initializable {
 
         updateWindHUD();
         tanksPlacement();
-        Collections.shuffle(Data.getInstance().alivePlayers);
-        for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
-            this.turn = Data.getInstance().alivePlayers.get(i);
-            if (this.turn.tank.getAmmunitionQuantity() > 0) {
-                Collections.swap(Data.getInstance().alivePlayers, 0, i);
-                break;
-            }
-        }
+        shuffleTurn();
         buttonsPanelInitialize();
         tankRadarInitialize();
         componentsSizesInitialize();
@@ -575,19 +568,7 @@ public class GameController implements Initializable {
     // Encapsulation of methods in charge of turn change mechanic
     public void stopMethods() {
         if (this.turn == Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)) {
-            Collections.shuffle(Data.getInstance().alivePlayers);
-            this.turn = Data.getInstance().alivePlayers.get(0);
-            for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
-                if (tie()) {
-                    changeTurn();
-                    return;
-                }
-                this.turn = Data.getInstance().alivePlayers.get(i);
-                if (this.turn.tank.getAmmunitionQuantity() > 0) {
-                    Collections.swap(Data.getInstance().alivePlayers, 0, i);
-                    break;
-                }
-            }
+            if (shuffleTurn()) return;
         } else if (changeTurn()) return;
         drawingMethods(true);
         shootButton.setDisable(false);
@@ -634,20 +615,29 @@ public class GameController implements Initializable {
         }
 
         if (tie()) {
-            this.music.stop();
-            try {
-                if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
-                Data.getInstance().tie = true;
-
-                App.setRoot("interlude");
-                return true;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            tieMethod();
+            return true;
         }
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
 
         updateWindHUD();
+        return false;
+    }
+
+    public boolean shuffleTurn() {
+        Collections.shuffle(Data.getInstance().alivePlayers);
+        this.turn = Data.getInstance().alivePlayers.get(0);
+        for (int i = 0; i < Data.getInstance().tanksQuantity; i++) {
+            if (tie()) {
+                tieMethod();
+                return true;
+            }
+            this.turn = Data.getInstance().alivePlayers.get(i);
+            if (this.turn.tank.getAmmunitionQuantity() > 0) {
+                Collections.swap(Data.getInstance().alivePlayers, 0, i);
+                break;
+            }
+        }
         return false;
     }
 
@@ -658,6 +648,18 @@ public class GameController implements Initializable {
             onePlayerHasAmmo |= player.tank.getAmmunitionQuantity() > 0;
         }
         return !onePlayerHasAmmo;
+    }
+
+    public void tieMethod() {
+        this.music.stop();
+        try {
+            if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
+            Data.getInstance().tie = true;
+
+            App.setRoot("interlude");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Initializes the buttons panel of the interface
