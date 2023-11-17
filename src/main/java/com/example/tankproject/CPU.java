@@ -10,9 +10,11 @@ import java.util.Random;
 public class CPU extends Player{
 
     Point target;
+    int difficulty;
 
-    public CPU(String name, Color color, Tank tank) {
+    public CPU(String name, Color color, Tank tank, int difficulty) {
         super(name, color, tank);
+        this.difficulty = difficulty;
     }
 
     public CPU(Player player) {
@@ -44,10 +46,10 @@ public class CPU extends Player{
         powerShoot = Math.sqrt(Math.pow(verticalVelocity, 2) + Math.pow(horizontalVelocity, 2));
 
         // Depending on the difficulty the power is randomized
-        if (Data.getInstance().CPUDifficulty== 1) {
+        if (this.difficulty== 1) {
             powerShoot = random.nextDouble(powerShoot - 20, powerShoot + 20);
         }
-        else if (Data.getInstance().CPUDifficulty== 2) {
+        else if (this.difficulty== 2) {
             powerShoot = random.nextDouble(powerShoot - 10, powerShoot + 10);
         }
 

@@ -37,10 +37,6 @@ public class MenuController implements Initializable {
     public Spinner<Integer> playersQuantitySpinner;
     public Slider sfxVolumeSlider;
     public Slider musicVolumeSlider;
-    public ToggleButton easyButton;
-    public ToggleButton mediumButton;
-    public ToggleButton hardButton;
-    public ToggleGroup CPUDifficultyButtons;
     public VBox gameOptionsVBox;
     public VBox optionsVBox;
     public Spinner<Integer> CPUQuantitySpinner;
@@ -66,7 +62,6 @@ public class MenuController implements Initializable {
         this.mediaPlayer.setVolume(Data.getInstance().musicVolume);
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
-        difficultyButtonsAlwaysSelected();
         Data.getInstance().reset();
     }
 
@@ -108,9 +103,6 @@ public class MenuController implements Initializable {
             App.restartWindow();
             App.updateScreenResolutionVariables();
         }
-        if (easyButton.isSelected()) Data.getInstance().CPUDifficulty = 1;
-        else if (mediumButton.isSelected()) Data.getInstance().CPUDifficulty = 2;
-        else if (hardButton.isSelected()) Data.getInstance().CPUDifficulty = 3;
 
         Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
         Data.getInstance().gamesMax = this.gamesQuantitySpinner.getValue();
@@ -149,16 +141,6 @@ public class MenuController implements Initializable {
         });
     }
 
-    // Verifies that is always a difficulty button selected in the options menu
-    public void difficultyButtonsAlwaysSelected() {
-        this.CPUDifficultyButtons.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                // If no button is selected, selects the last one
-                this.CPUDifficultyButtons.selectToggle(oldToggle);
-            }
-        });
-    }
-
     // When the game options button is clicked, the game options are displayed
     public void onGameOptionsButtonClick(ActionEvent ignoredEvent) {
         this.gameOptionsVBox.setDisable(false);
@@ -171,14 +153,6 @@ public class MenuController implements Initializable {
         this.gamesQuantitySpinner.getValueFactory().setValue(Data.getInstance().gamesMax);
         this.gravityAmountSpinner.getValueFactory().setValue(Data.getInstance().gravity);
         this.windCheckBox.setSelected(Data.getInstance().wind);
-
-        if (Data.getInstance().CPUDifficulty == 1) {
-            this.CPUDifficultyButtons.selectToggle(easyButton);
-        } else if (Data.getInstance().CPUDifficulty == 2) {
-            this.CPUDifficultyButtons.selectToggle(mediumButton);
-        } else if (Data.getInstance().CPUDifficulty == 3) {
-            this.CPUDifficultyButtons.selectToggle(hardButton);
-        }
     }
 
     // When the app options button is clicked, the app options are displayed

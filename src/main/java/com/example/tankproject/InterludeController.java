@@ -145,6 +145,7 @@ public class InterludeController implements Initializable {
 
     // This method creates the players and saves them into the alivePlayers arrayList
     public void createPlayers() {
+        Random random = new Random();
         Data.getInstance().alivePlayers = new ArrayList<>();
         Data.getInstance().deadPlayers = new ArrayList<>();
         int playersQuantity = Data.getInstance().playableTanksQuantity;
@@ -157,7 +158,7 @@ public class InterludeController implements Initializable {
 
         // It creates the CPU players
         for (int i = 0; i < cpuQuantity; i++) {
-            Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0))));
+            Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0)), random.nextInt(1,4)));
             // The CPU buys the ammo needed
             CPUBuysAmmo(((CPU) Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)));
         }

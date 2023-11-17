@@ -19,7 +19,6 @@ public class Data {
     public int buttonsPanelHeight;
     public int canvasHeight;
     public int seaLevel;
-    public int CPUDifficulty;
     public double musicVolume;
     public double SFXVolume;
     public double gravity;
@@ -42,7 +41,6 @@ public class Data {
         this.buttonsPanelHeight = 185;
         this.canvasHeight = windowsHeight - buttonsPanelHeight;
         this.seaLevel = canvasHeight - 200;
-        this.CPUDifficulty = 2;
         this.musicVolume = 1;
         this.SFXVolume = 1;
         this.gravity = 9.8;

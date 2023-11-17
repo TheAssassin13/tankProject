@@ -292,7 +292,6 @@ public class GameController implements Initializable {
                 this.music.stop();
                 if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
                 App.setRoot("interlude");
-
                 return true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -589,7 +588,7 @@ public class GameController implements Initializable {
                     break;
                 }
             }
-        } else changeTurn();
+        } else if (changeTurn()) return;
         drawingMethods(true);
         shootButton.setDisable(false);
         replayButton.setDisable(false);
@@ -621,7 +620,7 @@ public class GameController implements Initializable {
     }
 
     // Turn change, if there's no next player comes back to the first one
-    public void changeTurn() {
+    public boolean changeTurn() {
         for (int i = 0; i < Data.getInstance().alivePlayers.size(); i++) {
             if (this.turn == Data.getInstance().alivePlayers.get(i)) {
                 if (i + 1 < Data.getInstance().alivePlayers.size()) {
@@ -641,8 +640,7 @@ public class GameController implements Initializable {
                 Data.getInstance().tie = true;
 
                 App.setRoot("interlude");
-
-                return;
+                return true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -650,6 +648,7 @@ public class GameController implements Initializable {
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
 
         updateWindHUD();
+        return false;
     }
 
     // This method verifies all players have ammunition available
@@ -796,15 +795,13 @@ public class GameController implements Initializable {
         }
 
         this.windVelocityText.setText("Wind velocity = " + Math.abs(Data.getInstance().windVelocity) + " m/s");
-
-
     }
     public void setRandomWind() {
         Random r = new Random();
         int wind;
 
         do {
-            wind = r.nextInt(Constants.WIND_MAX_VELOCITY * -1, Constants.WIND_MAX_VELOCITY);
+            wind = r.nextInt(Constants.WIND_MAX_VELOCITY * -1, Constants.WIND_MAX_VELOCITY + 1);
         } while (wind == 0);
 
         Data.getInstance().windVelocity = wind;
