@@ -91,11 +91,11 @@
                   <Insets />
                </StackPane.margin>
             </VBox>
-            <VBox fx:id="gameOptionsVBox" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="40.0" styleClass="menuWindow">
+            <VBox fx:id="gameOptionsVBox" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="60.0" styleClass="menuWindow">
                <padding>
                   <Insets left="30.0" right="30.0" top="15.0" />
                </padding>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="35.0">
+               <HBox alignment="CENTER" prefHeight="100.0" spacing="35.0">
                   <Button mnemonicParsing="false" onAction="#onGameOptionsButtonClick" styleClass="menuButtons" text="Game" />
                   <Button mnemonicParsing="false" onAction="#onAppOptionsButtonClick" styleClass="menuButtons" text="App" />
                   <VBox.margin>
@@ -130,7 +130,7 @@
                   </Spinner>
 
                   <VBox.margin>
-                     <Insets bottom="15.0" />
+                     <Insets />
                   </VBox.margin>
                </HBox>
                <HBox alignment="CENTER" layoutX="40.0" layoutY="308.0" spacing="15.0">

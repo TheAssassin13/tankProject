@@ -253,4 +253,18 @@
          </VBox>
       </VBox>
    </HBox>
+   <VBox fx:id="tieScreenVBox" alignment="CENTER" style="-fx-background-color: rgba(213, 203, 197, 0.19);" visible="false">
+      <VBox alignment="CENTER" styleClass="winScreenContainersVBox">
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="TIE">
+            <font>
+               <Font size="128.0" />
+            </font>
+         </Text>
+         <Text fill="WHITE" layoutX="210.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No player has ammunition">
+            <font>
+               <Font size="64.0" />
+            </font>
+         </Text>
+      </VBox>
+   </VBox>
 </StackPane>

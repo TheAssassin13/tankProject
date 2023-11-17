@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -59,6 +60,7 @@ public class InterludeController implements Initializable {
     public Text winnerPlayerHealthText;
     public Text winnerPlayerKillsText;
     public ImageView winnerPlayerHealthImage;
+    public VBox tieScreenVBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,6 +68,8 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
+
+        if (Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
         if (Data.getInstance().gameNumber == Data.getInstance().gamesMax && !Data.getInstance().tie) {
             showWinScreen();
@@ -105,7 +109,7 @@ public class InterludeController implements Initializable {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
         if (needToBuyAmmo) {
-            showWarningHBox();
+            showNodeTimeline(this.warningHBox,3);
             return;
         }
         this.music.stop();
@@ -310,20 +314,6 @@ public class InterludeController implements Initializable {
         }
     }
 
-    // Makes warning HBox visible for a few seconds
-    public void showWarningHBox() {
-        Timeline timeline = new Timeline();
-        int showingSeconds = 3;
-        // Makes warning invisible after some time
-        timeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.ZERO, e -> warningHBox.setVisible(true)),
-                new KeyFrame(Duration.seconds(showingSeconds), e -> warningHBox.setVisible(false))
-        );
-
-        timeline.setOnFinished(event -> timeline.stop());
-        timeline.play();
-    }
-
     // Makes win screen visible
     public void showWinScreen() {
         Player winnerPlayer = getWinnerPlayer();
@@ -357,5 +347,18 @@ public class InterludeController implements Initializable {
         }
 
         return winnerPlayer;
+    }
+
+    // Makes node visible for a few seconds
+    public void showNodeTimeline(Node node, int seconds) {
+        Timeline timeline = new Timeline();
+        // Makes node invisible after some time
+        timeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, e -> node.setVisible(true)),
+                new KeyFrame(Duration.seconds(seconds), e -> node.setVisible(false))
+        );
+
+        timeline.setOnFinished(event -> timeline.stop());
+        timeline.play();
     }
 }
