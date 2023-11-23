@@ -275,8 +275,10 @@ public class GameController implements Initializable {
         if (this.shot.shotPlayer != player) {
             this.shop.LoadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.tank.kills++;
+            this.shot.shotPlayer.score += Constants.POINTS_FOR_DESTROYING_TANKS;
         } else {
             this.shop.ReduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
+            this.shot.shotPlayer.score = Math.max(0, this.shot.shotPlayer.score - Constants.POINTS_FOR_DESTROYING_TANKS);
         }
 
         // Checks if there is only one player left
@@ -513,6 +515,7 @@ public class GameController implements Initializable {
             if (hitPlayer.tank.getHealth() <= 0) {
                 if (deleteDeadPlayer(hitPlayer)) return true;
             }
+            this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
             stopMethods();
             return true;
         }
@@ -526,6 +529,7 @@ public class GameController implements Initializable {
                 sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
                 this.sounds.setVolume(Data.getInstance().SFXVolume);
                 this.sounds.play();
+                this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
                 mysteryBoxPower(box);
                 stopMethods();
                 return true;

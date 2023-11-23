@@ -177,6 +177,11 @@ public class InterludeController implements Initializable {
 
     // This method loads the players, and brings the dead players to the alivePlayers arrayList
     public void loadPlayers() {
+        for (Player player : Data.getInstance().alivePlayers) {
+            player.score += player.tank.getHealth();
+            remainingAmmoPoints(player);
+        }
+
         for (Player player : Data.getInstance().deadPlayers) {
             Data.getInstance().alivePlayers.add(player);
         }
@@ -200,6 +205,13 @@ public class InterludeController implements Initializable {
         shop.BuyBullet(cpu, Constants.AMMO_PRICE[0], ammo[0]);
         shop.BuyBullet(cpu, Constants.AMMO_PRICE[1], ammo[1]);
         shop.BuyBullet(cpu, Constants.AMMO_PRICE[2], ammo[2]);
+    }
+
+    // It gives the points to a player according to their remaining ammo
+    public void remainingAmmoPoints(Player player) {
+        player.score += Constants.POINTS_FOR_REMAINING_AMMO[0] * player.tank.ammunition.get(0);
+        player.score += Constants.POINTS_FOR_REMAINING_AMMO[1] * player.tank.ammunition.get(1);
+        player.score += Constants.POINTS_FOR_REMAINING_AMMO[2] * player.tank.ammunition.get(2);
     }
 
     // Initializes the current shop player spinner
@@ -301,24 +313,19 @@ public class InterludeController implements Initializable {
         playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
     }
 
-    // Calculates the player's position based on the number of kills
+    // Calculates the player's position based on the score
     public void calculatePlayersPosition() {
         ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
         int position = 1;
-        int kills;
 
-        players.sort(Comparator.comparing(player -> player.tank.kills));
+        players.sort(Comparator.comparing(player -> player.score));
         Collections.reverse(players);
-        kills = players.get(0).tank.kills;
 
         for (Player p: players) {
-            if (p.tank.kills == kills) {
-                p.position = position;
-            } else {
-                p.position = ++position;
-                kills = p.tank.kills;
-            }
+            p.position = position++;
+            System.out.println(p.name + ": " + p.score);
         }
+        System.out.println("-----------------------");
     }
 
     // Makes win screen visible

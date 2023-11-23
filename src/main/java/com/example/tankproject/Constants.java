@@ -24,5 +24,9 @@ public class Constants {
     public final static int TERRAIN_MARGIN = 50;
     public final static int WIND_MAX_VELOCITY = 10;
     public final static double MAX_VOLUME = 0.5;
+    public final static int POINTS_FOR_DESTROYING_TANKS = 1000;
+    public final static int POINTS_FOR_HITTING_SOMETHING = 50;
+    public final static int[] POINTS_FOR_REMAINING_AMMO = {100, 500, 1000};
+    public final static double POINTS_PER_CREDITS = 0.05;
 
 }
