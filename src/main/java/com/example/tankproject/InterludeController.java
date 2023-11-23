@@ -69,9 +69,9 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
 
-        if (Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
+        if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
-        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax && !Data.getInstance().tie) {
+        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
             showWinScreen();
             return;
         }
@@ -80,7 +80,6 @@ public class InterludeController implements Initializable {
             Data.getInstance().restart();
             loadPlayers();
         }
-
 
         this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
