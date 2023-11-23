@@ -188,7 +188,7 @@ public class InterludeController implements Initializable {
 
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
-            this.shop.LoadCredits(player,Constants.INITIAL_CREDITS);
+            Shop.LoadCredits(player,Constants.INITIAL_CREDITS);
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -341,7 +341,10 @@ public class InterludeController implements Initializable {
         this.winnerPlayerHealthImage.setImage(ComponentsCreator.healthIcon(winnerPlayer.tank));
         this.shopVBox.setVisible(false);
 
-        //TODO add victory SFX here
+        this.music.stop();
+        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        this.music.setVolume(Data.getInstance().SFXVolume);
+        this.music.play();
 
         scoreboardTableViewInitialize(this.winScreenScoreboardTableView);
     }

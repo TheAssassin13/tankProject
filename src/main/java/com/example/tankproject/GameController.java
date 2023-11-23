@@ -81,7 +81,6 @@ public class GameController implements Initializable {
     public Text windVelocityText;
     public VBox windHUDVBox;
     public Shot shot;
-    public Shop shop;
 
 
     // Initializes JavaFX windows
@@ -121,7 +120,6 @@ public class GameController implements Initializable {
         this.maxDistanceTextField.setText("Max distance = 0 m");
         this.maxHeightTextField.setText("Max height = 0 m");
         this.windHUDVBox.setVisible(Data.getInstance().wind);
-        this.shop = new Shop();
 
         updateWindHUD();
         tanksPlacement();
@@ -273,11 +271,11 @@ public class GameController implements Initializable {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         if (this.shot.shotPlayer != player) {
-            this.shop.LoadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
+            Shop.LoadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.tank.kills++;
             this.shot.shotPlayer.score += Constants.POINTS_FOR_DESTROYING_TANKS;
         } else {
-            this.shop.ReduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
+            Shop.ReduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.score = Math.max(0, this.shot.shotPlayer.score - Constants.POINTS_FOR_DESTROYING_TANKS);
         }
 
@@ -479,7 +477,7 @@ public class GameController implements Initializable {
             this.tankInfoHUD.showHUD(this.turn.tank);
             updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
-            this.shop.LoadCredits(this.turn,1500);
+            Shop.LoadCredits(this.turn,Constants.CREDITS_FROM_POWER_UP);
         } else if (box.powerUp == 2) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();

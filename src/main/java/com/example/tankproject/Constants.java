@@ -20,6 +20,7 @@ public class Constants {
     public final static int[] AMMO_PRICE = {1000, 2500, 4000}; // Light, medium and heavy
     public final static int INITIAL_CREDITS = 10000;
     public final static int CREDITS_FOR_DESTROYING_TANKS = 5000;
+    public final static int CREDITS_FROM_POWER_UP = 1500;
     public final static int TANK_HEALTH = 100;
     public final static int TERRAIN_MARGIN = 50;
     public final static int WIND_MAX_VELOCITY = 10;
