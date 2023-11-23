@@ -161,8 +161,6 @@
     -fx-background-position: center;
 }
 
-
-
 #resolutionSpinner .increment-arrow-button {
     -fx-background-image: url("icons/arrow_right_icon.png");
     -fx-background-color: transparent;

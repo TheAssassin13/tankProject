@@ -2,6 +2,7 @@ package com.example.tankproject;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -68,6 +69,10 @@ public class InterludeController implements Initializable {
         this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
+        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
+        this.music.setVolume(Data.getInstance().musicVolume);
+        this.music.setCycleCount(MediaPlayer.INDEFINITE);
+        this.music.play();
 
         if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
@@ -93,10 +98,7 @@ public class InterludeController implements Initializable {
             this.shopVBox.setDisable(true);
             this.shopVBox.setVisible(false);
         }
-        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
-        this.music.setVolume(Data.getInstance().musicVolume);
-        this.music.setCycleCount(MediaPlayer.INDEFINITE);
-        this.music.play();
+
 
         scoreboardTableViewInitialize(this.menuScoreboardTableView);
     }
@@ -121,6 +123,11 @@ public class InterludeController implements Initializable {
         App.setRoot("menu");
     }
 
+    // Closes game application
+    public void onExitButtonClick(ActionEvent ignoredEvent) {
+        Platform.exit();
+    }
+
     // When the options button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
         this.scoreboardVBox.setVisible(false);
@@ -134,6 +141,7 @@ public class InterludeController implements Initializable {
         this.shopVBox.setVisible(true);
     }
 
+    // When the scoreboard button is clicked, the scoreboard table appears or disappears
     public void onScoreboardButtonClick(ActionEvent ignoredEvent) {
         this.shopVBox.setVisible(false);
         if (this.scoreboardVBox.isVisible()) {
@@ -233,7 +241,7 @@ public class InterludeController implements Initializable {
             this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1);
             this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
         }
-        
+
         if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
             this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1);
             this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
