@@ -76,14 +76,14 @@ public class InterludeController implements Initializable {
 
         if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
-        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-            showWinScreen();
-            return;
-        }
         if (Data.getInstance().gameNumber == 0) createPlayers();
         else  {
             Data.getInstance().restart();
             loadPlayers();
+        }
+        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
+            showWinScreen();
+            return;
         }
 
         this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
@@ -273,13 +273,13 @@ public class InterludeController implements Initializable {
         TableColumn<Player, String> playerTankColumn = new TableColumn<>("Tank");
         TableColumn<Player, String> playerNameColumn = new TableColumn<>("Name");
         TableColumn<Player, String> playerKillsColumn = new TableColumn<>("Kills");
-        TableColumn<Player, String> playerCreditsColumn = new TableColumn<>("Credits");
+        TableColumn<Player, String> playerScoreColumn = new TableColumn<>("Score");
 
         playerPositionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().position)));
         playerTankColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().color)));
         playerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name));
         playerKillsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.kills)));
-        playerCreditsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tank.credits)));
+        playerScoreColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().score)));
 
         playerTankColumn.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -298,16 +298,16 @@ public class InterludeController implements Initializable {
         playerTankColumn.setPrefWidth(115);
         playerNameColumn.setPrefWidth(115);
         playerKillsColumn.setPrefWidth(85);
-        playerCreditsColumn.setPrefWidth(115);
+        playerScoreColumn.setPrefWidth(115);
 
         playerPositionColumn.getStyleClass().add("table-cell-centered");
         playerTankColumn.getStyleClass().add("table-cell-centered");
         playerNameColumn.getStyleClass().add("table-cell-centered");
         playerKillsColumn.getStyleClass().add("table-cell-centered");
-        playerCreditsColumn.getStyleClass().add("table-cell-centered");
+        playerScoreColumn.getStyleClass().add("table-cell-centered");
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerCreditsColumn);
+        tableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerScoreColumn);
         tableView.setItems(FXCollections.observableArrayList(Data.getInstance().alivePlayers));
         tableView.getSortOrder().add(playerPositionColumn);
         playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
@@ -323,9 +323,7 @@ public class InterludeController implements Initializable {
 
         for (Player p: players) {
             p.position = position++;
-            System.out.println(p.name + ": " + p.score);
         }
-        System.out.println("-----------------------");
     }
 
     // Makes win screen visible
