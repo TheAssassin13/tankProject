@@ -1,6 +1,7 @@
 package com.example.tankproject;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -148,11 +150,7 @@ public class GameController implements Initializable {
         replayButton.setOnAction(event -> {
             music.stop();
             Data.getInstance().reset();
-            try {
-                App.setRoot("interlude");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            goToInterlude();
         });
     }
 
@@ -281,14 +279,12 @@ public class GameController implements Initializable {
 
         // Checks if there is only one player left
         if (Data.getInstance().alivePlayers.size() == 1) {
-            try {
-                this.music.stop();
-                if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
-                App.setRoot("interlude");
-                return true;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.music.stop();
+
+            if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
+
+            goToInterlude();
+            return true;
         }
         return false;
     }
@@ -404,6 +400,7 @@ public class GameController implements Initializable {
                                 Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(Data.getInstance().gravity/9.8);
+                            System.out.println("eso --");
                             tankInfoHUD.showHUD(p.tank);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
@@ -654,14 +651,11 @@ public class GameController implements Initializable {
 
     public void tieMethod() {
         this.music.stop();
-        try {
-            if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
-            Data.getInstance().tie = true;
+        if (Data.getInstance().gameNumber != Data.getInstance().gamesMax) Data.getInstance().gameNumber++;
 
-            App.setRoot("interlude");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Data.getInstance().tie = true;
+
+        goToInterlude();
     }
 
     // Initializes the buttons panel of the interface
@@ -809,5 +803,19 @@ public class GameController implements Initializable {
         } while (wind == 0);
 
         Data.getInstance().windVelocity = wind;
+    }
+
+    public void goToInterlude() {
+        PauseTransition delay = new PauseTransition(Duration.millis(3000));
+
+        delay.setOnFinished(e -> {
+            try {
+                App.setRoot("interlude");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        delay.play();
     }
 }
