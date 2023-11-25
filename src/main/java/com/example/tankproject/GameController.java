@@ -150,8 +150,11 @@ public class GameController implements Initializable {
         replayButton.setOnAction(event -> {
             music.stop();
             Data.getInstance().reset();
-            goToInterlude();
-        });
+            try {
+                App.setRoot("interlude");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }        });
     }
 
     // Sets exit button action
@@ -400,7 +403,6 @@ public class GameController implements Initializable {
                                 Data.getInstance().terrain.resolutionMatrix[p.tank.position.getY() + Constants.TANK_SIZE/3][p.tank.position.getX()] == 0) {
                             p.tank.position.setY(p.tank.position.getY()+1);
                             p.tank.reduceHealth(Data.getInstance().gravity/9.8);
-                            System.out.println("eso --");
                             tankInfoHUD.showHUD(p.tank);
                             if (p.tank.getHealth() <= 0) {
                                 deleteDeadPlayer(p);
@@ -547,6 +549,7 @@ public class GameController implements Initializable {
                     if (deleteDeadPlayer(playerNearby)) return true;
                 }
             }
+
             stopMethods();
             return true;
         }
@@ -591,11 +594,9 @@ public class GameController implements Initializable {
         }
 
         this.tankRadarPointerRotate.setAngle(0);
-        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         if (this.turn instanceof CPU) {
             ((CPU) this.turn).shoot(shootButton, lightAmmoButton, mediumAmmoButton, heavyAmmoButton, angleTextField, powerTextField);
         }
-
         updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
     }
 
@@ -620,6 +621,8 @@ public class GameController implements Initializable {
         if (this.turn.tank.getAmmunitionQuantity() <= 0) changeTurn();
 
         updateWindHUD();
+        updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
+
         return false;
     }
 
@@ -670,7 +673,6 @@ public class GameController implements Initializable {
         this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);
         this.currentPlayerTankImage.setImage(ImagesLoader.getInstance().currentTankImage);
-        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
 
         updateCurrentPlayerInterfaceValues(heartIcon);
         ammunitionPanelControlInitialize();
@@ -774,6 +776,7 @@ public class GameController implements Initializable {
     }
 
     public void updateCurrentPlayerInterfaceValues(Image heartIcon) {
+        this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.currentPlayerText.setText(this.turn.name + " is playing");
         this.currentTankHealth.setText(String.valueOf((int)this.turn.tank.getHealth()));
         this.currentTankKills.setText(String.valueOf(this.turn.tank.getKills()));
@@ -806,7 +809,7 @@ public class GameController implements Initializable {
     }
 
     public void goToInterlude() {
-        PauseTransition delay = new PauseTransition(Duration.millis(3000));
+        PauseTransition delay = new PauseTransition(Duration.millis(2500));
 
         delay.setOnFinished(e -> {
             try {

@@ -74,6 +74,11 @@ public class InterludeController implements Initializable {
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
 
+        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
+            showWinScreen();
+            return;
+        }
+
         if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
         if (Data.getInstance().gameNumber == 0) createPlayers();
@@ -81,15 +86,12 @@ public class InterludeController implements Initializable {
             Data.getInstance().restart();
             loadPlayers();
         }
-        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-            showWinScreen();
-            return;
-        }
 
         this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
         this.heavyAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[2]));
+
         if (Data.getInstance().playableTanksQuantity > 0) {
             this.shopVBox.setDisable(false);
             this.shopVBox.setVisible(true);
@@ -98,7 +100,6 @@ public class InterludeController implements Initializable {
             this.shopVBox.setDisable(true);
             this.shopVBox.setVisible(false);
         }
-
 
         scoreboardTableViewInitialize(this.menuScoreboardTableView);
     }
