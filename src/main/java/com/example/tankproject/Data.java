@@ -40,7 +40,7 @@ public class Data {
         this.windowsWidth  = Constants.RESOLUTION_WIDTH[1];
         this.buttonsPanelHeight = 185;
         this.canvasHeight = windowsHeight - buttonsPanelHeight;
-        this.seaLevel = canvasHeight - 200;
+        this.seaLevel = (int) (canvasHeight - canvasHeight * 0.4);
         this.musicVolume = 1;
         this.SFXVolume = 1;
         this.gravity = 9.8;

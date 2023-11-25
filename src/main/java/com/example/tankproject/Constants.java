@@ -28,6 +28,6 @@ public class Constants {
     public final static int POINTS_FOR_DESTROYING_TANKS = 1000;
     public final static int POINTS_FOR_HITTING_SOMETHING = 50;
     public final static int[] POINTS_FOR_REMAINING_AMMO = {100, 500, 1000};
-    public final static double POINTS_PER_CREDITS = 0.05;
+    public final static int MAX_PLAYERS_QUANTITY = 6;
 
 }
