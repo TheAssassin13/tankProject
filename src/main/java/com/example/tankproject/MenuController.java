@@ -84,15 +84,31 @@ public class MenuController implements Initializable {
             return;
         }
 
-        onGameOptionsButtonClick(new ActionEvent());
         this.optionsVBox.setDisable(false);
         this.optionsVBox.setVisible(true);
+
+        // It recovers the game data
+        this.playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
+        this.CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
+        this.gamesQuantitySpinner.getValueFactory().setValue(Data.getInstance().gamesMax);
+        this.gravityAmountSpinner.getValueFactory().setValue(Data.getInstance().gravity);
+        this.windCheckBox.setSelected(Data.getInstance().wind);
+
+        // It recovers the app data
+        this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100 / Constants.MAX_VOLUME);
+        this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100 / Constants.MAX_VOLUME);
+        this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
     }
 
     // Saves user changes in the options menu and applies them
     public void onSaveButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         this.optionsVBox.setDisable(true);
         this.optionsVBox.setVisible(false);
+
+        Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
+        Data.getInstance().gamesMax = this.gamesQuantitySpinner.getValue();
+        Data.getInstance().gravity = this.gravityAmountSpinner.getValue();
+        Data.getInstance().wind = this.windCheckBox.isSelected();
 
         // User changed screen resolution
         if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsHeight || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsWidth) {
@@ -104,10 +120,6 @@ public class MenuController implements Initializable {
             App.updateScreenResolutionVariables();
         }
 
-        Data.getInstance().updatesTanksQuantity(playersQuantitySpinner.getValue(), CPUQuantitySpinner.getValue());
-        Data.getInstance().gamesMax = this.gamesQuantitySpinner.getValue();
-        Data.getInstance().gravity = this.gravityAmountSpinner.getValue();
-        Data.getInstance().wind = this.windCheckBox.isSelected();
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap
@@ -147,12 +159,6 @@ public class MenuController implements Initializable {
         this.gameOptionsVBox.setVisible(true);
         this.appOptionsVBox.setDisable(true);
         this.appOptionsVBox.setVisible(false);
-
-        this.playersQuantitySpinner.getValueFactory().setValue(Data.getInstance().playableTanksQuantity);
-        this.CPUQuantitySpinner.getValueFactory().setValue(Data.getInstance().cpuTanksQuantity);
-        this.gamesQuantitySpinner.getValueFactory().setValue(Data.getInstance().gamesMax);
-        this.gravityAmountSpinner.getValueFactory().setValue(Data.getInstance().gravity);
-        this.windCheckBox.setSelected(Data.getInstance().wind);
     }
 
     // When the app options button is clicked, the app options are displayed
@@ -161,22 +167,17 @@ public class MenuController implements Initializable {
         this.appOptionsVBox.setVisible(true);
         this.gameOptionsVBox.setDisable(true);
         this.gameOptionsVBox.setVisible(false);
-
-        this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100);
-        this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100);
-        this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
-
     }
 
     public void onPlayerSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - playersQuantitySpinner.getValue());
-        int max = 10 - playersQuantitySpinner.getValue();
+        int max = Constants.MAX_PLAYERS_QUANTITY - playersQuantitySpinner.getValue();
         CPUQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, CPUQuantitySpinner.getValue())));
     }
 
     public void onCPUSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - CPUQuantitySpinner.getValue());
-        int max = 10 - CPUQuantitySpinner.getValue();
+        int max = Constants.MAX_PLAYERS_QUANTITY - CPUQuantitySpinner.getValue();
         playersQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, playersQuantitySpinner.getValue())));
     }
 
