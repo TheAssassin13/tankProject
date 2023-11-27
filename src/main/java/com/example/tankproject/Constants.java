@@ -27,7 +27,7 @@ public class Constants {
     public final static double MAX_VOLUME = 0.5;
     public final static int POINTS_FOR_DESTROYING_TANKS = 1000;
     public final static int POINTS_FOR_HITTING_SOMETHING = 50;
-    public final static int[] POINTS_FOR_REMAINING_AMMO = {100, 500, 1000};
+    public final static int[] POINTS_FOR_REMAINING_AMMO = {100, 250, 400};
     public final static int MAX_PLAYERS_QUANTITY = 6;
 
 }
