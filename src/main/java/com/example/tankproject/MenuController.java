@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -98,6 +100,10 @@ public class MenuController implements Initializable {
         this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100 / Constants.MAX_VOLUME);
         this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100 / Constants.MAX_VOLUME);
         this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
+
+        MouseEvent clickEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED, 0.0, 0.0, 0.0, 0.0, null, 0, false, false, false, false, false, false, false, false, false, false, null);
+        onCPUSpinnerClick(clickEvent);
+        onPlayerSpinnerClick(clickEvent);
     }
 
     // Saves user changes in the options menu and applies them

@@ -113,7 +113,7 @@
                   </Text>
                   <Spinner id="quantitySpinner" fx:id="playersQuantitySpinner" maxWidth="250.0" onMouseClicked="#onPlayerSpinnerClick" styleClass="split-arrows-horizontal">
                      <valueFactory>
-                        <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="6" min="2" />
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="0" max="6" min="0" />
                      </valueFactory>
 
                   </Spinner>
