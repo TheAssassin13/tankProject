@@ -15,6 +15,7 @@ public class Tank {
     public Double power;
     private ToggleButton ammoSelected;
     public ArrayList<Integer> ammunition;
+    public ArrayList<Integer> temporaryAmmunition;
     private double health;
     public int credits;
     public int kills;
@@ -28,8 +29,10 @@ public class Tank {
         this.health= Constants.TANK_HEALTH;
         this.credits = Constants.INITIAL_CREDITS;
         this.ammunition = new ArrayList<>();
+        this.temporaryAmmunition = new ArrayList<>();
         this.kills = 0;
         initializeAmmunition();
+        initializeTemporaryAmmunition();
     }
 
     public void setAngle(double angle) {
@@ -56,7 +59,6 @@ public class Tank {
         return this.ammunition.get(0) + this.ammunition.get(1) + this.ammunition.get(2);
     }
 
-
     public void reduceHealth(double damage) {
         this.health = Math.max(0,this.health - damage);
     }
@@ -70,6 +72,12 @@ public class Tank {
         this.ammunition.add(0);
     }
 
+    public void initializeTemporaryAmmunition() {
+        this.temporaryAmmunition.clear();
+        this.temporaryAmmunition.add(0);
+        this.temporaryAmmunition.add(0);
+        this.temporaryAmmunition.add(0);
+    }
     public void setAmmoSelected(ToggleButton ammoSelected) {
         this.ammoSelected = ammoSelected;
     }

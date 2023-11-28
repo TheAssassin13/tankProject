@@ -21,6 +21,7 @@ public class TankInfoHUD {
 
         this.tankInfoHBox.setId("tankInfoHBox");
         this.tankInfoHBox.setVisible(false);
+
         timelineAnimationInitialize();
     }
 

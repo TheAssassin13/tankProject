@@ -107,13 +107,18 @@ public class InterludeController implements Initializable {
     // Opens game windows
     public void onPlayButtonClick(ActionEvent ignoredActionEvent) throws IOException {
         boolean needToBuyAmmo = true;
+
+        setDefinitiveAmmunition();
+
         for (Player player : Data.getInstance().alivePlayers) {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
+
         if (needToBuyAmmo) {
             showNodeTimeline(this.warningHBox,3);
             return;
         }
+
         this.music.stop();
         App.setRoot("game");
     }
@@ -190,6 +195,11 @@ public class InterludeController implements Initializable {
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
             Shop.LoadCredits(player,Constants.INITIAL_CREDITS);
+            if (!(player instanceof CPU)) {
+                player.tank.temporaryAmmunition.set(0, player.tank.ammunition.get(0));
+                player.tank.temporaryAmmunition.set(1, player.tank.ammunition.get(1));
+                player.tank.temporaryAmmunition.set(2, player.tank.ammunition.get(2));
+            }
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -203,9 +213,9 @@ public class InterludeController implements Initializable {
     // It buys the ammo for the CPU
     public void CPUBuysAmmo(CPU cpu) {
         int[] ammo = cpu.getAmmoToBuy();
-        shop.BuyBullet(cpu, Constants.AMMO_PRICE[0], ammo[0]);
-        shop.BuyBullet(cpu, Constants.AMMO_PRICE[1], ammo[1]);
-        shop.BuyBullet(cpu, Constants.AMMO_PRICE[2], ammo[2]);
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[0], ammo[0], false);
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[1], ammo[1], false);
+        shop.BuyBullet(cpu, Constants.AMMO_PRICE[2], ammo[2], false);
     }
 
     // It gives the points to a player according to their remaining ammo
@@ -243,27 +253,28 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(p.tank.color) + ";");
         this.currentShopPlayerNameText.setText(p.name);
         this.currentShopPlayerCreditsText.setText(String.valueOf(p.tank.credits));
-        this.currentShopPlayerLightAmmoText.setText(String.valueOf(p.tank.ammunition.get(0)));
-        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(p.tank.ammunition.get(1)));
-        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.ammunition.get(2)));
+        this.currentShopPlayerLightAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(0)));
+        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(1)));
+        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(2)));
     }
 
     // Buys one unit of selected ammo when user clicks the button and updates shop text values related
     public void onShopAmmoButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == this.shopLightAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1);
-            this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0)));
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1, true);
+            this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(0)));
         }
 
         if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1);
-            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1)));
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1, true);
+            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(1)));
         }
 
         if (mouseEvent.getSource() == this.shopHeavyAmmoHBox) {
-            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2], 1);
-            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2)));
+            this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2], 1, true);
+            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(2)));
         }
+
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
     }
 
@@ -376,5 +387,27 @@ public class InterludeController implements Initializable {
 
         timeline.setOnFinished(event -> timeline.stop());
         timeline.play();
+    }
+
+    // Resets the ammo purchase, return the credits to the user and the ammo to the shop
+    public void onResetButtonClick(ActionEvent ignoredActionEvent) {
+        Shop.LoadCredits(this.currentShopPlayerSpinner.getValueFactory().getValue(), this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(0) * Constants.AMMO_PRICE[0]);
+        Shop.LoadCredits(this.currentShopPlayerSpinner.getValueFactory().getValue(), this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(1) * Constants.AMMO_PRICE[1]);
+        Shop.LoadCredits(this.currentShopPlayerSpinner.getValueFactory().getValue(), this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(2) * Constants.AMMO_PRICE[2]);
+
+        this.currentShopPlayerSpinner.getValueFactory().getValue().tank.initializeTemporaryAmmunition();
+
+        updateShopValues(this.currentShopPlayerSpinner.getValueFactory().getValue());
+    }
+
+    // Changes temporary ammunition to definitive ammunition
+    public void setDefinitiveAmmunition() {
+        for (Player player: Data.getInstance().alivePlayers) {
+            if (!(player instanceof CPU)) {
+                player.tank.ammunition.set(0, player.tank.temporaryAmmunition.get(0));
+                player.tank.ammunition.set(1, player.tank.temporaryAmmunition.get(1));
+                player.tank.ammunition.set(2, player.tank.temporaryAmmunition.get(2));
+            }
+        }
     }
 }

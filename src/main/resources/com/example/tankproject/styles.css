@@ -317,10 +317,6 @@
 .buyShotShopButton {
     -fx-background-color: -fx-shop-button-color;
     -fx-background-radius: 4px;
-    -fx-min-width: 415px;
-    -fx-pref-width: 500px;
-    -fx-max-width: -fx-pref-width;
-    -fx-padding: 0 25px 0 25px;
 }
 
 .buyShotShopButton:hover {

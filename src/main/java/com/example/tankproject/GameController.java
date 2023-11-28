@@ -775,6 +775,7 @@ public class GameController implements Initializable {
         drawingMethods(false);
     }
 
+    // Updates all the current player values of the interface
     public void updateCurrentPlayerInterfaceValues(Image heartIcon) {
         this.currentPlayerTankStackPane.setStyle(this.currentPlayerTankStackPane.getStyle() + "-fx-background-color: " + toHexString(this.turn.tank.color) + ";");
         this.currentPlayerText.setText(this.turn.name + " is playing");
@@ -784,6 +785,7 @@ public class GameController implements Initializable {
         this.currentTankHealthIcon.setImage(heartIcon);
     }
 
+    // Updates the arrow icon and wind text of the wind HUD
     public void updateWindHUD() {
         if (!Data.getInstance().wind) return;
 
@@ -797,6 +799,8 @@ public class GameController implements Initializable {
 
         this.windVelocityText.setText("Wind velocity = " + Math.abs(Data.getInstance().windVelocity) + " m/s");
     }
+
+    // Sets a random wind between -max value and max value
     public void setRandomWind() {
         Random r = new Random();
         int wind;
@@ -808,6 +812,7 @@ public class GameController implements Initializable {
         Data.getInstance().windVelocity = wind;
     }
 
+    // Switches to interlude windows after some delay
     public void goToInterlude() {
         PauseTransition delay = new PauseTransition(Duration.millis(2500));
 
