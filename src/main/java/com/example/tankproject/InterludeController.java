@@ -194,12 +194,8 @@ public class InterludeController implements Initializable {
 
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
+            player.tank.initializeTemporaryAmmunition();
             Shop.LoadCredits(player,Constants.INITIAL_CREDITS);
-            if (!(player instanceof CPU)) {
-                player.tank.temporaryAmmunition.set(0, player.tank.ammunition.get(0));
-                player.tank.temporaryAmmunition.set(1, player.tank.ammunition.get(1));
-                player.tank.temporaryAmmunition.set(2, player.tank.ammunition.get(2));
-            }
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -253,26 +249,26 @@ public class InterludeController implements Initializable {
         this.currentShopPlayerSpinnerImageStackPane.setStyle(this.currentShopPlayerSpinnerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(p.tank.color) + ";");
         this.currentShopPlayerNameText.setText(p.name);
         this.currentShopPlayerCreditsText.setText(String.valueOf(p.tank.credits));
-        this.currentShopPlayerLightAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(0)));
-        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(1)));
-        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.temporaryAmmunition.get(2)));
+        this.currentShopPlayerLightAmmoText.setText(String.valueOf(p.tank.ammunition.get(0) + p.tank.temporaryAmmunition.get(0)));
+        this.currentShopPlayerMediumAmmoText.setText(String.valueOf(p.tank.ammunition.get(1) + p.tank.temporaryAmmunition.get(1)));
+        this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(p.tank.ammunition.get(2) + p.tank.temporaryAmmunition.get(2)));
     }
 
     // Buys one unit of selected ammo when user clicks the button and updates shop text values related
     public void onShopAmmoButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == this.shopLightAmmoHBox) {
             this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1, true);
-            this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(0)));
+            this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(0)));
         }
 
         if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
             this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1, true);
-            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(1)));
+            this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(1)));
         }
 
         if (mouseEvent.getSource() == this.shopHeavyAmmoHBox) {
             this.shop.BuyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2], 1, true);
-            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(2)));
+            this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(2)));
         }
 
         this.currentShopPlayerCreditsText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.credits));
@@ -404,9 +400,9 @@ public class InterludeController implements Initializable {
     public void setDefinitiveAmmunition() {
         for (Player player: Data.getInstance().alivePlayers) {
             if (!(player instanceof CPU)) {
-                player.tank.ammunition.set(0, player.tank.temporaryAmmunition.get(0));
-                player.tank.ammunition.set(1, player.tank.temporaryAmmunition.get(1));
-                player.tank.ammunition.set(2, player.tank.temporaryAmmunition.get(2));
+                player.tank.ammunition.set(0, player.tank.ammunition.get(0) + player.tank.temporaryAmmunition.get(0));
+                player.tank.ammunition.set(1, player.tank.ammunition.get(1) + player.tank.temporaryAmmunition.get(1));
+                player.tank.ammunition.set(2, player.tank.ammunition.get(2) + player.tank.temporaryAmmunition.get(2));
             }
         }
     }
