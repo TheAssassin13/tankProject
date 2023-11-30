@@ -4,8 +4,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -45,6 +43,7 @@ public class MenuController implements Initializable {
     public Spinner<Double> gravityAmountSpinner;
     public CheckBox windCheckBox;
     public Spinner<Integer> gamesQuantitySpinner;
+    public ImageView themeButtonImageView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -187,4 +186,13 @@ public class MenuController implements Initializable {
         playersQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, playersQuantitySpinner.getValue())));
     }
 
+    // When the theme button is clicked, the game theme changes between normal, Halloween and Christmas
+    public void onThemeButtonClick(ActionEvent ignoredActionEvent) {
+        if (Data.getInstance().themeSelected < 2) Data.getInstance().themeSelected++;
+        else Data.getInstance().themeSelected = 0;
+
+        if (Data.getInstance().themeSelected == 0) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(6));
+        if (Data.getInstance().themeSelected == 1) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(7));
+        if (Data.getInstance().themeSelected == 2) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(8));
+    }
 }

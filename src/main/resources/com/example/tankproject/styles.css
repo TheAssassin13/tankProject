@@ -418,3 +418,18 @@
     -fx-background-radius: 8px;
     -fx-padding: 20px;
 }
+
+.menuOptionsButton {
+    -fx-padding: 2px;
+    -fx-background-color: derive(-fx-white-color,-6%);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.menuOptionsButton:hover {
+    -fx-background-color: derive(-fx-white-color,18%);
+}
+
+.menuOptionsButton:pressed {
+    -fx-background-color: derive(-fx-white-color,-15%);
+}

@@ -25,6 +25,7 @@ public class Data {
     public boolean wind;
     public int windVelocity;
     public boolean tie;
+    public int themeSelected;  // 0 normal, 1 Halloween, 2 Christmas
 
     private Data() {
         this.alivePlayers = new ArrayList<>();
@@ -47,6 +48,7 @@ public class Data {
         this.wind = false;
         this.windVelocity = 0;
         this.tie = false;
+        this.themeSelected = 0;
     }
 
     public void updatesTanksQuantity(int playableTanks, int cpuTanks) {
