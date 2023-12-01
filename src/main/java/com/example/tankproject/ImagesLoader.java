@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class ImagesLoader {
     public static ImagesLoader instance;
-    public ArrayList<Image> shotImages;
-    public ArrayList<Image> backgroundImages;
+    private ArrayList<Image> shotImages;
+    private ArrayList<Image> backgroundImages;
     public Image currentTankImage;
     public Image currentTankKillsImage;
     public Image currenkTankScoreboardImage;
@@ -17,6 +17,9 @@ public class ImagesLoader {
     public Image umbrellaImage;
     public Image witchHatImage;
     public Image mysteryBoxImage;
+    public ArrayList<Image> currentBackgrounds;
+    public ArrayList<Image> currentShotImages;
+
     public ImagesLoader() {
         shotImagesLoader();
         backgroundImagesLoader();
@@ -31,6 +34,14 @@ public class ImagesLoader {
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/light_shot.png")).toExternalForm()));
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/medium_shot.png")).toExternalForm()));
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/heavy_shot.png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/light_shot(halloween).png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/medium_shot(halloween).png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/other_heavy_shot(halloween).png")).toExternalForm()));
+
+        this.currentShotImages = new ArrayList<>();
+        this.currentShotImages.add(this.shotImages.get(0));
+        this.currentShotImages.add(this.shotImages.get(1));
+        this.currentShotImages.add(this.shotImages.get(2));
     }
 
     // This method loads and saves the background images in an ArrayList
@@ -39,7 +50,13 @@ public class ImagesLoader {
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/menu_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/game_background_image.jpg")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/menu_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/background_halloween.jpg")).toExternalForm()));
+
+        this.currentBackgrounds = new ArrayList<>();
+        this.currentBackgrounds.add(this.backgroundImages.get(0));
+        this.currentBackgrounds.add(this.backgroundImages.get(1));
+        this.currentBackgrounds.add(this.backgroundImages.get(2));
     }
 
     // This method loads and saves all the images related to the interface
@@ -72,6 +89,40 @@ public class ImagesLoader {
         this.umbrellaImage = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
         this.witchHatImage = new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/hat.png")).toExternalForm());
         this.mysteryBoxImage = new Image(Objects.requireNonNull(getClass().getResource("images/mystery_box.png")).toExternalForm());
+    }
+
+    // This method returns the theme icon corresponding to the current selected theme
+    public Image getThemeIcon() {
+        if (Data.getInstance().themeSelected == 0) return ImagesLoader.getInstance().iconImages.get(6);
+        if (Data.getInstance().themeSelected == 1) return ImagesLoader.getInstance().iconImages.get(7);
+        if (Data.getInstance().themeSelected == 2) return ImagesLoader.getInstance().iconImages.get(8);
+        return null;
+    }
+
+    // This method changes between normal, Halloween and Christmas themes
+    public void changeTheme() {
+        // Normal
+        if (Data.getInstance().themeSelected == 0) {
+            this.currentBackgrounds.set(0, this.backgroundImages.get(0));
+            this.currentBackgrounds.set(1, this.backgroundImages.get(1));
+            this.currentShotImages.set(0, this.shotImages.get(0));
+            this.currentShotImages.set(1, this.shotImages.get(1));
+            this.currentShotImages.set(2, this.shotImages.get(2));
+            return;
+        }
+        // Halloween
+        if (Data.getInstance().themeSelected == 1) {
+            this.currentBackgrounds.set(0, this.backgroundImages.get(3));
+            this.currentBackgrounds.set(1, this.backgroundImages.get(4));
+            this.currentShotImages.set(0, this.shotImages.get(3));
+            this.currentShotImages.set(1, this.shotImages.get(4));
+            this.currentShotImages.set(2, this.shotImages.get(5));
+            return;
+        }
+        // Christmas
+        if (Data.getInstance().themeSelected == 2) {
+
+        }
     }
 
     public static synchronized ImagesLoader getInstance() {

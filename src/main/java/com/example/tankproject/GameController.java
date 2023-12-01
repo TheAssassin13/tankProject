@@ -104,7 +104,7 @@ public class GameController implements Initializable {
         this.umbrellaPosition = null;
         Data.getInstance().terrain = new Terrain(Data.getInstance().canvasHeight, Data.getInstance().windowsWidth);
         Data.getInstance().terrain.terrainGeneration(Data.getInstance().seaLevel, true);
-        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(1));
+        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(1));
         this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);

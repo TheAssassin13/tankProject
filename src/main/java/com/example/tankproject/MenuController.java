@@ -44,10 +44,11 @@ public class MenuController implements Initializable {
     public CheckBox windCheckBox;
     public Spinner<Integer> gamesQuantitySpinner;
     public ImageView themeButtonImageView;
+    public boolean themeButtonPressed;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(0));
+        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(0));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.optionsVBox.setDisable(true);
@@ -64,6 +65,7 @@ public class MenuController implements Initializable {
         resolutionSpinnerInitialize();
         musicVolumeDragInitialize();
         Data.getInstance().reset();
+        themeButtonPressed = false;
     }
 
     // Opens game windows
@@ -99,6 +101,7 @@ public class MenuController implements Initializable {
         this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100 / Constants.MAX_VOLUME);
         this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100 / Constants.MAX_VOLUME);
         this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
+        this.themeButtonImageView.setImage(ImagesLoader.getInstance().getThemeIcon());
 
         MouseEvent clickEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED, 0.0, 0.0, 0.0, 0.0, null, 0, false, false, false, false, false, false, false, false, false, false, null);
         onCPUSpinnerClick(clickEvent);
@@ -115,16 +118,17 @@ public class MenuController implements Initializable {
         Data.getInstance().gravity = this.gravityAmountSpinner.getValue();
         Data.getInstance().wind = this.windCheckBox.isSelected();
 
-        // User changed screen resolution
-        if (Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsHeight || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsWidth) {
+        // User changed screen resolution or theme.
+        if (themeButtonPressed || Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsHeight || Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())] != Data.getInstance().windowsWidth) {
             Data.getInstance().windowsHeight = Constants.RESOLUTION_HEIGHT[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
             Data.getInstance().windowsWidth = Constants.RESOLUTION_WIDTH[this.resolutionsHashMap.get(this.resolutionSpinner.getValue())];
-            // Closes the actual windows and opens a new one with the resolution selected by user
+            // Closes the current windows and opens a new one with the resolution and theme selected by the user
             this.mediaPlayer.stop();
+            themeButtonPressed = false;
+            ImagesLoader.getInstance().changeTheme();
             App.restartWindow();
             App.updateScreenResolutionVariables();
         }
-
     }
 
     // Initializes the resolution spinner, ArrayList and HashMap
@@ -191,8 +195,8 @@ public class MenuController implements Initializable {
         if (Data.getInstance().themeSelected < 2) Data.getInstance().themeSelected++;
         else Data.getInstance().themeSelected = 0;
 
-        if (Data.getInstance().themeSelected == 0) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(6));
-        if (Data.getInstance().themeSelected == 1) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(7));
-        if (Data.getInstance().themeSelected == 2) this.themeButtonImageView.setImage(ImagesLoader.getInstance().iconImages.get(8));
+        this.themeButtonImageView.setImage(ImagesLoader.getInstance().getThemeIcon());
+
+        this.themeButtonPressed = true;
     }
 }

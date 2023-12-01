@@ -11,6 +11,6 @@ public class LightShot extends Shot {
 
     @Override
     public void drawShot(GraphicsContext gc) {
-        gc.drawImage(ImagesLoader.getInstance().shotImages.get(0), this.position.getX() - Constants.SHOT_SIZE[0]/2.0, this.position.getY() - Constants.SHOT_SIZE[0]/2.0, Constants.SHOT_SIZE[0], Constants.SHOT_SIZE[0]);
+        gc.drawImage(ImagesLoader.getInstance().currentShotImages.get(0), this.position.getX() - Constants.SHOT_SIZE[0]/2.0, this.position.getY() - Constants.SHOT_SIZE[0]/2.0, Constants.SHOT_SIZE[0], Constants.SHOT_SIZE[0]);
     }
 }

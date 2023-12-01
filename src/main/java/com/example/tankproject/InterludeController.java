@@ -66,7 +66,7 @@ public class InterludeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.shop = new Shop();
-        this.backgroundImage.setImage(ImagesLoader.getInstance().backgroundImages.get(2));
+        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(2));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
