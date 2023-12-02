@@ -70,10 +70,10 @@ public class InterludeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.shop = new Shop();
-        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(2));
+        this.backgroundImage.setImage(Loader.getInstance().currentBackgrounds.get(2));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
-        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
+        this.music = new MediaPlayer(Loader.getInstance().currentBackgroundMusic.get(2));
         this.music.setVolume(Data.getInstance().musicVolume);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
@@ -299,7 +299,7 @@ public class InterludeController implements Initializable {
                 super.updateItem(color, empty);
 
                 if (color != null && !empty) {
-                    StackPane tankImageStackPane = ComponentsCreator.createPlayerTankImage(ImagesLoader.getInstance().currenkTankScoreboardImage, Color.valueOf(color), 35);
+                    StackPane tankImageStackPane = ComponentsCreator.createPlayerTankImage(Loader.getInstance().currenkTankScoreboardImage, Color.valueOf(color), 35);
                     setGraphic(tankImageStackPane);
                 }
             }
@@ -377,7 +377,7 @@ public class InterludeController implements Initializable {
         this.shopVBox.setVisible(false);
 
         this.music.stop();
-        this.music = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        this.music = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(3));
         this.music.setVolume(Data.getInstance().SFXVolume);
         this.music.play();
 

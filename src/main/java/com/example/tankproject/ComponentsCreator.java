@@ -17,7 +17,7 @@ public class ComponentsCreator {
 
     // Creates replay button
     public static Button createReplayButton(int height, int width) {
-        Image replayIcon = ImagesLoader.getInstance().iconImages.get(0);
+        Image replayIcon = Loader.getInstance().iconImages.get(0);
         ImageView replayIconView = new ImageView(replayIcon);
         Button replayButton = new Button("",replayIconView);
 
@@ -34,7 +34,7 @@ public class ComponentsCreator {
 
     // Creates exit button
     public static Button createExitButton(int height, int width) {
-        Image exitIcon = ImagesLoader.getInstance().iconImages.get(2);
+        Image exitIcon = Loader.getInstance().iconImages.get(2);
         ImageView exitIconView = new ImageView(exitIcon);
         Button exitButton = new Button("",exitIconView);
 
@@ -51,7 +51,7 @@ public class ComponentsCreator {
 
     // Creates menu exit button
     public static Button createMenuExitButton(int height, int width) {
-        Image menuExitIcon = ImagesLoader.getInstance().iconImages.get(1);
+        Image menuExitIcon = Loader.getInstance().iconImages.get(1);
         ImageView menuExitIconView = new ImageView(menuExitIcon);
         Button menuExitButton = new Button("",menuExitIconView);
 
@@ -109,7 +109,7 @@ public class ComponentsCreator {
         healthIconImageView = new ImageView(healthIconImage);
         healthIconImageView.setFitWidth(iconSize);
         healthIconImageView.setFitHeight(iconSize);
-        killsIconImageView = new ImageView(ImagesLoader.getInstance().currentTankKillsImage);
+        killsIconImageView = new ImageView(Loader.getInstance().currentTankKillsImage);
         killsIconImageView.setFitWidth(iconSize);
         killsIconImageView.setFitHeight(iconSize);
         if (inverse) killsIconImageView.setEffect(new ColorAdjust(1,1,-1,1));
@@ -127,11 +127,11 @@ public class ComponentsCreator {
 
     // Choose the health icon image according to tank health
     public static Image healthIcon(Tank tank) {
-        Image healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
+        Image healthIconImage = Loader.getInstance().heartIconImages.get(2);
 
-        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(2);
-        if (tank.getHealth() <= Constants.TANK_HEALTH / 2.0) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(1);
-        if (tank.getHealth() == 0) healthIconImage = ImagesLoader.getInstance().heartIconImages.get(0);
+        if (tank.getHealth() == Constants.TANK_HEALTH) healthIconImage = Loader.getInstance().heartIconImages.get(2);
+        if (tank.getHealth() <= Constants.TANK_HEALTH / 2.0) healthIconImage = Loader.getInstance().heartIconImages.get(1);
+        if (tank.getHealth() == 0) healthIconImage = Loader.getInstance().heartIconImages.get(0);
 
         return healthIconImage;
     }

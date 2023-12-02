@@ -1,12 +1,13 @@
 package com.example.tankproject;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ImagesLoader {
-    public static ImagesLoader instance;
+public class Loader {
+    public static Loader instance;
     private ArrayList<Image> shotImages;
     private ArrayList<Image> backgroundImages;
     public Image currentTankImage;
@@ -19,13 +20,19 @@ public class ImagesLoader {
     public Image mysteryBoxImage;
     public ArrayList<Image> currentBackgrounds;
     public ArrayList<Image> currentShotImages;
+    private ArrayList<Media> backgroundMusic;
+    private ArrayList<Media> soundEffects;
+    public ArrayList<Media> currentBackgroundMusic;
+    public ArrayList<Media> currentSoundEffects;
 
-    public ImagesLoader() {
+    public Loader() {
         shotImagesLoader();
         backgroundImagesLoader();
         interfaceImagesLoader();
         iconImagesLoader();
         gameImagesLoader();
+        backgroundMusicLoader();
+        SFXLoader();
     }
 
     // This method loads and saves the shot images in an ArrayList
@@ -91,11 +98,44 @@ public class ImagesLoader {
         this.mysteryBoxImage = new Image(Objects.requireNonNull(getClass().getResource("images/mystery_box.png")).toExternalForm());
     }
 
+    // This method loads and saves all the background music
+    public void backgroundMusicLoader() {
+        this.backgroundMusic = new ArrayList<>();
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/menuMusicHalloween.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicHalloween.mp3")).toExternalForm()));
+
+        this.currentBackgroundMusic = new ArrayList<>();
+        this.currentBackgroundMusic.add(this.backgroundMusic.get(0));
+        this.currentBackgroundMusic.add(this.backgroundMusic.get(1));
+        this.currentBackgroundMusic.add(this.backgroundMusic.get(2));
+    }
+
+    // This method loads and saves all the sound effects
+    public void SFXLoader() {
+        this.soundEffects = new ArrayList<>();
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/victory_laugh.mp3")).toExternalForm()));
+
+        this.currentSoundEffects = new ArrayList<>();
+        this.currentSoundEffects.add(this.soundEffects.get(0));
+        this.currentSoundEffects.add(this.soundEffects.get(1));
+        this.currentSoundEffects.add(this.soundEffects.get(2));
+        this.currentSoundEffects.add(this.soundEffects.get(3));
+        this.currentSoundEffects.add(this.soundEffects.get(4));
+    }
+
     // This method returns the theme icon corresponding to the current selected theme
     public Image getThemeIcon() {
-        if (Data.getInstance().themeSelected == 0) return ImagesLoader.getInstance().iconImages.get(6);
-        if (Data.getInstance().themeSelected == 1) return ImagesLoader.getInstance().iconImages.get(7);
-        if (Data.getInstance().themeSelected == 2) return ImagesLoader.getInstance().iconImages.get(8);
+        if (Data.getInstance().themeSelected == 0) return Loader.getInstance().iconImages.get(6);
+        if (Data.getInstance().themeSelected == 1) return Loader.getInstance().iconImages.get(7);
+        if (Data.getInstance().themeSelected == 2) return Loader.getInstance().iconImages.get(8);
         return null;
     }
 
@@ -105,18 +145,32 @@ public class ImagesLoader {
         if (Data.getInstance().themeSelected == 0) {
             this.currentBackgrounds.set(0, this.backgroundImages.get(0));
             this.currentBackgrounds.set(1, this.backgroundImages.get(1));
+            this.currentBackgrounds.set(2, this.backgroundImages.get(2));
             this.currentShotImages.set(0, this.shotImages.get(0));
             this.currentShotImages.set(1, this.shotImages.get(1));
             this.currentShotImages.set(2, this.shotImages.get(2));
+
+            this.currentBackgroundMusic.set(0, this.backgroundMusic.get(0));
+            this.currentBackgroundMusic.set(1, this.backgroundMusic.get(1));
+            this.currentBackgroundMusic.set(2, this.backgroundMusic.get(2));
+            this.currentSoundEffects.set(3, this.soundEffects.get(3));
+            this.currentSoundEffects.set(4, this.soundEffects.get(4));
             return;
         }
         // Halloween
         if (Data.getInstance().themeSelected == 1) {
             this.currentBackgrounds.set(0, this.backgroundImages.get(3));
             this.currentBackgrounds.set(1, this.backgroundImages.get(4));
+            this.currentBackgrounds.set(2, this.backgroundImages.get(2));
             this.currentShotImages.set(0, this.shotImages.get(3));
             this.currentShotImages.set(1, this.shotImages.get(4));
             this.currentShotImages.set(2, this.shotImages.get(5));
+
+            this.currentBackgroundMusic.set(0, this.backgroundMusic.get(3));
+            this.currentBackgroundMusic.set(1, this.backgroundMusic.get(4));
+            this.currentBackgroundMusic.set(2, this.backgroundMusic.get(2));
+            this.currentSoundEffects.set(3, this.soundEffects.get(5));
+            this.currentSoundEffects.set(4, this.soundEffects.get(4));
             return;
         }
         // Christmas
@@ -125,9 +179,9 @@ public class ImagesLoader {
         }
     }
 
-    public static synchronized ImagesLoader getInstance() {
+    public static synchronized Loader getInstance() {
         if (instance == null) {
-            instance = new ImagesLoader();
+            instance = new Loader();
         }
         return instance;
     }

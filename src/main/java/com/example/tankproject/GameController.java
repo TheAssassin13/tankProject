@@ -104,8 +104,8 @@ public class GameController implements Initializable {
         this.umbrellaPosition = null;
         Data.getInstance().terrain = new Terrain(Data.getInstance().canvasHeight, Data.getInstance().windowsWidth);
         Data.getInstance().terrain.terrainGeneration(Data.getInstance().seaLevel, true);
-        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(1));
-        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/gameMusic.mp3")).toExternalForm());
+        this.backgroundImage.setImage(Loader.getInstance().currentBackgrounds.get(1));
+        this.backgroundMusic = Loader.getInstance().currentBackgroundMusic.get(1);
         this.music = new MediaPlayer(backgroundMusic);
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
@@ -204,7 +204,7 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Data.getInstance().windowsWidth, Data.getInstance().windowsHeight);
-        if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(ImagesLoader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
+        if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(Loader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
         if (collision) Data.getInstance().terrain.drawTerrain(this.gameCanvasGraphicContext);
         else Data.getInstance().terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
@@ -269,6 +269,8 @@ public class GameController implements Initializable {
 
     // Removes hit player from alive players and add to dead players. It returns true if there's only one player left
     public boolean deleteDeadPlayer(Player player) {
+        this.sounds.stop();
+        this.sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(4));
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         if (this.shot.shotPlayer != player) {
@@ -506,7 +508,7 @@ public class GameController implements Initializable {
             tankFallAnimationTimer();
             this.tankInfoHUD.showHUD(hitPlayer.tank);
             this.animationsCreator.startExplosionAnimation(hitPlayer.tank.position);
-            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
+            this.sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(1));
             this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             if (hitPlayer.tank.getHealth() <= 0) {
@@ -523,7 +525,7 @@ public class GameController implements Initializable {
                 Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
                 terrainFallAnimationTimer();
                 tankFallAnimationTimer();
-                sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
+                sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(2));
                 this.sounds.setVolume(Data.getInstance().SFXVolume);
                 this.sounds.play();
                 this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
@@ -537,7 +539,7 @@ public class GameController implements Initializable {
             Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
             terrainFallAnimationTimer();
             tankFallAnimationTimer();
-            this.sounds = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("sounds/boom.mp3")).toExternalForm()));
+            this.sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(0));
             this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             // Checks if a tank is nearby
@@ -663,7 +665,7 @@ public class GameController implements Initializable {
 
     // Initializes the buttons panel of the interface
     public void buttonsPanelInitialize() {
-        Image heartIcon = ImagesLoader.getInstance().heartIconImages.get(2);
+        Image heartIcon = Loader.getInstance().heartIconImages.get(2);
         this.replayExitButtonsVbox.getChildren().clear();
         this.replayButton = ComponentsCreator.createReplayButton(25,25);
         this.exitButton = ComponentsCreator.createExitButton(25,25);
@@ -672,7 +674,7 @@ public class GameController implements Initializable {
         this.replayExitButtonsVbox.getChildren().add(this.replayButton);
         this.replayExitButtonsVbox.getChildren().add(this.menuExitButton);
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);
-        this.currentPlayerTankImage.setImage(ImagesLoader.getInstance().currentTankImage);
+        this.currentPlayerTankImage.setImage(Loader.getInstance().currentTankImage);
 
         updateCurrentPlayerInterfaceValues(heartIcon);
         ammunitionPanelControlInitialize();
@@ -792,9 +794,9 @@ public class GameController implements Initializable {
         setRandomWind();
 
         if (Data.getInstance().windVelocity < 0) {
-            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(4));
+            this.windDirectionImageView.setImage(Loader.getInstance().iconImages.get(4));
         } else {
-            this.windDirectionImageView.setImage(ImagesLoader.getInstance().iconImages.get(5));
+            this.windDirectionImageView.setImage(Loader.getInstance().iconImages.get(5));
         }
 
         this.windVelocityText.setText("Wind velocity = " + Math.abs(Data.getInstance().windVelocity) + " m/s");

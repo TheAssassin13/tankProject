@@ -48,7 +48,7 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.backgroundImage.setImage(ImagesLoader.getInstance().currentBackgrounds.get(0));
+        this.backgroundImage.setImage(Loader.getInstance().currentBackgrounds.get(0));
         this.backgroundImage.setFitHeight(Data.getInstance().windowsHeight);
         this.backgroundImage.setFitWidth(Data.getInstance().windowsWidth);
         this.optionsVBox.setDisable(true);
@@ -57,7 +57,7 @@ public class MenuController implements Initializable {
         this.appOptionsVBox.setVisible(false);
         this.gameOptionsVBox.setDisable(false);
         this.gameOptionsVBox.setVisible(true);
-        this.backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("music/menuMusic.mp3")).toExternalForm());
+        this.backgroundMusic = Loader.getInstance().currentBackgroundMusic.get(0);
         this.mediaPlayer = new MediaPlayer(backgroundMusic);
         this.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         this.mediaPlayer.play();
@@ -101,7 +101,7 @@ public class MenuController implements Initializable {
         this.musicVolumeSlider.adjustValue(Data.getInstance().musicVolume * 100 / Constants.MAX_VOLUME);
         this.sfxVolumeSlider.adjustValue(Data.getInstance().SFXVolume * 100 / Constants.MAX_VOLUME);
         this.resolutionSpinner.getValueFactory().setValue(Data.getInstance().windowsWidth + " x " + Data.getInstance().windowsHeight);
-        this.themeButtonImageView.setImage(ImagesLoader.getInstance().getThemeIcon());
+        this.themeButtonImageView.setImage(Loader.getInstance().getThemeIcon());
 
         MouseEvent clickEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED, 0.0, 0.0, 0.0, 0.0, null, 0, false, false, false, false, false, false, false, false, false, false, null);
         onCPUSpinnerClick(clickEvent);
@@ -125,7 +125,7 @@ public class MenuController implements Initializable {
             // Closes the current windows and opens a new one with the resolution and theme selected by the user
             this.mediaPlayer.stop();
             themeButtonPressed = false;
-            ImagesLoader.getInstance().changeTheme();
+            Loader.getInstance().changeTheme();
             App.restartWindow();
             App.updateScreenResolutionVariables();
         }
@@ -195,7 +195,7 @@ public class MenuController implements Initializable {
         if (Data.getInstance().themeSelected < 2) Data.getInstance().themeSelected++;
         else Data.getInstance().themeSelected = 0;
 
-        this.themeButtonImageView.setImage(ImagesLoader.getInstance().getThemeIcon());
+        this.themeButtonImageView.setImage(Loader.getInstance().getThemeIcon());
 
         this.themeButtonPressed = true;
     }
