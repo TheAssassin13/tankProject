@@ -56,12 +56,16 @@ public class InterludeController implements Initializable {
     public TableView<Player> winScreenScoreboardTableView;
     public HBox warningHBox;
     public StackPane winnerPlayerImageStackPane;
-    public HBox winScreenHBox;
+    public HBox finalScreenHBox;
     public Text winnerPlayerNameText;
     public Text winnerPlayerHealthText;
     public Text winnerPlayerKillsText;
     public ImageView winnerPlayerHealthImage;
     public VBox tieScreenVBox;
+    public VBox winScreenVBox;
+    public VBox drawScreenVBox;
+    public StackPane drawFirstPlayerImageStackPane;
+    public StackPane drawSecondPlayerImageStackPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,7 +79,7 @@ public class InterludeController implements Initializable {
         this.music.play();
 
         if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-            showWinScreen();
+            showFinalScreen(getWinnerPlayers().size() != 1);
             return;
         }
 
@@ -301,7 +305,6 @@ public class InterludeController implements Initializable {
             }
         });
 
-
         playerPositionColumn.setPrefWidth(85);
         playerTankColumn.setPrefWidth(115);
         playerNameColumn.setPrefWidth(115);
@@ -325,26 +328,52 @@ public class InterludeController implements Initializable {
     public void calculatePlayersPosition() {
         ArrayList<Player> players = new ArrayList<>(Data.getInstance().alivePlayers);
         int position = 1;
+        int winnerScore;
 
+        players.addAll(Data.getInstance().deadPlayers);
         players.sort(Comparator.comparing(player -> player.score));
         Collections.reverse(players);
 
+        winnerScore = players.get(0).score;
+
         for (Player p: players) {
-            p.position = position++;
+            if (p.score == winnerScore) p.position = position;
+            else p.position = ++position;
         }
     }
 
-    // Makes win screen visible
-    public void showWinScreen() {
-        Player winnerPlayer = getWinnerPlayer();
+    // Makes final screen visible
+    public void showFinalScreen(boolean draw) {
+        if (draw) {
+            ArrayList<Player> winnerPlayers = getWinnerPlayers();
 
-        this.winScreenHBox.setVisible(true);
-        this.winScreenHBox.setDisable(false);
-        this.winnerPlayerImageStackPane.setStyle(this.winnerPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayer.tank.color) + ";");
-        this.winnerPlayerNameText.setText(winnerPlayer.name);
-        this.winnerPlayerHealthText.setText(String.valueOf((int)winnerPlayer.tank.getHealth()));
-        this.winnerPlayerKillsText.setText(String.valueOf(winnerPlayer.tank.kills));
-        this.winnerPlayerHealthImage.setImage(ComponentsCreator.healthIcon(winnerPlayer.tank));
+            this.winScreenVBox.setVisible(false);
+            this.winScreenVBox.setDisable(true);
+            this.winScreenVBox.setManaged(false);
+            this.drawScreenVBox.setVisible(true);
+            this.drawScreenVBox.setDisable(false);
+            this.drawScreenVBox.setManaged(true);
+            this.drawFirstPlayerImageStackPane.setStyle(this.drawFirstPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayers.get(0).tank.color) + ";");
+            this.drawSecondPlayerImageStackPane.setStyle(this.drawSecondPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayers.get(1).tank.color) + ";");
+
+        } else {
+            Player winnerPlayer = getWinnerPlayers().get(0);
+
+            this.winScreenVBox.setVisible(true);
+            this.winScreenVBox.setDisable(false);
+            this.winScreenVBox.setManaged(true);
+            this.drawScreenVBox.setVisible(false);
+            this.drawScreenVBox.setDisable(true);
+            this.drawScreenVBox.setManaged(false);
+            this.winnerPlayerImageStackPane.setStyle(this.winnerPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayer.tank.color) + ";");
+            this.winnerPlayerNameText.setText(winnerPlayer.name);
+            this.winnerPlayerHealthText.setText(String.valueOf((int)winnerPlayer.tank.getHealth()));
+            this.winnerPlayerKillsText.setText(String.valueOf(winnerPlayer.tank.kills));
+            this.winnerPlayerHealthImage.setImage(ComponentsCreator.healthIcon(winnerPlayer.tank));
+        }
+
+        this.finalScreenHBox.setVisible(true);
+        this.finalScreenHBox.setDisable(false);
         this.shopVBox.setVisible(false);
 
         this.music.stop();
@@ -355,21 +384,17 @@ public class InterludeController implements Initializable {
         scoreboardTableViewInitialize(this.winScreenScoreboardTableView);
     }
 
-    // Gets player with the most kills
-    public Player getWinnerPlayer() {
-        Player winnerPlayer = Data.getInstance().alivePlayers.get(0);
-
-        for (Player player : Data.getInstance().deadPlayers) {
-            Data.getInstance().alivePlayers.add(player);
-        }
+    // Gets players with the highest score
+    public ArrayList<Player> getWinnerPlayers() {
+        ArrayList<Player> winnerPlayers = new ArrayList<>();
 
         calculatePlayersPosition();
 
         for (Player player : Data.getInstance().alivePlayers) {
-            if (player.position == 1) winnerPlayer = player;
+            if (player.position == 1) winnerPlayers.add(player);
         }
 
-        return winnerPlayer;
+        return winnerPlayers;
     }
 
     // Makes node visible for a few seconds

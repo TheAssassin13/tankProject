@@ -216,7 +216,7 @@
          </font>
       </Text>
    </HBox>
-   <HBox fx:id="winScreenHBox" alignment="CENTER" fillHeight="false" layoutX="-5.0" layoutY="153.0" spacing="25.0" visible="false">
+   <HBox fx:id="finalScreenHBox" alignment="CENTER" disable="true" fillHeight="false" layoutX="-5.0" layoutY="153.0" spacing="25.0" visible="false">
       <padding>
          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
@@ -230,44 +230,77 @@
       </VBox>
       <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="winScreenContainersVBox">
-            <StackPane fx:id="winnerPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
-               <ImageView fitHeight="280.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@images/current_tank_image.png" />
-               </ImageView>
+            <StackPane>
+               <VBox fx:id="winScreenVBox" alignment="CENTER" disable="true" visible="false">
+                  <StackPane fx:id="winnerPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
+                     <ImageView fitHeight="280.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@images/current_tank_image.png" />
+                     </ImageView>
+                  </StackPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Victory!">
+                     <font>
+                        <Font name="Arial" size="64.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="winnerPlayerNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Player name">
+                     <font>
+                        <Font name="Arial" size="48.0" />
+                     </font>
+                  </Text>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <Text fx:id="winnerPlayerHealthText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="health">
+                        <font>
+                           <Font name="Arial" size="36.0" />
+                        </font>
+                     </Text>
+                     <ImageView fx:id="winnerPlayerHealthImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <HBox.margin>
+                           <Insets right="15.0" />
+                        </HBox.margin>
+                     </ImageView>
+                     <Text fx:id="winnerPlayerKillsText" fill="WHITE" layoutX="71.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kills">
+                        <font>
+                           <Font name="Arial" size="36.0" />
+                        </font>
+                     </Text>
+                     <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@icons/kills_icon.png" />
+                     </ImageView>
+                     <padding>
+                        <Insets bottom="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </VBox>
+               <VBox fx:id="drawScreenVBox" alignment="CENTER" disable="true" spacing="25.0">
+                  <StackPane>
+                     <HBox alignment="CENTER">
+                        <StackPane fx:id="drawFirstPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
+                           <ImageView fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
+                              <Image url="@images/draw_first_tank_image.png"/>
+                           </ImageView>
+                        </StackPane>
+                        <StackPane fx:id="drawSecondPlayerImageStackPane" layoutX="10.0" layoutY="10.0"
+                                   maxHeight="-Infinity" maxWidth="-Infinity">
+                           <ImageView fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
+                              <Image url="@images/draw_second_tank_image.png"/>
+                           </ImageView>
+                        </StackPane>
+                     </HBox>
+                     <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true"
+                                translateY="15.0">
+                        <Image url="@images/tank_shake_hands.png"/>
+                     </ImageView>
+                  </StackPane>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Draw!">
+                     <font>
+                        <Font name="Arial" size="80.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Text>
+               </VBox>
             </StackPane>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Victory!">
-               <font>
-                  <Font name="Arial" size="64.0" />
-               </font>
-            </Text>
-            <Text fx:id="winnerPlayerNameText" fill="WHITE" layoutX="10.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player name">
-               <font>
-                  <Font name="Arial" size="48.0" />
-               </font>
-            </Text>
-            <HBox alignment="CENTER" spacing="10.0">
-               <Text fx:id="winnerPlayerHealthText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="health">
-                  <font>
-                     <Font name="Arial" size="36.0" />
-                  </font>
-               </Text>
-               <ImageView fx:id="winnerPlayerHealthImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                  <HBox.margin>
-                     <Insets right="15.0" />
-                  </HBox.margin>
-               </ImageView>
-               <Text fx:id="winnerPlayerKillsText" fill="WHITE" layoutX="71.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kills">
-                  <font>
-                     <Font name="Arial" size="36.0" />
-                  </font>
-               </Text>
-               <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@icons/kills_icon.png" />
-               </ImageView>
-               <padding>
-                  <Insets bottom="5.0" top="5.0" />
-               </padding>
-            </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="50.0" prefWidth="50.0" style="-fx-pref-height: 50; -fx-pref-width: 50;" styleClass="winScreenButton">
                   <graphic>
