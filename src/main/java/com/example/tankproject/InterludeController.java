@@ -78,17 +78,17 @@ public class InterludeController implements Initializable {
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
 
-        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
-            showFinalScreen(getWinnerPlayers().size() != 1);
-            return;
-        }
-
         if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
 
         if (Data.getInstance().gameNumber == 0) createPlayers();
         else  {
             Data.getInstance().restart();
             loadPlayers();
+        }
+
+        if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
+            showFinalScreen(getWinnerPlayers().size() != 1);
+            return;
         }
 
         this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
