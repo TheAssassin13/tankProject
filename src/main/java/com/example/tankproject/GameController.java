@@ -22,6 +22,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -72,7 +73,6 @@ public class GameController implements Initializable {
     public Media backgroundMusic;
     public MediaPlayer music;
     public MediaPlayer sounds;
-    public Point umbrellaPosition;
     public HBox healthRemainingHBox;
     public TankInfoHUD tankInfoHUD;
     public ImageView explosionAnimation;
@@ -101,7 +101,6 @@ public class GameController implements Initializable {
         this.angleTextField.clear();
         this.powerTextField.clear();
         this.mediumAmmoButton.setSelected(true);
-        this.umbrellaPosition = null;
         Data.getInstance().terrain = new Terrain(Data.getInstance().canvasHeight, Data.getInstance().windowsWidth);
         Data.getInstance().terrain.terrainGeneration(Data.getInstance().seaLevel, true);
         this.backgroundImage.setImage(Loader.getInstance().currentBackgrounds.get(1));
@@ -204,7 +203,6 @@ public class GameController implements Initializable {
     // All drawing methods that should render every frame
     public void drawingMethods(boolean collision) {
         this.gameCanvasGraphicContext.clearRect(0, 0, Data.getInstance().windowsWidth, Data.getInstance().windowsHeight);
-        if (umbrellaPosition != null) gameCanvasGraphicContext.drawImage(Loader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
         // If there's a collision it draws the terrain without the optimization
         if (collision) Data.getInstance().terrain.drawTerrain(this.gameCanvasGraphicContext);
         else Data.getInstance().terrain.drawTerrainOptimized(this.gameCanvasGraphicContext);
@@ -296,7 +294,6 @@ public class GameController implements Initializable {
 
     // Manages the shoot button action in the interface. Create the shot from the angle and initial velocity from user input, check for collision and turn changes.
     public void onShootButtonClick(ActionEvent ignoredActionEvent) {
-        this.umbrellaPosition = null;
         this.maxHeight = 0;
         this.maxDistance = 0;
         // Checks if the input is not empty
@@ -363,7 +360,7 @@ public class GameController implements Initializable {
                    }
 
                    // Checks all the possible collisions
-                   if (shotCollision(shot)) stop();
+                   if (shotCollision(shot, false)) stop();
 
                    // Trajectory point added
                    shot.addTrajectory();
@@ -480,16 +477,63 @@ public class GameController implements Initializable {
         } else if (box.powerUp == 1) {
             Shop.LoadCredits(this.turn,Constants.CREDITS_FROM_POWER_UP);
         } else if (box.powerUp == 2) {
-            this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
-            bombardment();
+            bombardmentAnimationTimer();
         }
     }
 
     // Power up that creates a bombardment of shots from the sky
-    public void bombardment() {
-        for (int i = 0; i < 10; i++) {
-            gameAnimationTimer(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 10, -90, this.turn));
+    public void bombardmentAnimationTimer() {
+        ArrayList<Shot> bombs = new ArrayList<>();
+        Point umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
+
+        for (int i = 0; i < Constants.SHOTS_FROM_BOMBARDMENT; i++) {
+            bombs.add(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 0, -90, this.turn));
         }
+
+        shootButton.setDisable(true);
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Makes animation fps constant
+                if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                    drawingMethods(false);
+                    for (Shot s : bombs) {
+                        s.shotPosition();
+                        s.drawTrajectory(gameCanvasGraphicContext);
+                        s.drawShot(gameCanvasGraphicContext);
+                        replayButton.setDisable(true);
+                        menuExitButton.setDisable(true);
+                    }
+                    gameCanvasGraphicContext.drawImage(Loader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
+
+                    ArrayList<Shot> deletedShots = new ArrayList<>();
+                    for (Shot s : bombs) {
+                        // Shot is out of the screen
+                        if (s.position.getX() >= Data.getInstance().windowsWidth || s.position.getX() < 0
+                                || s.position.getY() >= Data.getInstance().canvasHeight) {
+                            deletedShots.add(s);
+                        }
+
+                        // Checks all the possible collisions
+                        if (shotCollision(s, true)) deletedShots.add(s);
+
+                        // Trajectory point added
+                        s.addTrajectory();
+                    }
+
+                    for (Shot s : deletedShots) {
+                        bombs.remove(s);
+                    }
+
+                    if (bombs.isEmpty()) {
+                        stop();
+                        stopMethods();
+                    }
+
+                    lastUpdateTime = now;
+                }
+            }
+        }.start();
     }
 
     // Shakes the windows screen
@@ -498,7 +542,7 @@ public class GameController implements Initializable {
     }
 
     // Checks all the possible collisions with a shot
-    public boolean shotCollision(Shot shot) {
+    public boolean shotCollision(Shot shot, boolean bombardment) {
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer != null) {
@@ -515,7 +559,7 @@ public class GameController implements Initializable {
                 if (deleteDeadPlayer(hitPlayer)) return true;
             }
             this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
-            stopMethods();
+            if (!bombardment) stopMethods();
             return true;
         }
         // Checks if a box is hit
@@ -530,7 +574,7 @@ public class GameController implements Initializable {
                 this.sounds.play();
                 this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
                 mysteryBoxPower(box);
-                stopMethods();
+                if (!bombardment) stopMethods();
                 return true;
             }
         }
@@ -552,7 +596,7 @@ public class GameController implements Initializable {
                 }
             }
 
-            stopMethods();
+            if (!bombardment) stopMethods();
             return true;
         }
         return false;
