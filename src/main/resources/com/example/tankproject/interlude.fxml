@@ -232,8 +232,8 @@
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="winScreenContainersVBox">
             <StackPane>
                <VBox fx:id="winScreenVBox" alignment="CENTER" disable="true" visible="false">
-                  <StackPane fx:id="winnerPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
-                     <ImageView fitHeight="280.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
+                  <StackPane fx:id="winnerPlayerImageStackPane">
+                     <ImageView fx:id="winnerPlayerImageView" fitHeight="280.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/current_tank_image.png" />
                      </ImageView>
                   </StackPane>
@@ -248,16 +248,6 @@
                      </font>
                   </Text>
                   <HBox alignment="CENTER" spacing="10.0">
-                     <Text fx:id="winnerPlayerHealthText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="health">
-                        <font>
-                           <Font name="Arial" size="36.0" />
-                        </font>
-                     </Text>
-                     <ImageView fx:id="winnerPlayerHealthImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                        <HBox.margin>
-                           <Insets right="15.0" />
-                        </HBox.margin>
-                     </ImageView>
                      <Text fx:id="winnerPlayerKillsText" fill="WHITE" layoutX="71.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="kills">
                         <font>
                            <Font name="Arial" size="36.0" />
@@ -265,6 +255,14 @@
                      </Text>
                      <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@icons/kills_icon.png" />
+                     </ImageView>
+                     <Text fx:id="winnerPlayerCreditsText" fill="WHITE" layoutX="193.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="credits">
+                        <font>
+                           <Font name="Arial" size="36.0" />
+                        </font>
+                     </Text>
+                     <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="213.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@icons/tank_money.png" />
                      </ImageView>
                      <padding>
                         <Insets bottom="5.0" top="5.0" />
@@ -275,20 +273,18 @@
                   <StackPane>
                      <HBox alignment="CENTER">
                         <StackPane fx:id="drawFirstPlayerImageStackPane" maxHeight="-Infinity" maxWidth="-Infinity">
-                           <ImageView fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
-                              <Image url="@images/draw_first_tank_image.png"/>
+                           <ImageView fx:id="drawFirstPlayerImageView" fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
+                              <Image url="@images/draw_first_tank_image.png" />
                            </ImageView>
                         </StackPane>
-                        <StackPane fx:id="drawSecondPlayerImageStackPane" layoutX="10.0" layoutY="10.0"
-                                   maxHeight="-Infinity" maxWidth="-Infinity">
-                           <ImageView fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
-                              <Image url="@images/draw_second_tank_image.png"/>
+                        <StackPane fx:id="drawSecondPlayerImageStackPane" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity">
+                           <ImageView fx:id="drawSecondPlayerImageView" fitHeight="160.0" fitWidth="235.0" pickOnBounds="true">
+                              <Image url="@images/draw_second_tank_image.png" />
                            </ImageView>
                         </StackPane>
                      </HBox>
-                     <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true"
-                                translateY="15.0">
-                        <Image url="@images/tank_shake_hands.png"/>
+                     <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" translateY="15.0">
+                        <Image url="@images/tank_shake_hands.png" />
                      </ImageView>
                   </StackPane>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Draw!">

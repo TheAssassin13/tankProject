@@ -78,6 +78,7 @@ public class Tank {
         this.temporaryAmmunition.add(0);
         this.temporaryAmmunition.add(0);
     }
+
     public void setAmmoSelected(ToggleButton ammoSelected) {
         this.ammoSelected = ammoSelected;
     }

@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -58,14 +57,16 @@ public class InterludeController implements Initializable {
     public StackPane winnerPlayerImageStackPane;
     public HBox finalScreenHBox;
     public Text winnerPlayerNameText;
-    public Text winnerPlayerHealthText;
     public Text winnerPlayerKillsText;
-    public ImageView winnerPlayerHealthImage;
     public VBox tieScreenVBox;
     public VBox winScreenVBox;
     public VBox drawScreenVBox;
     public StackPane drawFirstPlayerImageStackPane;
     public StackPane drawSecondPlayerImageStackPane;
+    public ImageView winnerPlayerImageView;
+    public Text winnerPlayerCreditsText;
+    public ImageView drawFirstPlayerImageView;
+    public ImageView drawSecondPlayerImageView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -188,7 +189,7 @@ public class InterludeController implements Initializable {
     // This method loads the players, and brings the dead players to the alivePlayers arrayList
     public void loadPlayers() {
         for (Player player : Data.getInstance().alivePlayers) {
-            player.score += player.tank.getHealth();
+            player.score += (int) player.tank.getHealth();
             remainingAmmoPoints(player);
         }
 
@@ -311,6 +312,18 @@ public class InterludeController implements Initializable {
         playerKillsColumn.setPrefWidth(85);
         playerScoreColumn.setPrefWidth(115);
 
+        playerPositionColumn.setReorderable(false);
+        playerTankColumn.setReorderable(false);
+        playerNameColumn.setReorderable(false);
+        playerKillsColumn.setReorderable(false);
+        playerScoreColumn.setReorderable(false);
+
+        playerPositionColumn.setResizable(false);
+        playerTankColumn.setResizable(false);
+        playerNameColumn.setResizable(false);
+        playerKillsColumn.setResizable(false);
+        playerScoreColumn.setResizable(false);
+
         playerPositionColumn.getStyleClass().add("table-cell-centered");
         playerTankColumn.getStyleClass().add("table-cell-centered");
         playerNameColumn.getStyleClass().add("table-cell-centered");
@@ -347,6 +360,11 @@ public class InterludeController implements Initializable {
         if (draw) {
             ArrayList<Player> winnerPlayers = getWinnerPlayers();
 
+            if (Data.getInstance().windowsWidth == Constants.RESOLUTION_WIDTH[0] && Data.getInstance().windowsHeight == Constants.RESOLUTION_HEIGHT[0]) {
+                this.drawFirstPlayerImageView.setFitWidth(150);
+                this.drawSecondPlayerImageView.setFitWidth(150);
+            }
+
             this.winScreenVBox.setVisible(false);
             this.winScreenVBox.setDisable(true);
             this.winScreenVBox.setManaged(false);
@@ -359,6 +377,8 @@ public class InterludeController implements Initializable {
         } else {
             Player winnerPlayer = getWinnerPlayers().get(0);
 
+            if (Data.getInstance().windowsWidth == Constants.RESOLUTION_WIDTH[0] && Data.getInstance().windowsHeight == Constants.RESOLUTION_HEIGHT[0]) this.winnerPlayerImageView.setFitWidth(250);
+
             this.winScreenVBox.setVisible(true);
             this.winScreenVBox.setDisable(false);
             this.winScreenVBox.setManaged(true);
@@ -367,9 +387,8 @@ public class InterludeController implements Initializable {
             this.drawScreenVBox.setManaged(false);
             this.winnerPlayerImageStackPane.setStyle(this.winnerPlayerImageStackPane.getStyle() + "-fx-background-color: " + toHexString(winnerPlayer.tank.color) + ";");
             this.winnerPlayerNameText.setText(winnerPlayer.name);
-            this.winnerPlayerHealthText.setText(String.valueOf((int)winnerPlayer.tank.getHealth()));
             this.winnerPlayerKillsText.setText(String.valueOf(winnerPlayer.tank.kills));
-            this.winnerPlayerHealthImage.setImage(ComponentsCreator.healthIcon(winnerPlayer.tank));
+            this.winnerPlayerCreditsText.setText(String.valueOf(winnerPlayer.tank.credits));
         }
 
         this.finalScreenHBox.setVisible(true);

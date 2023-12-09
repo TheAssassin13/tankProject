@@ -476,13 +476,13 @@ public class GameController implements Initializable {
         if (box.powerUp == 0) {
             this.turn.tank.restoreHealth();
             this.tankInfoHUD.showHUD(this.turn.tank);
-            updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
         } else if (box.powerUp == 1) {
             Shop.LoadCredits(this.turn,Constants.CREDITS_FROM_POWER_UP);
         } else if (box.powerUp == 2) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
         }
+        updateCurrentPlayerInterfaceValues(ComponentsCreator.healthIcon(this.turn.tank));
     }
 
     // Power up that creates a bombardment of shots from the sky
