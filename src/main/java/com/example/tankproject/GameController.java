@@ -225,7 +225,7 @@ public class GameController implements Initializable {
         ArrayList<Point> tanksPosition = new ArrayList<>();
 
         // Position of the first tank
-        int x = (int) (Math.random() * 2 * Data.getInstance().windowsWidth / (Data.getInstance().tanksQuantity * 2 + 1) + Constants.TANK_SIZE);
+        int x = (int) Math.max(Math.random() * 2 * Data.getInstance().windowsWidth / (Data.getInstance().tanksQuantity * 2 + 1), Constants.TANK_SIZE);
         int y = Data.getInstance().canvasHeight - Constants.TANK_SIZE;
         tanksPosition.add(new Point(x, y));
 
@@ -361,13 +361,13 @@ public class GameController implements Initializable {
 
                    // Shot is out of the screen
                    if (shot.position.getX() >= Data.getInstance().windowsWidth || shot.position.getX() < 0
-                        || shot.position.getY() >= Data.getInstance().canvasHeight) {
+                        || shot.position.getY() >= Data.getInstance().canvasHeight || shot.position.getY() < 0) {
                        stop();
                        stopMethods();
+                   } else {
+                       // Checks all the possible collisions
+                       if (shotCollision(shot)) stop();
                    }
-
-                   // Checks all the possible collisions
-                   if (shotCollision(shot)) stop();
 
                    // Trajectory point added
                    shot.addTrajectory();
