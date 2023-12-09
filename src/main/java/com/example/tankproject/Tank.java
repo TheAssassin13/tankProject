@@ -109,8 +109,8 @@ public class Tank {
         gc.setTransform(new Affine());
 
         //hat
-        /*
-        gc.drawImage(images.witchHatImage, this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);*/
+        if (Data.getInstance().themeSelected > 0)
+            gc.drawImage(Loader.getInstance().hatImage, this.position.getX() + 3 - Constants.TANK_SIZE / 2.0, this.position.getY() -32- wheelSize, Constants.TANK_SIZE, Constants.TANK_SIZE);
     }
 
     public int getKills() {

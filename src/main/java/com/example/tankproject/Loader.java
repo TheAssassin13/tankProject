@@ -16,7 +16,7 @@ public class Loader {
     public ArrayList<Image> heartIconImages;
     public ArrayList<Image> iconImages;
     public Image umbrellaImage;
-    public Image witchHatImage;
+    public Image hatImage;
     public Image mysteryBoxImage;
     public ArrayList<Image> currentBackgrounds;
     public ArrayList<Image> currentShotImages;
@@ -44,6 +44,9 @@ public class Loader {
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/light_shot(halloween).png")).toExternalForm()));
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/medium_shot(halloween).png")).toExternalForm()));
         this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/other_heavy_shot(halloween).png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/light_shot_christmas.png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/medium_shot_christmas.png")).toExternalForm()));
+        this.shotImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/heavy_shot_christmas.png")).toExternalForm()));
 
         this.currentShotImages = new ArrayList<>();
         this.currentShotImages.add(this.shotImages.get(0));
@@ -59,6 +62,10 @@ public class Loader {
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/interlude_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/menu_background_image.png")).toExternalForm()));
         this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/background_halloween.jpg")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/interlude_background_image.png")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/menu_background_image.png")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/game_background_image.png")).toExternalForm()));
+        this.backgroundImages.add(new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/interlude_background_image.png")).toExternalForm()));
 
         this.currentBackgrounds = new ArrayList<>();
         this.currentBackgrounds.add(this.backgroundImages.get(0));
@@ -94,7 +101,7 @@ public class Loader {
     // This method loads and saves all the game related images
     public void gameImagesLoader() {
         this.umbrellaImage = new Image(Objects.requireNonNull(getClass().getResource("images/umbrella.png")).toExternalForm());
-        this.witchHatImage = new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/hat.png")).toExternalForm());
+        this.hatImage = new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/hat.png")).toExternalForm());
         this.mysteryBoxImage = new Image(Objects.requireNonNull(getClass().getResource("images/mystery_box.png")).toExternalForm());
     }
 
@@ -106,6 +113,10 @@ public class Loader {
         this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusic.mp3")).toExternalForm()));
         this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/menuMusicHalloween.mp3")).toExternalForm()));
         this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicHalloween.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusicHalloween.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/menuMusicChristmas.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/gameMusicChristmas.mp3")).toExternalForm()));
+        this.backgroundMusic.add(new Media(Objects.requireNonNull(getClass().getResource("music/interludeMusicChristmas.mp3")).toExternalForm()));
 
         this.currentBackgroundMusic = new ArrayList<>();
         this.currentBackgroundMusic.add(this.backgroundMusic.get(0));
@@ -120,8 +131,11 @@ public class Loader {
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTank.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
-        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTankDeath.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/victory_laugh.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/christmas_sounds/victory_hohoho.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/christmas_sounds/sparky_death.mp3")).toExternalForm()));
 
         this.currentSoundEffects = new ArrayList<>();
         this.currentSoundEffects.add(this.soundEffects.get(0));
@@ -161,21 +175,35 @@ public class Loader {
         if (Data.getInstance().themeSelected == 1) {
             this.currentBackgrounds.set(0, this.backgroundImages.get(3));
             this.currentBackgrounds.set(1, this.backgroundImages.get(4));
-            this.currentBackgrounds.set(2, this.backgroundImages.get(2));
+            this.currentBackgrounds.set(2, this.backgroundImages.get(5));
             this.currentShotImages.set(0, this.shotImages.get(3));
             this.currentShotImages.set(1, this.shotImages.get(4));
             this.currentShotImages.set(2, this.shotImages.get(5));
 
             this.currentBackgroundMusic.set(0, this.backgroundMusic.get(3));
             this.currentBackgroundMusic.set(1, this.backgroundMusic.get(4));
-            this.currentBackgroundMusic.set(2, this.backgroundMusic.get(2));
+            this.currentBackgroundMusic.set(2, this.backgroundMusic.get(5));
             this.currentSoundEffects.set(3, this.soundEffects.get(5));
-            this.currentSoundEffects.set(4, this.soundEffects.get(4));
+            this.currentSoundEffects.set(4, this.soundEffects.get(6));
+            this.hatImage = new Image(Objects.requireNonNull(getClass().getResource("images/halloween_additions/hat.png")).toExternalForm());
             return;
         }
         // Christmas
         if (Data.getInstance().themeSelected == 2) {
+            this.currentBackgrounds.set(0, this.backgroundImages.get(6));
+            this.currentBackgrounds.set(1, this.backgroundImages.get(7));
+            this.currentBackgrounds.set(2, this.backgroundImages.get(8));
+            this.currentShotImages.set(0, this.shotImages.get(6));
+            this.currentShotImages.set(1, this.shotImages.get(7));
+            this.currentShotImages.set(2, this.shotImages.get(8));
 
+            this.currentBackgroundMusic.set(0, this.backgroundMusic.get(6));
+            this.currentBackgroundMusic.set(1, this.backgroundMusic.get(7));
+            this.currentBackgroundMusic.set(2, this.backgroundMusic.get(8));
+            this.currentSoundEffects.set(3, this.soundEffects.get(7));
+            this.currentSoundEffects.set(4, this.soundEffects.get(8));
+            this.hatImage = new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/hat.png")).toExternalForm());
+            return;
         }
     }
 
