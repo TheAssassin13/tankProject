@@ -83,6 +83,9 @@ public class GameController implements Initializable {
     public Text windVelocityText;
     public VBox windHUDVBox;
     public Shot shot;
+    public ImageView lightAmmoImageView;
+    public ImageView mediumAmmoImageView;
+    public ImageView heavyAmmoImageView;
 
 
     // Initializes JavaFX windows
@@ -275,11 +278,11 @@ public class GameController implements Initializable {
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
         if (this.shot.shotPlayer != player) {
-            Shop.LoadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
+            Shop.loadCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.tank.kills++;
             this.shot.shotPlayer.score += Constants.POINTS_FOR_DESTROYING_TANKS;
         } else {
-            Shop.ReduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
+            Shop.reduceCredits(this.shot.shotPlayer,Constants.CREDITS_FOR_DESTROYING_TANKS);
             this.shot.shotPlayer.score = Math.max(0, this.shot.shotPlayer.score - Constants.POINTS_FOR_DESTROYING_TANKS);
         }
 
@@ -478,7 +481,7 @@ public class GameController implements Initializable {
             this.turn.tank.restoreHealth();
             this.tankInfoHUD.showHUD(this.turn.tank);
         } else if (box.powerUp == 1) {
-            Shop.LoadCredits(this.turn,Constants.CREDITS_FROM_POWER_UP);
+            Shop.loadCredits(this.turn,Constants.CREDITS_FROM_POWER_UP);
         } else if (box.powerUp == 2) {
             this.umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
             bombardment();
@@ -677,6 +680,10 @@ public class GameController implements Initializable {
         this.replayExitButtonsVbox.getChildren().add(this.exitButton);
         this.currentPlayerTankImage.setImage(Loader.getInstance().currentTankImage);
 
+        this.lightAmmoImageView.setImage(Loader.getInstance().currentShotImages.get(0));
+        this.mediumAmmoImageView.setImage(Loader.getInstance().currentShotImages.get(1));
+        this.heavyAmmoImageView.setImage(Loader.getInstance().currentShotImages.get(2));
+        
         updateCurrentPlayerInterfaceValues(heartIcon);
         ammunitionPanelControlInitialize();
     }

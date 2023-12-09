@@ -47,29 +47,26 @@
                <VBox alignment="CENTER" spacing="10.0">
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolution">
                      <font>
-                        <Font name="Arial" size="24.0"/>
+                        <Font name="Arial" size="24.0" />
                      </font>
                   </Text>
-                  <Spinner fx:id="resolutionSpinner" styleClass="split-arrows-horizontal"/>
+                  <Spinner fx:id="resolutionSpinner" styleClass="split-arrows-horizontal" />
                </VBox>
                <VBox alignment="CENTER" spacing="10.0">
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Music volume">
                      <font>
-                        <Font name="Arial" size="24.0"/>
+                        <Font name="Arial" size="24.0" />
                      </font>
                   </Text>
-                  <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                          minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" value="50.0"/>
+                  <Slider fx:id="musicVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" showTickMarks="true" value="50.0" />
                </VBox>
                <VBox alignment="CENTER" spacing="10.0">
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SFX volume">
                      <font>
-                        <Font name="Arial" size="24.0"/>
+                        <Font name="Arial" size="24.0" />
                      </font>
                   </Text>
-                  <Slider fx:id="sfxVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                          minWidth="-Infinity" onMouseReleased="#onSFXVolumeDrag" prefWidth="250.0" showTickMarks="true"
-                          value="50.0"/>
+                  <Slider fx:id="sfxVolumeSlider" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseReleased="#onSFXVolumeDrag" prefWidth="250.0" showTickMarks="true" value="50.0" />
                </VBox>
                <HBox alignment="CENTER" fillHeight="false" spacing="20.0">
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Theme">
@@ -79,9 +76,8 @@
                   </Text>
                   <Button mnemonicParsing="false" onAction="#onThemeButtonClick" styleClass="menuOptionsButton">
                      <graphic>
-                        <ImageView fx:id="themeButtonImageView" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@icons/normal_theme_icon.png"/>
+                        <ImageView fx:id="themeButtonImageView" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@icons/normal_theme_icon.png" />
                         </ImageView>
                      </graphic></Button>
                </HBox>

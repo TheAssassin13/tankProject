@@ -151,7 +151,7 @@
                             <ToggleGroup fx:id="ammunitionButtons" />
                         </toggleGroup>
                   <graphic>
-                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fx:id="lightAmmoImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                           <Image url="@images/light_shot.png" />
                       </ImageView>
                   </graphic>
@@ -169,7 +169,7 @@
                   </font></Text>
                     <ToggleButton fx:id="mediumAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
-                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fx:id="mediumAmmoImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                           <Image url="@images/medium_shot.png" />
                       </ImageView>
                   </graphic></ToggleButton>
@@ -186,7 +186,7 @@
                   </font></Text>
                     <ToggleButton fx:id="heavyAmmoButton" mnemonicParsing="false" styleClass="ammoButtons" toggleGroup="$ammunitionButtons">
                   <graphic>
-                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fx:id="heavyAmmoImageView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                           <Image url="@images/heavy_shot.png" />
                       </ImageView>
                   </graphic></ToggleButton>

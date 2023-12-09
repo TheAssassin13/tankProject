@@ -15,7 +15,7 @@
                <Font name="Arial" size="80.0" />
             </font>
          </Text>
-         <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play Local">
+         <Button fx:id="playButton" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="55.0" prefWidth="200.0" styleClass="menuButtons" text="Play">
             <font>
                <Font name="Arial Bold" size="12.0" />
             </font>
@@ -83,7 +83,7 @@
                </HBox>
                <HBox fx:id="shopLightAmmoHBox" alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="415.0" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" prefWidth="500.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
-                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="lightAmmoImageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/light_shot.png" />
                      </ImageView>
                   </StackPane>
@@ -117,7 +117,7 @@
                </HBox>
                <HBox fx:id="shopMediumAmmoHBox" alignment="CENTER_LEFT" layoutX="40.0" layoutY="228.0" maxWidth="-Infinity" minWidth="415.0" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" prefWidth="500.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
-                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="mediumAmmoImageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/medium_shot.png" />
                      </ImageView>
                   </StackPane>
@@ -151,7 +151,7 @@
                </HBox>
                <HBox fx:id="shopHeavyAmmoHBox" alignment="CENTER_LEFT" layoutX="40.0" layoutY="265.0" maxWidth="-Infinity" minWidth="415.0" onMouseClicked="#onShopAmmoButtonClick" prefHeight="75.0" prefWidth="500.0" spacing="20.0" styleClass="buyShotShopButton">
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" styleClass="ammoButtonsShop">
-                     <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="heavyAmmoImageView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@images/heavy_shot.png" />
                      </ImageView>
                   </StackPane>
