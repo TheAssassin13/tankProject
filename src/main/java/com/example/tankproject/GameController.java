@@ -489,9 +489,6 @@ public class GameController implements Initializable {
             bombs.add(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), random.nextInt(-Data.getInstance().canvasHeight, 0)), random.nextInt(10), 90, this.turn));
         }
 
-        shootButton.setDisable(true);
-        replayButton.setDisable(true);
-        menuExitButton.setDisable(true);
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -504,6 +501,10 @@ public class GameController implements Initializable {
                         s.drawTrajectory(gameCanvasGraphicContext);
                         s.drawShot(gameCanvasGraphicContext);
                     }
+                    shootButton.setDisable(true);
+                    replayButton.setDisable(true);
+                    menuExitButton.setDisable(true);
+
                     // It draws the protective umbrella
                     gameCanvasGraphicContext.drawImage(Loader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
 
@@ -533,6 +534,7 @@ public class GameController implements Initializable {
                         stopMethods();
                     }
 
+                    if (Data.getInstance().tie || Data.getInstance().alivePlayers.size() < 2) stop();
                     lastUpdateTime = now;
                 }
             }
@@ -575,19 +577,21 @@ public class GameController implements Initializable {
             return true;
         }
         // Checks if a box is hit
-        for (MysteryBox box : Data.getInstance().mysteryBoxes) {
-            if (shot.mysteryBoxCollision(box)) {
-                Data.getInstance().mysteryBoxes.remove(box);
-                Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
-                terrainFallAnimationTimer();
-                tankFallAnimationTimer();
-                sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(2));
-                this.sounds.setVolume(Data.getInstance().SFXVolume);
-                this.sounds.play();
-                this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
-                mysteryBoxPower(box);
-                if (!bombardment) stopMethods();
-                return true;
+        if (!bombardment) {
+            for (MysteryBox box : Data.getInstance().mysteryBoxes) {
+                if (shot.mysteryBoxCollision(box)) {
+                    Data.getInstance().mysteryBoxes.remove(box);
+                    Data.getInstance().terrain.destroyTerrain(shot.position, shot.area);
+                    terrainFallAnimationTimer();
+                    tankFallAnimationTimer();
+                    sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(2));
+                    this.sounds.setVolume(Data.getInstance().SFXVolume);
+                    this.sounds.play();
+                    this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
+                    mysteryBoxPower(box);
+                    stopMethods();
+                    return true;
+                }
             }
         }
         // Checks if terrain is hit
