@@ -9,7 +9,7 @@ public class MysteryBox {
     public int powerUp;
     public MysteryBox(Point position) {
         this.position = position;
-        this.powerUp = new Random().nextInt(2);
+        this.powerUp = new Random().nextInt(3);
     }
 
     public void drawMysteryBox(GraphicsContext gc) {
