@@ -277,6 +277,7 @@ public class GameController implements Initializable {
     public boolean deleteDeadPlayer(Player player) {
         this.sounds.stop();
         this.sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(4));
+        this.sounds.setVolume(Data.getInstance().SFXVolume);
         this.sounds.play();
         Data.getInstance().deadPlayers.add(player);
         Data.getInstance().alivePlayers.remove(player);
