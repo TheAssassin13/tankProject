@@ -16,12 +16,4 @@ public class Player {
         this.position = 1;
         this.score = 0;
     }
-
-    public Player(Player player) {
-        this.name = player.name;
-        this.color = player.color;
-        this.tank = player.tank;
-        this.position = player.position;
-        this.score = player.score;
-    }
 }

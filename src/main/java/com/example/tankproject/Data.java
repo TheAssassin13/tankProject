@@ -10,7 +10,6 @@ public class Data {
     public int gameNumber;
     public int gamesMax;
     public Terrain terrain;
-    public int playersPlayed;
     public int tanksQuantity;
     public int playableTanksQuantity;
     public int cpuTanksQuantity;
@@ -33,7 +32,6 @@ public class Data {
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 0;
         this.gamesMax = 1;
-        this.playersPlayed = 0;
         this.playableTanksQuantity = 2;
         this.cpuTanksQuantity = 0;
         this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
@@ -62,13 +60,11 @@ public class Data {
         this.deadPlayers = new ArrayList<>();
         this.mysteryBoxes = new ArrayList<>();
         this.gameNumber = 0;
-        this.playersPlayed = 0;
         this.tie = false;
     }
 
     public void restart() {
         this.mysteryBoxes = new ArrayList<>();
-        this.playersPlayed = 0;
     }
 
     public static synchronized Data getInstance() {

@@ -11,7 +11,8 @@ public class Shop {
         this.heavyAmmunitionPrice = Constants.AMMO_PRICE[2];
     }
 
-    public void buyBullet(Player p, int price, int quantity, boolean temporary){
+    // This method is used to buy one or more ammo. The CPU is the only one that buys multiple ammo with one call
+    public void buyAmmo(Player p, int price, int quantity, boolean temporary){
         if(p.tank.getCredits() >= price){
             if(price == this.lightAmmunitionPrice){
                 if (!temporary) p.tank.ammunition.set(0, p.tank.ammunition.get(0) + quantity);

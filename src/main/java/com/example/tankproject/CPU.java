@@ -17,10 +17,6 @@ public class CPU extends Player{
         this.difficulty = difficulty;
     }
 
-    public CPU(Player player) {
-        super(player);
-    }
-
     // The CPU makes its shot with calculations and random variables
     public void shoot(Button shootButton, ToggleButton lightShot, ToggleButton mediumShot, ToggleButton heavyShot, TextField angle, TextField power) {
         if (this.tank.getHealth() == 0) return; // In case the tank is dead

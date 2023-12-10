@@ -154,7 +154,7 @@ public class MenuController implements Initializable {
         sound.play();
     }
 
-    // Sets the music game volume
+    // Sets the game music volume
     public void musicVolumeDragInitialize() {
         this.musicVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             Data.getInstance().musicVolume = newValue.doubleValue() / 100 * Constants.MAX_VOLUME;
@@ -178,12 +178,14 @@ public class MenuController implements Initializable {
         this.gameOptionsVBox.setVisible(false);
     }
 
+    // It changes the limits of the other spinner, so they don't sum up more than the max players quantity
     public void onPlayerSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - playersQuantitySpinner.getValue());
         int max = Constants.MAX_PLAYERS_QUANTITY - playersQuantitySpinner.getValue();
         CPUQuantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, Math.min(max, CPUQuantitySpinner.getValue())));
     }
 
+    // It changes the limits of the other spinner, so they don't sum up more than the max players quantity
     public void onCPUSpinnerClick(MouseEvent ignoredMouseEvent) {
         int min = Math.max(0, 2 - CPUQuantitySpinner.getValue());
         int max = Constants.MAX_PLAYERS_QUANTITY - CPUQuantitySpinner.getValue();

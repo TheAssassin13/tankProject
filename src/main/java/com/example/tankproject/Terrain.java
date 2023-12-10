@@ -21,34 +21,33 @@ public class Terrain {
         this.maxTerrainHeight = new int[width];
     }
 
-    public void terrainGeneration(int seaLevel, boolean random) {
+    public void terrainGeneration(int seaLevel, boolean randomized) {
+        Random randomNumber = new Random();
         int margin = Constants.TERRAIN_MARGIN;
         //Reference points without random
         Point[] reference = new Point[5];
-        if (!random) {
+        if (!randomized) {
             reference[0] = new Point(width/5 - margin, seaLevel - margin*3);
             reference[1] = new Point(2*width/5 - margin, seaLevel + margin*2);
             reference[2] = new Point(3*width/5 - margin, reference[0].getY() + margin);
             reference[3] = new Point(4*width/5 - margin, reference[1].getY() - margin);
             reference[4] = new Point(width - margin, reference[2].getY() - margin*2);
         } else {
-            Random random1 = new Random();
             // First hill
-            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), margin + random1.nextInt(seaLevel - margin*2));
+            reference[0] = new Point((int) round(margin*2 + Math.random()*width/(reference.length*2 + 1)), margin + randomNumber.nextInt(seaLevel - margin*2));
             for (int i = 1; i < reference.length; i++) {
                 if (i % 2 == 0) {
                     // Hills
-                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), margin + random1.nextInt(seaLevel - margin*2));
+                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), margin + randomNumber.nextInt(seaLevel - margin*2));
                 } else {
                     // Craters
-                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), seaLevel + margin*2 + random1.nextInt(height - seaLevel - margin*2));
+                    reference[i] = new Point(min(width - margin, (int) round(reference[i-1].getX() + margin*3 + Math.random()*width/(reference.length*1.5))), seaLevel + margin*2 + randomNumber.nextInt(height - seaLevel - margin*2));
                 }
             }
             // In case the last reference point gets out of bound
             if (reference[reference.length-1].getX() > width - margin) reference[reference.length - 1].setX(width - margin*2);
         }
 
-        Random random1 = new Random();
         int x = 0;
         int maxHeight = seaLevel;
         int terrainHeight = seaLevel;
@@ -70,16 +69,16 @@ public class Terrain {
                 }
                 referencePoint++;
             }
-            if (referencePoint > reference.length) maxHeight = random1.nextInt(seaLevel + margin, height);
+            if (referencePoint > reference.length) maxHeight = randomNumber.nextInt(seaLevel + margin, height);
 
             // Random y-axis
-            if (terrainHeight > height || terrainHeight > maxHeight) terrainHeight -= random1.nextInt(2);
-            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += random1.nextInt(2);
+            if (terrainHeight > height || terrainHeight > maxHeight) terrainHeight -= randomNumber.nextInt(2);
+            else if (terrainHeight - margin < 0 || terrainHeight < maxHeight) terrainHeight += randomNumber.nextInt(2);
             else {
                 referencePoint++;
             }
 
-            // random x-axis
+            // Random x-axis
             x += new Random().nextInt(2);
         }
     }
@@ -95,6 +94,7 @@ public class Terrain {
         }
     }
 
+    // This method destroys a circular chunk of the terrain
     public void destroyTerrain(Point center, int radius) {
         for (int i = 0; i < this.height; i++) {
             for (int j = 0; j < this.width; j++) {

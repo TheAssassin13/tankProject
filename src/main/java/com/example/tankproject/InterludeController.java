@@ -19,6 +19,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -82,20 +83,24 @@ public class InterludeController implements Initializable {
         this.music.setCycleCount(MediaPlayer.INDEFINITE);
         this.music.play();
 
-        if (Data.getInstance().gameNumber != Data.getInstance().gamesMax && Data.getInstance().tie) showNodeTimeline(this.tieScreenVBox,4);
+        // If there's a tie, it shows a message
+        if (Data.getInstance().gameNumber < Data.getInstance().gamesMax && Data.getInstance().tie)
+            showNodeTimeline(this.tieScreenVBox, 4);
 
+        // If it's the first game it creates the players, otherwise it just loads them and reset some data
         if (Data.getInstance().gameNumber == 0) createPlayers();
-        else  {
+        else {
             Data.getInstance().restart();
             loadPlayers();
         }
 
+        // When all games finished it shows the final screen
         if (Data.getInstance().gameNumber == Data.getInstance().gamesMax) {
             showFinalScreen(getWinnerPlayers().size() != 1);
             return;
         }
 
-        this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber+1));
+        this.gameNumberText.setText("Game " + (Data.getInstance().gameNumber + 1));
         this.lightAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[0]));
         this.mediumAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[1]));
         this.heavyAmmoCostText.setText(String.valueOf(Constants.AMMO_PRICE[2]));
@@ -119,12 +124,13 @@ public class InterludeController implements Initializable {
 
         setDefinitiveAmmunition();
 
+        // Checks if there's at least one player with ammo
         for (Player player : Data.getInstance().alivePlayers) {
             if (player.tank.getAmmunitionQuantity() > 0) needToBuyAmmo = false;
         }
 
         if (needToBuyAmmo) {
-            showNodeTimeline(this.warningHBox,3);
+            showNodeTimeline(this.warningHBox, 3);
             return;
         }
 
@@ -143,10 +149,11 @@ public class InterludeController implements Initializable {
         Platform.exit();
     }
 
-    // When the options button is clicked, the shop appears or disappears
+    // When the shop button is clicked, the shop appears or disappears
     public void onShopButtonClick(ActionEvent ignoredActionEvent) {
         this.scoreboardVBox.setVisible(false);
-        if (Data.getInstance().playableTanksQuantity < 1) return;
+        if (Data.getInstance().playableTanksQuantity < 1)
+            return; // if there's no playable tanks the shop cannot be open
         if (this.shopVBox.isVisible()) {
             this.shopVBox.setDisable(true);
             this.shopVBox.setVisible(false);
@@ -179,14 +186,14 @@ public class InterludeController implements Initializable {
 
         // It creates the playable players
         for (int i = 0; i < playersQuantity; i++) {
-            Data.getInstance().alivePlayers.add(new Player("Player " + (i+1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
+            Data.getInstance().alivePlayers.add(new Player("Player " + (i + 1), Constants.TANK_COLORS[i], new Tank(Constants.TANK_COLORS[i], new Point(0, 0))));
         }
 
         // It creates the CPU players
         for (int i = 0; i < cpuQuantity; i++) {
-            Data.getInstance().alivePlayers.add(new CPU("CPU " + (i+1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0)), random.nextInt(1,4)));
+            Data.getInstance().alivePlayers.add(new CPU("CPU " + (i + 1), Constants.TANK_COLORS[playersQuantity + i], new Tank(Constants.TANK_COLORS[playersQuantity + i], new Point(0, 0)), random.nextInt(1, 4)));
             // The CPU buys the ammo needed
-            CPUBuysAmmo(((CPU) Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size()-1)));
+            CPUBuysAmmo(((CPU) Data.getInstance().alivePlayers.get(Data.getInstance().alivePlayers.size() - 1)));
         }
     }
 
@@ -204,7 +211,7 @@ public class InterludeController implements Initializable {
         for (Player player : Data.getInstance().alivePlayers) {
             player.tank.restoreHealth();
             player.tank.initializeTemporaryAmmunition();
-            Shop.loadCredits(player,Constants.INITIAL_CREDITS);
+            Shop.loadCredits(player, Constants.INITIAL_CREDITS);
         }
 
         Data.getInstance().deadPlayers = new ArrayList<>();
@@ -218,9 +225,9 @@ public class InterludeController implements Initializable {
     // It buys the ammo for the CPU
     public void CPUBuysAmmo(CPU cpu) {
         int[] ammo = cpu.getAmmoToBuy();
-        shop.buyBullet(cpu, Constants.AMMO_PRICE[0], ammo[0], false);
-        shop.buyBullet(cpu, Constants.AMMO_PRICE[1], ammo[1], false);
-        shop.buyBullet(cpu, Constants.AMMO_PRICE[2], ammo[2], false);
+        shop.buyAmmo(cpu, Constants.AMMO_PRICE[0], ammo[0], false);
+        shop.buyAmmo(cpu, Constants.AMMO_PRICE[1], ammo[1], false);
+        shop.buyAmmo(cpu, Constants.AMMO_PRICE[2], ammo[2], false);
     }
 
     // It gives the points to a player according to their remaining ammo
@@ -235,7 +242,7 @@ public class InterludeController implements Initializable {
         ObservableList<Player> observableArrayList;
         ArrayList<Player> players = new ArrayList<>();
 
-        for (Player p: Data.getInstance().alivePlayers) {
+        for (Player p : Data.getInstance().alivePlayers) {
             if (!(p instanceof CPU)) {
                 players.add(p);
             }
@@ -266,17 +273,17 @@ public class InterludeController implements Initializable {
     // Buys one unit of selected ammo when user clicks the button and updates shop text values related
     public void onShopAmmoButtonClick(MouseEvent mouseEvent) {
         if (mouseEvent.getSource() == this.shopLightAmmoHBox) {
-            this.shop.buyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[0], 1, true);
+            this.shop.buyAmmo(this.currentShopPlayerSpinner.getValueFactory().getValue(), Constants.AMMO_PRICE[0], 1, true);
             this.currentShopPlayerLightAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(0) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(0)));
         }
 
         if (mouseEvent.getSource() == this.shopMediumAmmoHBox) {
-            this.shop.buyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[1], 1, true);
+            this.shop.buyAmmo(this.currentShopPlayerSpinner.getValueFactory().getValue(), Constants.AMMO_PRICE[1], 1, true);
             this.currentShopPlayerMediumAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(1) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(1)));
         }
 
         if (mouseEvent.getSource() == this.shopHeavyAmmoHBox) {
-            this.shop.buyBullet(this.currentShopPlayerSpinner.getValueFactory().getValue(),Constants.AMMO_PRICE[2], 1, true);
+            this.shop.buyAmmo(this.currentShopPlayerSpinner.getValueFactory().getValue(), Constants.AMMO_PRICE[2], 1, true);
             this.currentShopPlayerHeavyAmmoText.setText(String.valueOf(this.currentShopPlayerSpinner.getValueFactory().getValue().tank.ammunition.get(2) + this.currentShopPlayerSpinner.getValueFactory().getValue().tank.temporaryAmmunition.get(2)));
         }
 
@@ -335,7 +342,7 @@ public class InterludeController implements Initializable {
         playerScoreColumn.getStyleClass().add("table-cell-centered");
 
         tableView.getColumns().clear();
-        tableView.getColumns().addAll(playerPositionColumn,playerTankColumn,playerNameColumn,playerKillsColumn,playerScoreColumn);
+        tableView.getColumns().addAll(playerPositionColumn, playerTankColumn, playerNameColumn, playerKillsColumn, playerScoreColumn);
         tableView.setItems(FXCollections.observableArrayList(Data.getInstance().alivePlayers));
         tableView.getSortOrder().add(playerPositionColumn);
         playerPositionColumn.setSortType(TableColumn.SortType.ASCENDING);
@@ -353,7 +360,8 @@ public class InterludeController implements Initializable {
 
         winnerScore = players.get(0).score;
 
-        for (Player p: players) {
+        // The players with the same score as the winner take first position
+        for (Player p : players) {
             if (p.score == winnerScore) p.position = position;
             else p.position = ++position;
         }
@@ -381,7 +389,8 @@ public class InterludeController implements Initializable {
         } else {
             Player winnerPlayer = getWinnerPlayers().get(0);
 
-            if (Data.getInstance().windowsWidth == Constants.RESOLUTION_WIDTH[0] && Data.getInstance().windowsHeight == Constants.RESOLUTION_HEIGHT[0]) this.winnerPlayerImageView.setFitWidth(250);
+            if (Data.getInstance().windowsWidth == Constants.RESOLUTION_WIDTH[0] && Data.getInstance().windowsHeight == Constants.RESOLUTION_HEIGHT[0])
+                this.winnerPlayerImageView.setFitWidth(250);
 
             this.winScreenVBox.setVisible(true);
             this.winScreenVBox.setDisable(false);
@@ -446,7 +455,7 @@ public class InterludeController implements Initializable {
 
     // Changes temporary ammunition to definitive ammunition
     public void setDefinitiveAmmunition() {
-        for (Player player: Data.getInstance().alivePlayers) {
+        for (Player player : Data.getInstance().alivePlayers) {
             if (!(player instanceof CPU)) {
                 player.tank.ammunition.set(0, player.tank.ammunition.get(0) + player.tank.temporaryAmmunition.get(0));
                 player.tank.ammunition.set(1, player.tank.ammunition.get(1) + player.tank.temporaryAmmunition.get(1));
