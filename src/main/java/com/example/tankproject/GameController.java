@@ -524,7 +524,7 @@ public class GameController implements Initializable {
             if (hitPlayer.tank.getHealth() <= 0) {
                 if (deleteDeadPlayer(hitPlayer)) return true;
             }
-            this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
+            if (hitPlayer != this.turn) this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
             stopMethods();
             return true;
         }
