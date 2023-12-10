@@ -21,8 +21,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-
-import java.awt.image.AreaAveragingScaleFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -486,24 +484,27 @@ public class GameController implements Initializable {
         ArrayList<Shot> bombs = new ArrayList<>();
         Point umbrellaPosition = new Point(turn.tank.position.getX() - Constants.TANK_SIZE, turn.tank.position.getY()-30-Constants.TANK_SIZE);
 
+        // Creates the bombs with random parameters
         for (int i = 0; i < Constants.SHOTS_FROM_BOMBARDMENT; i++) {
-            bombs.add(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), 0), 0, -90, this.turn));
+            bombs.add(new MediumShot(new Point(random.nextInt(Data.getInstance().windowsWidth - 1), random.nextInt(-Data.getInstance().canvasHeight, 0)), random.nextInt(10), 90, this.turn));
         }
 
         shootButton.setDisable(true);
+        replayButton.setDisable(true);
+        menuExitButton.setDisable(true);
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // Makes animation fps constant
                 if (now - lastUpdateTime >= Constants.FRAME_TIME) {
+                    // It draws all bombs
                     drawingMethods(false);
                     for (Shot s : bombs) {
                         s.shotPosition();
                         s.drawTrajectory(gameCanvasGraphicContext);
                         s.drawShot(gameCanvasGraphicContext);
-                        replayButton.setDisable(true);
-                        menuExitButton.setDisable(true);
                     }
+                    // It draws the protective umbrella
                     gameCanvasGraphicContext.drawImage(Loader.getInstance().umbrellaImage, umbrellaPosition.getX(), umbrellaPosition.getY(), 55.6, 61.2);
 
                     ArrayList<Shot> deletedShots = new ArrayList<>();
@@ -512,19 +513,21 @@ public class GameController implements Initializable {
                         if (s.position.getX() >= Data.getInstance().windowsWidth || s.position.getX() < 0
                                 || s.position.getY() >= Data.getInstance().canvasHeight) {
                             deletedShots.add(s);
+                        } else {
+                            // Checks all the possible collisions
+                            if (shotCollision(s, true)) deletedShots.add(s);
                         }
-
-                        // Checks all the possible collisions
-                        if (shotCollision(s, true)) deletedShots.add(s);
 
                         // Trajectory point added
                         s.addTrajectory();
                     }
 
+                    // It deletes the bombs that have collided
                     for (Shot s : deletedShots) {
                         bombs.remove(s);
                     }
 
+                    // If there's no bombs left it stops
                     if (bombs.isEmpty()) {
                         stop();
                         stopMethods();
@@ -543,6 +546,15 @@ public class GameController implements Initializable {
 
     // Checks all the possible collisions with a shot
     public boolean shotCollision(Shot shot, boolean bombardment) {
+        Player playerNearby = tanksCollision(shot, true);
+        // Checks if during a bombardment there's a player nearby who's the same one that made the shot
+        if (bombardment && playerNearby == this.turn) {
+            this.sounds = new MediaPlayer(Loader.getInstance().currentSoundEffects.get(0));
+            this.sounds.setVolume(Data.getInstance().SFXVolume);
+            this.sounds.play();
+            return true;
+        }
+
         // Checks if a tank is hit
         Player hitPlayer = tanksCollision(shot, false);
         if (hitPlayer != null) {
@@ -587,7 +599,6 @@ public class GameController implements Initializable {
             this.sounds.setVolume(Data.getInstance().SFXVolume);
             this.sounds.play();
             // Checks if a tank is nearby
-            Player playerNearby = tanksCollision(shot, true);
             if (playerNearby != null) {
                 playerNearby.tank.reduceHealth((int) (shot.getDamage() * shot.tankCollision(playerNearby.tank)));
                 this.tankInfoHUD.showHUD(playerNearby.tank);
