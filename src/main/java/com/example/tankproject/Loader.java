@@ -203,7 +203,6 @@ public class Loader {
             this.currentSoundEffects.set(3, this.soundEffects.get(7));
             this.currentSoundEffects.set(4, this.soundEffects.get(8));
             this.hatImage = new Image(Objects.requireNonNull(getClass().getResource("images/christmas_additions/hat.png")).toExternalForm());
-            return;
         }
     }
 

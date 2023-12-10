@@ -305,8 +305,14 @@ public class GameController implements Initializable {
         this.maxDistance = 0;
         // Checks if the input is not empty
         if (!powerTextField.getText().isEmpty() && !angleTextField.getText().isEmpty()) {
-            this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
-            this.turn.tank.power = Double.parseDouble(powerTextField.getText());
+            try {
+                this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
+                this.turn.tank.power = Double.parseDouble(powerTextField.getText());
+            } catch (NumberFormatException e) {
+                this.turn.tank.setAngle(null);
+                this.turn.tank.power = null;
+                return;
+            }
             this.turn.tank.setAmmoSelected((ToggleButton) this.ammunitionButtons.getSelectedToggle());
             // There's a 1/5 chance a mystery box appears
             if (random.nextInt(5) == 1) {
@@ -361,7 +367,7 @@ public class GameController implements Initializable {
 
                    // Shot is out of the screen
                    if (shot.position.getX() >= Data.getInstance().windowsWidth || shot.position.getX() < 0
-                        || shot.position.getY() >= Data.getInstance().canvasHeight || shot.position.getY() < 0) {
+                        || shot.position.getY() >= Data.getInstance().canvasHeight) {
                        stop();
                        stopMethods();
                    } else {
@@ -518,7 +524,7 @@ public class GameController implements Initializable {
             if (hitPlayer.tank.getHealth() <= 0) {
                 if (deleteDeadPlayer(hitPlayer)) return true;
             }
-            this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
+            if (hitPlayer != this.turn) this.turn.score += Constants.POINTS_FOR_HITTING_SOMETHING;
             stopMethods();
             return true;
         }
@@ -780,9 +786,13 @@ public class GameController implements Initializable {
 
     // Updates the direction of the canon
     public void onAngleTextFieldTyped(KeyEvent ignoredActionEvent) {
-        if (angleTextField.getText().isEmpty()) return;
-        this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
-        drawingMethods(false);
+        try {
+            if (angleTextField.getText().isEmpty()) return;
+            this.turn.tank.setAngle(Double.parseDouble(angleTextField.getText()));
+            drawingMethods(false);
+        } catch (NumberFormatException e) {
+            this.turn.tank.setAngle(null);
+        }
     }
 
     // Updates all the current player values of the interface

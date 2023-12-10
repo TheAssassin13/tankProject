@@ -35,7 +35,7 @@ public class Tank {
         initializeTemporaryAmmunition();
     }
 
-    public void setAngle(double angle) {
+    public void setAngle(Double angle) {
         this.angle = angle;
     }
 
