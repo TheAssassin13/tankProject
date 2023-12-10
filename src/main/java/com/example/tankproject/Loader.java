@@ -132,8 +132,8 @@ public class Loader {
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/powerup.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/victory.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/explosionTankDeath.mp3")).toExternalForm()));
-        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/victory_laugh.mp3")).toExternalForm()));
-        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween sounds/ghost_collition.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween_sounds/victory_laugh.mp3")).toExternalForm()));
+        this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/halloween_sounds/ghost_collision.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/christmas_sounds/victory_hohoho.mp3")).toExternalForm()));
         this.soundEffects.add(new Media(Objects.requireNonNull(getClass().getResource("sounds/christmas_sounds/sparky_death.mp3")).toExternalForm()));
 
