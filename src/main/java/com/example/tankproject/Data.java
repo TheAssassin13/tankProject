@@ -35,8 +35,8 @@ public class Data {
         this.playableTanksQuantity = 2;
         this.cpuTanksQuantity = 0;
         this.tanksQuantity = this.playableTanksQuantity + this.cpuTanksQuantity;
-        this.windowsHeight = Constants.RESOLUTION_HEIGHT[1];
-        this.windowsWidth  = Constants.RESOLUTION_WIDTH[1];
+        this.windowsHeight = Constants.RESOLUTION_HEIGHT[0];
+        this.windowsWidth  = Constants.RESOLUTION_WIDTH[0];
         this.buttonsPanelHeight = 185;
         this.canvasHeight = windowsHeight - buttonsPanelHeight;
         this.seaLevel = (int) (canvasHeight - canvasHeight * 0.4);
